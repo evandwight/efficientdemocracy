@@ -1,0 +1,301 @@
+/* https://coolors.co/05668d-028090-00a896-02c39a-f0f3bd */
+
+/* Colored Icon */
+.caret-up {
+    mask: url(/public/icons/caret-up.svg) no-repeat top center / contain;
+    -webkit-mask: url(/public/icons/caret-up.svg) no-repeat top center / contain;
+}
+.caret-down {
+    mask: url(/public/icons/caret-down.svg) no-repeat top center / contain;
+    -webkit-mask: url(/public/icons/caret-down.svg) no-repeat top center / contain;
+}
+
+.vote-inactive {
+    background-color: #6B7280;
+}
+.vote-active {
+    background-color: #60A5FA;
+}
+.vote-error {
+    background-color: #DC2626;
+}
+
+code {
+    white-space: pre;
+    background-color: #eee;
+    border: 1px solid #999;
+    display: block;
+    padding: 20px;
+}
+
+.comment-div {
+    padding-left: 2px;
+}
+
+.error {
+    color: #DC2626;
+}
+
+.card {
+    border-radius: 1em;
+    border-color: #60A5FA; 
+    border-width: thin;
+    border-style: solid;
+    padding: 1em;
+    margin: 1px;
+}
+
+.bg-error {
+    background-color: #DC2626;
+}
+
+.gray-500 {
+    color: #6B7280
+}
+
+.gray-700 {
+    color: #374151
+}
+
+.gray-900 {
+    color: #111827
+}
+
+.bg-gray-100 {
+    background-color: #F3F4F6;
+}
+
+.bg-gray-200 {
+    background-color: #F9FAFB;
+}
+.bg-gray-500 {
+    background-color: #6B7280
+}
+
+.bg-gray-700 {
+    background-color: #374151
+}
+
+.bg-gray-900 {
+    background-color: #111827
+}
+
+.bg-blue-200 {
+    background-color: #BFDBFE;
+}
+
+.bg-blue-400 {
+    background-color: #60A5FA;
+}
+
+.blue-400 {
+    color: #60A5FA;
+}
+
+.lb-on {
+    border-left: 3px solid
+}
+
+.lb-gray-100 {
+    border-color: #F3F4F6;
+}
+.lb-gray-200 {
+    border-color:  #E5E7EB;
+}
+.lb-gray-300 {
+    border-color:  #D1D5DB;
+}
+.lb-gray-400 {
+    border-color:  #9CA3AF;
+}
+.lb-gray-500 {
+    border-color:  #6B7280;
+}
+.lb-gray-600 {
+    border-color: #4B5563;
+}
+.lb-gray-700 {
+    border-color:  #6B7280;
+}
+.lb-gray-800 {
+    border-color:  #1F2937;
+}
+.lb-gray-900 {
+    border-color:  #111827;
+}
+
+.opacity-10 {
+    opacity: 0.1;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+.l-pad-05 {
+    padding-left: 0.5em;
+}
+
+.center-h {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.rank-col {
+    text-align: center;
+    vertical-align: top;
+}
+
+.vote-col {
+    display:block;
+    text-align: center;
+    width: 2em;
+}
+
+.title-col {
+    width: 100%;
+}
+
+.truth-col {
+    text-align: center;
+    width: 3em;
+}
+
+.xs-text {
+    font-size: x-small;
+}
+
+.width-100 {
+    width:100%;
+}
+
+.about-text {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.about-text a {
+    color: #0000ee;
+    text-decoration: underline;
+}
+
+.highlight-links a {
+    color: #0000ee;
+    text-decoration: underline;
+}
+
+#userInfo {
+    text-align: right;
+}
+
+#content {
+    margin: auto;
+    max-width: 1215px;
+    overflow: hidden
+}
+
+#header {
+    width: 100%;
+}
+
+#post_header {
+    font-weight: bold;
+    text-align: center;
+}
+
+#posts {
+    width: 100%;
+    border-collapse:collapse;
+}
+
+body {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 10pt;
+    margin: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.icon {
+    height: 1em;
+    width: 1em;
+    display: block;
+}
+
+@media only screen and (min-width: 300px) and (max-width: 389px) {
+    #content {
+        max-width: 100%;
+        overflow: hidden
+    }
+}
+
+@media only screen and (min-width: 390px) and (max-width: 460px) {
+    #content {
+        max-width: 100%;
+        overflow: hidden
+    }
+}
+
+@media only screen and (min-width: 460px) and (max-width: 599px) {
+    #content {
+        max-width: 460px;
+        overflow: hidden
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 689px) {
+    #content {
+        max-width: 540px;
+        overflow: hidden
+    }
+}
+
+@media only screen and (min-width: 690px) and (max-width: 809px) {
+    #content {
+        max-width: 620px;
+        overflow: hidden
+    }
+}
+
+@media only screen and (min-width: 810px) and (max-width: 899px) {
+    #content {
+        max-width: 730px;
+        overflow: hidden
+    }
+}
+
+@media only screen and (min-width: 900px) and (max-width: 1079px) {
+    #content {
+        max-width: 810px;
+        overflow: hidden
+    }
+}
+
+@media only screen and (min-width: 1080px) and (max-width: 1169px) {
+    #content {
+        max-width: 970px;
+        overflow: hidden
+    }
+}
+
+@media only screen and (min-width: 1170px) and (max-width: 1259px) {
+    #content {
+        max-width: 1050px;
+        overflow: hidden
+    }
+}
+
+@media only screen and (min-width: 1260px) and (max-width: 1349px) {
+    #content {
+        max-width: 1130px;
+        overflow: hidden
+    }
+}
