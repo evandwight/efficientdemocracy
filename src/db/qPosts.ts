@@ -125,9 +125,10 @@ export default class QPosts {
                 WHERE id = $1`,
                 [postId, v.score]).then(assertOne);
             const modAction = await this.db.modActions.getModAction({thingId: postId, field});
+            const version = !!modAction ? modAction.version : 0;
             if ((!modAction && isDeeplyImportant) ||
                 (!!modAction && modAction.priority <= priority && modAction.value !== isDeeplyImportant)) {
-                await this.db.modActions.upsertModAction({thingId:postId, value:isDeeplyImportant, version: modAction.version, ... modActionArgs});
+                await this.db.modActions.upsertModAction({thingId:postId, value:isDeeplyImportant, version, ... modActionArgs});
             }
         }
     }

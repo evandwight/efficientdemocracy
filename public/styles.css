@@ -28,6 +28,13 @@ code {
     padding: 20px;
 }
 
+.about-text img {
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .comment-div {
     padding-left: 2px;
 }

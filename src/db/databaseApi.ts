@@ -44,7 +44,7 @@ export class DatabaseApi {
     }
     initialize() {
         if (this.isInitialized) {
-            return Promise.resolve();;
+            return Promise.resolve();
         }
         this.isInitialized = true;
         this.realPool = getPool();

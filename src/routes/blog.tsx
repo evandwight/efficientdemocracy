@@ -16,6 +16,7 @@ export const index = (req, res) => {
     const entriesPerPage = 10;
 
     const entries = [
+        {title: Blogs.JestSerialCodeCoverage.title, url: C.URLS.BLOG_JEST_SERIAL_CODE_COVERAGE},
         {title: Blogs.ReactStaticRender.title, url: C.URLS.BLOG_REACT_STATIC_RENDER},
     ];
     const pageEntries = entries.slice(page * entriesPerPage, (page + 1) * entriesPerPage);

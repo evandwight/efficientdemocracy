@@ -68,17 +68,6 @@ function setup(db) {
   // Misc
   router.get(C.URLS.SORT, Routes.Misc.Sort);
 
-  // About
-  router.get(C.URLS.ABOUT_WHAT_IS_THIS, renderAbout(About.WhatIsThis, "What is this?"));
-  router.get(C.URLS.ABOUT_FAQ, renderAbout(About.Faq  , "Faq"));
-  router.get(C.URLS.ABOUT_DEMOCRATIC_MODERATION, renderAbout(About.DemocraticModeration  , "Democratic moderation"));
-  router.get(C.URLS.ABOUT_MODERATE_VISIBILITY, renderAbout(About.ModerateVisibilty  , "Moderate visibility"));
-  router.get(C.URLS.ABOUT_STATUS, renderAbout(About.Alpha  , "Alpha"));
-
-  // Blog
-  router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
-  router.get(C.URLS.BLOG_REACT_STATIC_RENDER, renderBlog(Blog.ReactStaticRender));
-
   // // Qiri Posts
   router.getAsync(C.URLS.QPOSTS + "(/:page)?", Routes.QPost.list);
   router.getAsync(C.URLS.NEW_QPOSTS + "(/:page)?", Routes.QPost.listNew);
@@ -114,6 +103,18 @@ function setup(db) {
 
   router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);
   router.get(C.URLS.USER_SETTINGS, assertAuthenticated, Routes.Account.userSettings);
+
+  // About
+  router.get(C.URLS.ABOUT_WHAT_IS_THIS, renderAbout(About.WhatIsThis, "What is this?"));
+  router.get(C.URLS.ABOUT_FAQ, renderAbout(About.Faq  , "Faq"));
+  router.get(C.URLS.ABOUT_DEMOCRATIC_MODERATION, renderAbout(About.DemocraticModeration  , "Democratic moderation"));
+  router.get(C.URLS.ABOUT_MODERATE_VISIBILITY, renderAbout(About.ModerateVisibilty  , "Moderate visibility"));
+  router.get(C.URLS.ABOUT_STATUS, renderAbout(About.Alpha  , "Alpha"));
+
+  // Blog
+  router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
+  router.get(C.URLS.BLOG_REACT_STATIC_RENDER, renderBlog(Blog.ReactStaticRender));
+  router.get(C.URLS.BLOG_JEST_SERIAL_CODE_COVERAGE, renderBlog(Blog.JestSerialCodeCoverage));
 
   return router;
 }
