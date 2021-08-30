@@ -25,9 +25,10 @@ export const Header = ({ showLogin, user, csrfToken}) =>
 export const LoginInfo = ({ user }) => {
     if (user) {
         return <span>
-            <a href={C.URLS.USER_SETTINGS}>{user.user_name}</a> 
+            <a href={C.URLS.USER_SETTINGS}>{user.user_name}</a>
             <span> </span>
-            (<a href={C.URLS.USER_STRIKES}>{user.strike_count} strikes</a>) 
+            <span style={{display:"inline-block"}}>
+            (<a href={C.URLS.USER_STRIKES}>{user.strike_count} strikes</a>)</span>
             <span> | </span>
             <a href={C.URLS.USER_LOGOUT}>Logout</a>
         </span>
