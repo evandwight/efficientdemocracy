@@ -79,6 +79,7 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
     </div>
 
     ${includeChartJs ? `${chartData} <script src="/public/chart.js"></script>`: ""}
+    <script>0</script>
 </body>
 </html>
 `;
