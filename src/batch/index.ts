@@ -27,5 +27,5 @@ export async function updateHackerNewsPosts() {
     const topList = await axios.get("https://hacker-news.firebaseio.com/v0/topstories.json");
     const items = await Promise.all(topList.data.filter((v, i) => i < 30)
         .map(id => axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(v => v.data)));
-    await Promise.all(items.map(v => db.qPosts.upsertHackerNewsPost(v)));
+    await Promise.all(items.map(v => db.qPosts.upsertHackerNewsPost(v as any)));
 }
