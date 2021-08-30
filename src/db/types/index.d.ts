@@ -1,5 +1,4 @@
 import { Nominal } from 'simplytyped';
-import internal from 'stream';
 
 // Ids
 type UUID = string;

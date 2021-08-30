@@ -240,6 +240,18 @@ a {
     display: block;
 }
 
+@media only screen and (max-width: 600px) {
+    .about-text {
+        max-width: 100%;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .about-text {
+        max-width: 500px;
+    }
+}
+
 @media only screen and (min-width: 300px) and (max-width: 389px) {
     #content {
         max-width: 100%;
@@ -275,18 +287,12 @@ a {
         max-width: 540px;
         overflow: hidden
     }
-    .about-text {
-        max-width: 500px;
-    }
 }
 
 @media only screen and (min-width: 690px) and (max-width: 809px) {
     #content {
         max-width: 620px;
         overflow: hidden
-    }
-    .about-text {
-        max-width: 500px;
     }
 }
 
@@ -295,18 +301,12 @@ a {
         max-width: 730px;
         overflow: hidden
     }
-    .about-text {
-        max-width: 500px;
-    }
 }
 
 @media only screen and (min-width: 900px) and (max-width: 1079px) {
     #content {
         max-width: 810px;
         overflow: hidden
-    }
-    .about-text {
-        max-width: 500px;
     }
 }
 
@@ -315,9 +315,6 @@ a {
         max-width: 970px;
         overflow: hidden
     }
-    .about-text {
-        max-width: 500px;
-    }
 }
 
 @media only screen and (min-width: 1170px) and (max-width: 1259px) {
@@ -325,17 +322,11 @@ a {
         max-width: 1050px;
         overflow: hidden
     }
-    .about-text {
-        max-width: 500px;
-    }
 }
 
 @media only screen and (min-width: 1260px) and (max-width: 1349px) {
     #content {
         max-width: 1130px;
         overflow: hidden
-    }
-    .about-text {
-        max-width: 500px;
     }
 }

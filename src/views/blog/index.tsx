@@ -4,7 +4,7 @@ export {Page as ReactStaticRender} from './react-static-render';
 export {Page as JestSerialCodeCoverage} from './jest-serial-code-coverage';
 
 export const Blogs = ({ entries, page, showNext }) =>
-    <div style={{ paddingLeft: "5px", paddingRight: "5px" }}>
+    <div className="about-text">
         <h2>Blog</h2>
         <ul>
         {entries.map((e, i) => 
