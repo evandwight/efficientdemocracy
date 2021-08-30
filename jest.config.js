@@ -14,7 +14,7 @@ module.exports = {
     {
       displayName: "serial-tests",
       testEnvironment: "node",
-      runner: "jest-serial-runner2",
+      runner: "jest-serial-runner",
       testMatch: ["**/?(*.)+(serial-test).[jt]s?(x)"],
       transform: {
         "^.+\\.(ts|tsx)$": "ts-jest"
@@ -26,4 +26,3 @@ module.exports = {
     }
   ]
 }
-// runner: "jest-serial-runner",
