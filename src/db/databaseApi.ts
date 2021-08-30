@@ -57,7 +57,9 @@ export class DatabaseApi {
                 console.log("Error:", e)
                 console.log("Query args:", query, parameters);
                 throw e;
-            });
+            })
+            // .then(r => {console.log(r); return r;})
+            ;
         }
     }
 }

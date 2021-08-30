@@ -1,4 +1,5 @@
 import { Nominal } from 'simplytyped';
+import internal from 'stream';
 
 // Ids
 type UUID = string;
@@ -38,6 +39,6 @@ export type QPost = {
     content?: string,
     user_name: string,
     user_id: UserId,
-    vote?: number,
-    censor: boolean,
+    censor?: boolean,
+    deeply_important?: boolean,
 }

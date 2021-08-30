@@ -91,7 +91,7 @@ export default class QPosts {
         return thingId as QPostId;
     }
 
-    async upsertHackerNewsPost(v) {
+    async upsertHackerNewsPost(v: {id: number, title: string, score:number}): Promise<QPostId> {
         // TODO what if this query fails, modactions could not be set! Maybe retry?
         let postId = await this.getPostIdByHackerId(v.id);
         const field = C.SAMPLE.FIELDS.DEEPLY_IMPORTANT;
@@ -131,5 +131,7 @@ export default class QPosts {
                 await this.db.modActions.upsertModAction({thingId:postId, value:isDeeplyImportant, version, ... modActionArgs});
             }
         }
+        
+        return postId;
     }
 }

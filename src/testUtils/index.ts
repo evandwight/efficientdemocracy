@@ -103,6 +103,13 @@ export const testApi = {
         return [await db.users.createUser({userName:"httpUser", name: "huser", email: "huser@huser.com", hashedPassword}),
             {...userInfo, password}];
     },
+    createHackerUser: async ():Promise<UserId> => {
+        await db.pool.query(
+            `INSERT INTO users (id, user_name, name, email, password, created_on, is_mod)
+            VALUES ($1, $2, $3, $4, $5, $6, false)`,
+            [C.BOT_ACCOUNT_USER_ID, "hacker", "hacker name", "hacker@h.com", "", new Date()]);
+        return C.BOT_ACCOUNT_USER_ID as UserId;
+    },
     createPost: (args) => db.qPosts.submitPost({title: "a", url:"b", content:"c", ...args}),
     createSample: (args) => db.samples.createSample({
         type: C.SAMPLE.TYPE.LEVEL_1,
