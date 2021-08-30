@@ -33,18 +33,26 @@ function setup(db) {
   app.use(express.urlencoded({ extended: false }));
 
   // Static files
+  // use before session, otherwise it creates multiple sessions on each page load
+  // https://www.airpair.com/express/posts/expressjs-and-passportjs-sessions-deep-dive
   app.use('/public', express.static(__dirname + '/../public'));
 
   // Sessions
-  app.use(session({
+  let sessionOptions: any = {
     store: new (pgSession)({ pool: db.realPool }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      sameSite: true
+      sameSite: true,
+      maxAge: 365 * 24 * 60 * 60 * 1000 // 365 days
     }
-  }));
+  };
+  if (process.env.NODE_ENV === "prod") {
+    app.set('trust proxy', 1) // trust first proxy
+    sessionOptions.cookie.secure = true // serve secure cookies
+  }
+  app.use(session(sessionOptions));
 
   // Authentication
   initializePassport(passport);
