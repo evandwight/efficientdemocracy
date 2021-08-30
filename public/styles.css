@@ -28,13 +28,6 @@ code {
     padding: 20px;
 }
 
-.about-text img {
-    width: 50%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .comment-div {
     padding-left: 2px;
 }
@@ -184,11 +177,21 @@ code {
 .about-text {
     padding-left: 5px;
     padding-right: 5px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .about-text a {
     color: #0000ee;
     text-decoration: underline;
+}
+
+
+.about-text img {
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .highlight-links a {
@@ -242,12 +245,18 @@ a {
         max-width: 100%;
         overflow: hidden
     }
+    .about-text {
+        max-width: 100%;
+    }
 }
 
 @media only screen and (min-width: 390px) and (max-width: 460px) {
     #content {
         max-width: 100%;
         overflow: hidden
+    }
+    .about-text {
+        max-width: 100%;
     }
 }
 
@@ -256,12 +265,18 @@ a {
         max-width: 460px;
         overflow: hidden
     }
+    .about-text {
+        max-width: 100%;
+    }
 }
 
 @media only screen and (min-width: 600px) and (max-width: 689px) {
     #content {
         max-width: 540px;
         overflow: hidden
+    }
+    .about-text {
+        max-width: 500px;
     }
 }
 
@@ -270,12 +285,18 @@ a {
         max-width: 620px;
         overflow: hidden
     }
+    .about-text {
+        max-width: 500px;
+    }
 }
 
 @media only screen and (min-width: 810px) and (max-width: 899px) {
     #content {
         max-width: 730px;
         overflow: hidden
+    }
+    .about-text {
+        max-width: 500px;
     }
 }
 
@@ -284,12 +305,18 @@ a {
         max-width: 810px;
         overflow: hidden
     }
+    .about-text {
+        max-width: 500px;
+    }
 }
 
 @media only screen and (min-width: 1080px) and (max-width: 1169px) {
     #content {
         max-width: 970px;
         overflow: hidden
+    }
+    .about-text {
+        max-width: 500px;
     }
 }
 
@@ -298,11 +325,17 @@ a {
         max-width: 1050px;
         overflow: hidden
     }
+    .about-text {
+        max-width: 500px;
+    }
 }
 
 @media only screen and (min-width: 1260px) and (max-width: 1349px) {
     #content {
         max-width: 1130px;
         overflow: hidden
+    }
+    .about-text {
+        max-width: 500px;
     }
 }

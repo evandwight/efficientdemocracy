@@ -7,7 +7,8 @@ const URL = "/public/blog/jest-serial-code-coverage/";
 const element = () =>
     <div className="about-text">
         <h2>{title}</h2>
-        <p>I need to test this website more - it has bugs. In order to <i>save time</i> I decided to setup code coverage. With Jest it's as simple as running `npm run test -- --coverage`</p>
+        <p>I need to test this website more - it has bugs. In order to <i>save time</i> I decided to setup code coverage. With Jest it's as simple as running</p>
+        <code>npm run test -- --coverage</code>
         <img src={URL + "low.png"}/>
         <p>The coverage was strangely low and low in files I know I tested! Eventually, I checked that jest-serial-runner worked.</p>
         <img src={URL + "none.png"}/>
