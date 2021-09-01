@@ -84,21 +84,3 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
 </html>
 `;
 }
-
-export function DangerousATag(attributes: {[key:string]:string}) {
-    return DangerousTag({tag:"a", ... attributes});
-}
-
-export function DangerousTag(attributes: {[key:string]:string}) {
-    let {className, innerHtml, tag} = attributes;
-    delete attributes["className"]
-    delete attributes["innerHtml"]
-    delete attributes["tag"]
-
-    const classNameStr = !!className ? `class="${className}"`: "";
-    const innerHtmlStr = !!innerHtml ? innerHtml : "";
-    const  otherAttributesStr = Object.entries(attributes).reduce((pv, [key, value]) => `${pv} ${key}="${value}"`, "");
-    
-    const html = `<${tag} ${classNameStr} ${otherAttributesStr}>${innerHtmlStr}</${tag}>`;
-    return <div style={{display: "inline"}} dangerouslySetInnerHTML={{__html: html}}></div>;
-}

@@ -1,31 +1,30 @@
 import * as C from '../constant';
 import React from 'react';
-import { DangerousATag } from './utils';
 
 export const DisputeLink = ({post, field}) => 
-  <DangerousATag
-    href={`${C.URLS.SUBMIT_QPOST_DISPUTE}${post.id}/${field}/${!post.censor}`}
-    innerHtml="dispute"
-    onclick="post(event)" />
+  <a className="onclick-post" 
+    href={`${C.URLS.SUBMIT_QPOST_DISPUTE}${post.id}/${field}/${!post.censor}`}>
+      dispute
+    </a>
 
 export const UpVoteButton = ({post, i}: {post:any, i?: number}) => {
   const active = post.hasOwnProperty('vote') ? post.vote === C.VOTE.UP : false; 
   i = i || 0;
-  return <DangerousATag className={`center-h icon`}
-    title="Up vote" id={`up-${i}`} other={`down-${i}`}
-    href={`${C.URLS.SUBMIT_QPOST_VOTE}${post.id}/${active ? C.VOTE.NONE : C.VOTE.UP}`}
-    onclick={`vote(event)`}
-    innerHtml={`<img style="width: 1em;" src="/public/icons/caret-up-${active ? "active" : "inactive"}.svg"/>`} />
+  return <a className="center-h icon onclick-vote"
+    title="Up vote" id={`up-${i}`} data-other={`down-${i}`}
+    href={`${C.URLS.SUBMIT_QPOST_VOTE}${post.id}/${active ? C.VOTE.NONE : C.VOTE.UP}`}>
+      <img style={{width: "1em"}} src={`/public/icons/caret-up-${active ? "active" : "inactive"}.svg`}/>
+    </a>
 }
 
 export const DownVoteButton = ({post, i} : {post:any, i?: number}) => {
   const active = post.hasOwnProperty('vote') ? post.vote === C.VOTE.DOWN : false; 
   i = i || 0;
-  return <DangerousATag className={`center-h icon rotate-180`}
-    title="Down vote" id={`down-${i}`} other={`up-${i}`}
-    href={`${C.URLS.SUBMIT_QPOST_VOTE}${post.id}/${active ? C.VOTE.NONE : C.VOTE.DOWN}`}
-    onclick={`vote(event)`} 
-    innerHtml={`<img style="width: 1em;" src="/public/icons/caret-up-${active ? "active" : "inactive"}.svg"/>`}/>
+  return <a className="rotate-180 center-h icon onclick-vote"
+    title="Down vote" id={`down-${i}`} data-other={`up-${i}`}
+    href={`${C.URLS.SUBMIT_QPOST_VOTE}${post.id}/${active ? C.VOTE.NONE : C.VOTE.DOWN}`}>
+      <img style={{width: "1em"}} src={`/public/icons/caret-up-${active ? "active" : "inactive"}.svg`}/>
+    </a>
 }
 
 export const ViewPost = ({ post, user }) => {

@@ -1,8 +1,9 @@
 function vote(event) {
+  event.preventDefault();
   var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  var element = this.event.currentTarget;
+  var element = event.currentTarget;
   var targetImg = element.children[0];
-  var other = document.getElementById(element.getAttribute("other"));
+  var other = document.getElementById(element.getAttribute("data-other"));
   var otherImg = other.children[0];
   var url = element.href;
   var sources = {
@@ -28,10 +29,10 @@ function vote(event) {
       targetImg.src = sources.error;
     }
   });
-  event.preventDefault();
 }
 
 function post(event) {
+  event.preventDefault();
   var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   var element = this.event.currentTarget;
   var url = element.href;
@@ -47,5 +48,14 @@ function post(event) {
       setTimeout(function() {element.classList.remove("error")}, 5000);
     }
   });
-  event.preventDefault();
 }
+
+// Attach listeners
+document.addEventListener('DOMContentLoaded', function () {
+  Array.from(document.getElementsByClassName('onclick-vote')).forEach(element => {
+    element.addEventListener('click', vote);
+  });
+  Array.from(document.getElementsByClassName('onclick-post')).forEach(element => {
+    element.addEventListener('click', post);
+  });
+});

@@ -42,8 +42,7 @@ function setup(db) {
       useDefaults: true,
       directives: {
         "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
-        // TODO remove unsafe-inline
-        "script-src": ["'self'", "'unsafe-inline'"]
+        "script-src": ["'self'"]
       },
     })
   );

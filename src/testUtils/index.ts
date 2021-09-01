@@ -9,7 +9,7 @@ import {setup} from '../index';
 export const TEST_URL = "http://localhost:3005";
 
 export function getCsrfToken(html) {
-    const regex = /<meta name="csrf-token" content="(.*?)">/g;
+    const regex = /<meta name="csrf-token" content="(.*?)" \/>/g;
     try {
         return [... html.matchAll(regex)][0][1];
     } catch (e) {
