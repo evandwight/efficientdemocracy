@@ -7,14 +7,20 @@ import { addAsync } from '@awaitjs/express';
 import * as Routes from './routes';
 const initializePassport = require("./passportConfig");
 import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403 } from './routes/utils';
-import {addCustomLocals} from './utils';
+import { addCustomLocals } from './utils';
 import * as C from "./constant";
-import {runTasks} from "./batch";
+import { runTasks } from "./batch";
 import * as About from './views/about';
 import { renderAbout } from './routes/about';
 import { renderBlog } from './routes/blog';
 import * as Blog from './views/blog';
+import helmet from 'helmet';
+import { logger } from './logger';
+import hpp from 'hpp';
+import toobusy from 'toobusy-js'
 const pgSession = require('connect-pg-simple')(session);
+// TODO uses local memory to store ips - wont scale to multiple front ends
+const bouncer = require("express-bouncer")(500, 900000);
 
 // Setup
 require("dotenv").config();
@@ -27,7 +33,29 @@ function setup(db) {
 
   // Middleware
 
-  app.disable('x-powered-by');
+  // security settings:
+  app.use(hpp()); // HTTP Parameter Pollution(HPP)
+  // app.disable('x-powered-by');
+  app.use(helmet());
+  app.use(
+    helmet.contentSecurityPolicy({
+      useDefaults: true,
+      directives: {
+        "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
+        // TODO remove unsafe-inline
+        "script-src": ["'self'", "'unsafe-inline'"]
+      },
+    })
+  );
+
+  app.use(function (req, res, next) {
+    if (toobusy()) {
+      // log if you see necessary
+      res.status(503).send("Server Too Busy");
+    } else {
+      next();
+    }
+  });
 
   // Parses details from a form
   app.use(express.urlencoded({ extended: false }));
@@ -45,10 +73,10 @@ function setup(db) {
     saveUninitialized: false,
     cookie: {
       sameSite: true,
-      maxAge: 365 * 24 * 60 * 60 * 1000 // 365 days
+      maxAge: 365 * 24 * 60 * 60 * 1000, // 365 days
     }
   };
-  if (process.env.NODE_ENV === "prod") {
+  if (process.env.NODE_ENV === "production") {
     app.set('trust proxy', 1) // trust first proxy
     sessionOptions.cookie.secure = true // serve secure cookies
   }
@@ -66,10 +94,11 @@ function setup(db) {
   // Custom local variables
   app.use(addCustomLocals);
 
+
   const router = addAsync(app);
 
   // Routes
-  router.get("/favicon.ico", (req, res) => res.sendFile('favicon.ico', {root: __dirname + '/../public'}))
+  router.get("/favicon.ico", (req, res) => res.sendFile('favicon.ico', { root: __dirname + '/../public' }))
   router.get("/", (req, res) => res.redirect(C.URLS.QPOSTS));
 
 
@@ -104,9 +133,9 @@ function setup(db) {
 
   // Accounts
   router.get(C.URLS.USER_LOGIN, redirectAuthenticated, Routes.Account.login);
-  router.post(C.URLS.USER_LOGIN, passport.authenticate("local", { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
+  router.post(C.URLS.USER_LOGIN, bouncer.block, passport.authenticate("local", { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
   router.get(C.URLS.USER_REGISTER, redirectAuthenticated, Routes.Account.register);
-  router.postAsync(C.URLS.USER_REGISTER, Routes.Account.userRegister);
+  router.postAsync(C.URLS.USER_REGISTER, bouncer.block, Routes.Account.userRegister);
   router.get(C.URLS.USER_LOGOUT, Routes.Account.logout);
 
   router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);
@@ -114,15 +143,24 @@ function setup(db) {
 
   // About
   router.get(C.URLS.ABOUT_WHAT_IS_THIS, renderAbout(About.WhatIsThis, "What is this?"));
-  router.get(C.URLS.ABOUT_FAQ, renderAbout(About.Faq  , "Faq"));
-  router.get(C.URLS.ABOUT_DEMOCRATIC_MODERATION, renderAbout(About.DemocraticModeration  , "Democratic moderation"));
-  router.get(C.URLS.ABOUT_MODERATE_VISIBILITY, renderAbout(About.ModerateVisibilty  , "Moderate visibility"));
-  router.get(C.URLS.ABOUT_STATUS, renderAbout(About.Alpha  , "Alpha"));
+  router.get(C.URLS.ABOUT_FAQ, renderAbout(About.Faq, "Faq"));
+  router.get(C.URLS.ABOUT_DEMOCRATIC_MODERATION, renderAbout(About.DemocraticModeration, "Democratic moderation"));
+  router.get(C.URLS.ABOUT_MODERATE_VISIBILITY, renderAbout(About.ModerateVisibilty, "Moderate visibility"));
+  router.get(C.URLS.ABOUT_STATUS, renderAbout(About.Alpha, "Alpha"));
 
   // Blog
   router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
   router.get(C.URLS.BLOG_REACT_STATIC_RENDER, renderBlog(Blog.ReactStaticRender));
   router.get(C.URLS.BLOG_JEST_SERIAL_CODE_COVERAGE, renderBlog(Blog.JestSerialCodeCoverage));
+
+  // Custom error handler
+  router.use(function (err, req, res, next) {
+    logger.error({ severity: "error", url: req.originalUrl, method: req.method, ip: req.ip, message: err.message, stack: err.stack, time: Date.now() });
+    if (process.env.NODE_ENV !== "production") {
+      console.log(err);
+    }
+    res.sendStatus(500);
+  });
 
   return router;
 }
@@ -137,7 +175,13 @@ if (require.main === module) {
   });
 
   setInterval(runTasks, 5 * 60 * 1000);
+
+
+  process.on("uncaughtException", function (err) {
+    logger.error({ severity: "error", message: err.message, stack: err.stack, time: Date.now() });
+    process.exit(); // exit the process to avoid unknown state
+  });
 }
 
-export {setup};
+export { setup };
 

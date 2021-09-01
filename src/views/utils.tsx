@@ -65,11 +65,12 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
         <script src="/public/index.js"></script>`
         : ""}
     ${includeChartJs ? `<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js" crossorigin></script>` : ""}
-    <link rel="stylesheet" href="/public/styles.css">
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon/favicon-16x16.png">
+    <link rel="stylesheet" href="/public/styles.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon/favicon-16x16.png" />
 
-    <meta name="csrf-token" content="${csrfToken}">
+    <meta name="csrf-token" content="${csrfToken}" />
+
     <title>${title}</title>
 </head>
 
@@ -79,7 +80,6 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
     </div>
 
     ${includeChartJs ? `${chartData} <script src="/public/chart.js"></script>`: ""}
-    <script>0</script>
 </body>
 </html>
 `;
