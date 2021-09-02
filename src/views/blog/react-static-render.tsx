@@ -1,4 +1,5 @@
 import React from 'react';
+import * as C from '../../constant';
 
 const title = "Replacing ejs with react to generate static html";
 
@@ -53,4 +54,4 @@ const element = () =>
 
     </div>
 
-export const Page = {element, title};
+export const Page = {element, title, url: C.URLS.BLOG_REACT_STATIC_RENDER, created: new Date(2021, 7, 26)};

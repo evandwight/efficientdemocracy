@@ -12,7 +12,7 @@ import * as C from "./constant";
 import { runTasks } from "./batch";
 import * as About from './views/about';
 import { renderAbout } from './routes/about';
-import { renderBlog } from './routes/blog';
+import { BLOG_ENTRIES, renderBlog } from './routes/blog';
 import * as Blog from './views/blog';
 import helmet from 'helmet';
 import { logger } from './logger';
@@ -147,9 +147,7 @@ function setup(db) {
 
   // Blog
   router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
-  router.get(C.URLS.BLOG_REACT_STATIC_RENDER, renderBlog(Blog.ReactStaticRender));
-  router.get(C.URLS.BLOG_JEST_SERIAL_CODE_COVERAGE, renderBlog(Blog.JestSerialCodeCoverage));
-  router.get(C.URLS.BLOG_CSP_INLINE_SCRIPT, renderBlog(Blog.CspInlineScript));
+  BLOG_ENTRIES.forEach(entry => router.get(entry.url, renderBlog(entry)));
 
   // Custom error handler
   router.use(function (err, req, res, next) {

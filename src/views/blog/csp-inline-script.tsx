@@ -1,7 +1,7 @@
 import React from 'react';
 import * as C from '../../constant';
 
-const title = "You aren't supposed to use inline scripts: a lesson in the content security policy http header";
+const title = "TIL: don't use inline scripts";
 
 const element = () =>
     <div className="about-text">
@@ -21,4 +21,4 @@ const element = () =>
         </code>
     </div>
 
-export const Page = { element, title };
+export const Page = { element, title, url: C.URLS.BLOG_CSP_INLINE_SCRIPT, created: new Date(2021, 8, 1)};

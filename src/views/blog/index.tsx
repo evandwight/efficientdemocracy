@@ -11,6 +11,9 @@ export const Blogs = ({ entries, page, showNext }) =>
         {entries.map((e, i) => 
             <li key={i}>
                 <a href={e.url}>{e.title}</a>
+                <ul className="no-bullet">
+                    <li>{e.created.toDateString()}</li>
+                </ul>
             </li>)}
         </ul>
         {showNext && <a href={C.URLS.BLOG + "/" + (page + 1)}> More </a>}
