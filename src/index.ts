@@ -19,8 +19,6 @@ import { logger } from './logger';
 import hpp from 'hpp';
 import toobusy from 'toobusy-js'
 const pgSession = require('connect-pg-simple')(session);
-// TODO uses local memory to store ips - wont scale to multiple front ends
-const bouncer = require("express-bouncer")(500, 900000);
 
 // Setup
 require("dotenv").config();
@@ -35,7 +33,6 @@ function setup(db) {
 
   // security settings:
   app.use(hpp()); // HTTP Parameter Pollution(HPP)
-  // app.disable('x-powered-by');
   app.use(helmet());
   app.use(
     helmet.contentSecurityPolicy({
@@ -70,6 +67,7 @@ function setup(db) {
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    name: "sesId-d48s",
     cookie: {
       sameSite: true,
       maxAge: 365 * 24 * 60 * 60 * 1000, // 365 days
@@ -132,9 +130,9 @@ function setup(db) {
 
   // Accounts
   router.get(C.URLS.USER_LOGIN, redirectAuthenticated, Routes.Account.login);
-  router.post(C.URLS.USER_LOGIN, bouncer.block, passport.authenticate("local", { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
+  router.post(C.URLS.USER_LOGIN, passport.authenticate("local", { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
   router.get(C.URLS.USER_REGISTER, redirectAuthenticated, Routes.Account.register);
-  router.postAsync(C.URLS.USER_REGISTER, bouncer.block, Routes.Account.userRegister);
+  router.postAsync(C.URLS.USER_REGISTER, Routes.Account.userRegister);
   router.get(C.URLS.USER_LOGOUT, Routes.Account.logout);
 
   router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);
@@ -151,6 +149,7 @@ function setup(db) {
   router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
   router.get(C.URLS.BLOG_REACT_STATIC_RENDER, renderBlog(Blog.ReactStaticRender));
   router.get(C.URLS.BLOG_JEST_SERIAL_CODE_COVERAGE, renderBlog(Blog.JestSerialCodeCoverage));
+  router.get(C.URLS.BLOG_CSP_INLINE_SCRIPT, renderBlog(Blog.CspInlineScript));
 
   // Custom error handler
   router.use(function (err, req, res, next) {
