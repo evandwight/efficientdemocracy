@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Page = () =>
-    <div className="about-text">
+    <div>
         <h2>Democratize Moderation</h2>
         <p>
             As bad actors exist, we need moderation. Deciding who qualifies as a bad actor is a matter of taste, so the community should decide for itself.

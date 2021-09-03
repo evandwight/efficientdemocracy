@@ -4,7 +4,7 @@ import * as C from '../../constant';
 const title = "Replacing ejs with react to generate static html";
 
 const element = () =>
-    <div className="about-text">
+    <div>
         <h2>{title}</h2>
         <p><b>TLDR:</b> don't do it if you need to call client side javascript</p>
         <p>I started with <a href="https://ejs.co/">ejs</a> but ran into two problems: first, I couldn't pass parameters to partial views and second, my views kept breaking due to typos and refactoring. The first problem is easy to solve: just read the <a href="https://ejs.co/#docs">docs more carefully</a>! The second problem is more difficult. Here are the solutions I considered:</p>

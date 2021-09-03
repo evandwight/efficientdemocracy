@@ -18,7 +18,9 @@ export const reactRender = (res, element, options?: reactRenderOptions) => {
     const innerHtml = ReactDOMServer.renderToStaticMarkup(
         <div>
             <Header showLogin={showLogin} user={res.locals.user} csrfToken={res.locals.csrfToken}/>
-            {element}
+            <div id="inner-content">
+                {element}
+            </div>
             <hr className="blue-400"/>
         </div>);
     res.send(HtmlBoilerPlate(innerHtml, res.locals.csrfToken, options));
@@ -29,7 +31,9 @@ export const reactAboutRender = (res, element: JSX.Element, title: string) => {
     const innerHtml = ReactDOMServer.renderToStaticMarkup(
         <div>
             <AboutHeader />
-            {element}
+            <div id="about-content">
+                {element}
+            </div>
             <hr className="blue-400"/>
         </div>);
     const options = {

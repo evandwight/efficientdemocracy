@@ -6,7 +6,7 @@ const title = "Code coverage and jest-serial-runner";
 const IMG_URL = "/public/blog/jest-serial-code-coverage/";
 
 const element = () =>
-    <div className="about-text">
+    <div>
         <h2>{title}</h2>
         <p>I need to test this website more - it has bugs. In order to <i>save time</i> I decided to setup code coverage. With Jest it's as simple as running</p>
         <code>npm run test -- --coverage</code>

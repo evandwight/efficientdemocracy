@@ -4,7 +4,7 @@ import * as C from '../../constant';
 const title = "TIL: don't use inline scripts";
 
 const element = () =>
-    <div className="about-text">
+    <div>
         <h2>{title}</h2>
         <p>Apparently <a href={C.URLS.BLOG_REACT_STATIC_RENDER}>react</a> was trying to warn me. Don't use inline scripts or you'll be <a href="https://developers.google.com/web/fundamentals/security/csp#inline-code-considered-harmful">vulnerable to cross site scripting</a>!</p>
 

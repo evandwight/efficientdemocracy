@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Page = () =>
-    <div className="about-text">
+    <div>
         <h2>Status: Alpha</h2>
         <h4>Incompleted features:</h4>
         <ul>

@@ -2,7 +2,7 @@ import React from 'react';
 import * as C from "../../constant";
 
 export const Page = () =>
-    <div className="about-text">
+    <div>
         <h2>What is this?</h2>
         <p>
             Efficient Democracy is a weekly newsletter of deeply important Hacker News posts. Rather than showing an addictive infinite list of interesting posts we select only those you need to read - no news is good news.

@@ -5,7 +5,7 @@ export {Page as JestSerialCodeCoverage} from './jest-serial-code-coverage';
 export {Page as CspInlineScript} from './csp-inline-script';
 
 export const Blogs = ({ entries, page, showNext }) =>
-    <div className="about-text">
+    <div>
         <h2>Blog</h2>
         <ul>
         {entries.map((e, i) => 

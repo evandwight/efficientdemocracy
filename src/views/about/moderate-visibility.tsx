@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Page = () =>
-    <div className="about-text">
+    <div>
         <h2>Why we moderate visibility</h2>
         <p>
             The purpose of suspending bad posters is to prevent people from seeing bad posts. However, this doesn't solve the problem because the people who promoted a bad post can keep doing so. Voters have more control over what the community sees than posters; a post on the front page of Reddit will be seen by millions whereas a post without any up votes will be seen by almost no one. A bad post seen by no one doesn't matter. We hold voters responsible for what they promote.
