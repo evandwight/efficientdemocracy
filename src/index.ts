@@ -40,7 +40,7 @@ function setup(db) {
       useDefaults: true,
       directives: {
         "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
-        "script-src": ["'self'"]
+        "script-src": ["'self'"],
       },
     })
   );

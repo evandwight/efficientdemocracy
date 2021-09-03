@@ -45,4 +45,20 @@ export default class Users {
         return this.db.pool.query(`SELECT id FROM users`)
             .then((result) => result.rows.map(row => row.id));
     }
+
+    createGoogleUser({ userName, email, googleId}) {
+        return this.db.things.create(C.THINGS.USER).then(async id => {
+            await this.db.pool.query(
+                `INSERT INTO users (id, user_name, email, google_id, created_on, is_mod, auth_type)
+                VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.GOOGLE})`,
+                [id, userName, email, googleId, new Date()]);
+            return id as UserId;
+        });
+    }
+
+    getUserByGoogleId(googleId) {
+        return this.db.pool.query(`
+            SELECT * FROM users WHERE google_id = $1`, [googleId])
+            .then(selectOne);
+    }
 }

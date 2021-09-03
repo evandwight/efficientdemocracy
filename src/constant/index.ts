@@ -14,6 +14,11 @@ export const THINGS = {
     MOD_ACTION: 5,
 };
 
+export const AUTH_TYPE = {
+    LOCAL: 0,
+    GOOGLE: 1,
+}
+
 export const VOTE = {
     UP: 2,
     NONE : 1,
