@@ -24,5 +24,7 @@ export const Login = ({ errors, csrfToken }) =>
       </div>
 
       <p>Don't have an account? <b><a href={C.URLS.USER_REGISTER}>Register</a></b></p>
+
+      <div><a href="/auth/google">Sign In with Google</a></div>
     </form>
   </div>
