@@ -10,28 +10,13 @@ We follow try to follow the recommendations listed in the owasp cheatsheets. The
 Cheatsheets:
 * https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html
 * https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
-* https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html
-* https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
 
 ### Authentication
 
-This area needs work.
-
-Implemented:
-* Authentication Solution and Sensitive Accounts - no sensitive accounts used
-* Transmit Passwords Only Over TLS or Other Strong Transport - tls with nginx
-* Password Managers - compatible
+Using google oauth2
 
 Not Implemented:
-* Implement Proper Password Strength Controls
-* Implement Secure Password Recovery Mechanism
-* Store Passwords in a Secure Fashion
-* Compare Password Hashes Using Safe Functions
 * Require Re-authentication for Sensitive Features
-* Consider Strong Transaction Authentication
-* Authentication and Error Messages
-* Protect Against Automated Attacks
-* Logging and Monitoring
 
 ### Application Security
 
