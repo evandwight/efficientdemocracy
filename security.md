@@ -1,9 +1,6 @@
 # Security
 
-This site is insecure. Please do not reuse passwords, or an email address you don't want leaked. Known insecurities:
-
-* Login - timing attacks, no request limitations
-* Registration - leaks email information
+This site is insecure.
 
 ## Specific measures
 We follow try to follow the recommendations listed in the owasp cheatsheets. They are out of date and incomplete but better than nothing.
