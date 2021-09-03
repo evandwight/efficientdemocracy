@@ -33,21 +33,17 @@ export async function notLoggedIn() {
 
 export async function login() {
     const [userId, userInfo] = await testApi.createHttpUser();
-    const request = supertest(setup(db));
-    let res = await request.get(C.URLS.USER_LOGIN)
+    const router = setup(db);
+    // When google auth is the only method to login, add a method to simulate a login via passport
+    router.get("/test_force_login", (req, res) => {
+        req["session"].passport = {user: userId}
+        res.sendStatus(200);
+    });
+    const request = supertest(router);
+    let res = await request.get("/test_force_login")
         .send()
         .expect(200);
-    const csrfToken = getCsrfToken(res.text);
     const cookies = res.headers['set-cookie'];
-    res = await request.post(C.URLS.USER_LOGIN)
-        .type('form')
-        .set('Cookie', cookies)
-        .send({
-        _csrf: csrfToken,
-        email: userInfo.email,
-        password: userInfo.password
-        })
-        .expect(302);
     return {
         get: (url) => request.get(url).set('Cookie', cookies),
         post: (url) => request.post(url).set('Cookie', cookies),

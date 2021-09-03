@@ -100,25 +100,6 @@ code {
     width:100%;
 }
 
-.about-text {
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.about-text a {
-    color: #0000ee;
-    text-decoration: underline;
-}
-
-
-.about-text img {
-    width: 100%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
 
 .highlight-links a {
     color: #0000ee;
@@ -129,6 +110,32 @@ code {
     text-align: right;
 }
 
+
+#about-content {
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+#about-content a {
+    color: #0000ee;
+    text-decoration: underline;
+}
+
+
+#about-content img {
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#inner-content {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 #content {
     margin: auto;
     max-width: 1215px;
@@ -137,6 +144,8 @@ code {
 
 #header {
     width: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 #post_header {
@@ -169,13 +178,13 @@ a {
 /* Media Quieres */
 
 @media only screen and (max-width: 600px) {
-    .about-text {
+    #about-content {
         max-width: 100%;
     }
 }
 
 @media only screen and (min-width: 600px) {
-    .about-text {
+    #about-content {
         max-width: 500px;
     }
 }
@@ -183,9 +192,9 @@ a {
 @media only screen and (min-width: 300px) and (max-width: 389px) {
     #content {
         max-width: 100%;
-        overflow: hidden
+        overflow: hidden;
     }
-    .about-text {
+    #about-content {
         max-width: 100%;
     }
 }
@@ -193,9 +202,9 @@ a {
 @media only screen and (min-width: 390px) and (max-width: 460px) {
     #content {
         max-width: 100%;
-        overflow: hidden
+        overflow: hidden;
     }
-    .about-text {
+    #about-content {
         max-width: 100%;
     }
 }
@@ -203,9 +212,9 @@ a {
 @media only screen and (min-width: 460px) and (max-width: 599px) {
     #content {
         max-width: 460px;
-        overflow: hidden
+        overflow: hidden;
     }
-    .about-text {
+    #about-content {
         max-width: 100%;
     }
 }
@@ -213,49 +222,49 @@ a {
 @media only screen and (min-width: 600px) and (max-width: 689px) {
     #content {
         max-width: 540px;
-        overflow: hidden
+        overflow: hidden;
     }
 }
 
 @media only screen and (min-width: 690px) and (max-width: 809px) {
     #content {
         max-width: 620px;
-        overflow: hidden
+        overflow: hidden;
     }
 }
 
 @media only screen and (min-width: 810px) and (max-width: 899px) {
     #content {
         max-width: 730px;
-        overflow: hidden
+        overflow: hidden;
     }
 }
 
 @media only screen and (min-width: 900px) and (max-width: 1079px) {
     #content {
         max-width: 810px;
-        overflow: hidden
+        overflow: hidden;
     }
 }
 
 @media only screen and (min-width: 1080px) and (max-width: 1169px) {
     #content {
         max-width: 970px;
-        overflow: hidden
+        overflow: hidden;
     }
 }
 
 @media only screen and (min-width: 1170px) and (max-width: 1259px) {
     #content {
         max-width: 1050px;
-        overflow: hidden
+        overflow: hidden;
     }
 }
 
 @media only screen and (min-width: 1260px) and (max-width: 1349px) {
     #content {
         max-width: 1130px;
-        overflow: hidden
+        overflow: hidden;
     }
 }
 

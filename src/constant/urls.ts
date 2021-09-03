@@ -32,10 +32,14 @@ export const USER_REGISTER = "/users/register";
 export const USER_LOGOUT = "/users/logout";
 export const USER_STRIKES = "/user/strikes";
 export const USER_SETTINGS = "/user/settings";
+export const FIRST_RUN_SETUP = "/first-run-setup";
 
 
 // Misc
 export const ABOUT = "/about/";
+export const ABOUT_LEGAL = ABOUT + "legal";
+export const ABOUT_PRIVACY = ABOUT + "privacy";
+export const ABOUT_TERMS_OF_SERVICE = ABOUT + "terms-of-service";
 export const ABOUT_WHAT_IS_THIS = ABOUT + "what-is-this";
 export const ABOUT_DEMOCRATIC_MODERATION = ABOUT + "democratic-moderation";
 export const ABOUT_MODERATE_VISIBILITY = ABOUT + "moderate-visibility";

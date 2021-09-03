@@ -5,8 +5,6 @@ import assert from 'assert';
 
 export async function addCustomLocals(req, res, next) {
     let user;
-    console.log("is authenticated:", req.isAuthenticated());
-    console.log("session id", req.headers);
     if (req.isAuthenticated()) {
       try {
         let userId = req.user.id;

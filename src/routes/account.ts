@@ -11,8 +11,7 @@ import validator from 'validator';
 export const USERNAME_REGEX = RegExp('[A-Za-z0-9_]*');
 
 export function login(req, res) {
-    const {errors, csrfToken} = res.locals;
-    reactRender(res, Login({errors, csrfToken}), {showLogin: false, title:"Login"});
+    reactRender(res, Login(), {showLogin: false, title:"Login"});
 }
 
 export function register(req, res) {

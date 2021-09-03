@@ -61,4 +61,20 @@ export default class Users {
             SELECT * FROM users WHERE google_id = $1`, [googleId])
             .then(selectOne);
     }
+
+    setFirstRunComplete(id) {
+        return this.db.pool.query(
+            `UPDATE users
+            SET first_run = false
+            WHERE id = $1`,
+            [id]);
+    }
+
+    setSendEmails({userId, sendEmails}) {
+        return this.db.pool.query(
+            `UPDATE users
+            SET send_emails = $2
+            WHERE id = $1`,
+            [userId, sendEmails]);
+    }
 }

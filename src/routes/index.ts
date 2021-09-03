@@ -5,3 +5,4 @@ export * as About from './about';
 export * as Blog from './blog';
 export * as Sample from './sample';
 export * as Misc from './misc';
+export * as FirstRunSetup from './firstRunSetup';

@@ -1,30 +1,9 @@
 import React from 'react';
 import * as C from "../constant";
 
-export const Login = ({ errors, csrfToken }) =>
+export const Login = () =>
   <div>
-    <h1>Login</h1>
-
-    {(typeof errors != 'undefined') &&
-      <ul>
-        {errors.map(error =>
-          (<li> {error.message}</li>))}
-      </ul>}
-
-    <form action={C.URLS.USER_LOGIN} method="POST">
-      <input type="hidden" name="_csrf" value={csrfToken} />
-      <div>
-        <input type="email" id="email" name="email" placeholder="Email" required />
-      </div>
-      <div>
-        <input type="password" id="password" name="password" placeholder="Password" required />
-      </div>
-      <div>
-        <input type="submit" value="Login" />
-      </div>
-
-      <p>Don't have an account? <b><a href={C.URLS.USER_REGISTER}>Register</a></b></p>
-
-      <div><a href="/auth/google">Sign In with Google</a></div>
-    </form>
+    <a href="/auth/google">
+      <img style={{ height: "3em" }} src="/public/icons/btn_google_signin_light_normal_web@2x.png" />
+    </a>
   </div>

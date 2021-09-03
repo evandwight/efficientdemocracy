@@ -5,7 +5,6 @@ import session from "express-session";
 import csrf from 'csurf';
 import { addAsync } from '@awaitjs/express';
 import * as Routes from './routes';
-const initializePassport = require("./passportConfig");
 import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403 } from './routes/utils';
 import { addCustomLocals } from './utils';
 import * as C from "./constant";
@@ -13,13 +12,12 @@ import { runTasks } from "./batch";
 import * as About from './views/about';
 import { renderAbout } from './routes/about';
 import { BLOG_ENTRIES, renderBlog } from './routes/blog';
-import * as Blog from './views/blog';
 import helmet from 'helmet';
 import { logger } from './logger';
 import hpp from 'hpp';
 import toobusy from 'toobusy-js'
 const pgSession = require('connect-pg-simple')(session);
-import "./googlePassportConfig";
+import * as GooglePassport from "./googlePassportConfig";
 
 // Setup
 require("dotenv").config();
@@ -34,16 +32,18 @@ function setup(db) {
 
   // security settings:
   app.use(hpp()); // HTTP Parameter Pollution(HPP)
-  app.use(helmet());
-  app.use(
-    helmet.contentSecurityPolicy({
-      useDefaults: true,
-      directives: {
-        "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
-        "script-src": ["'self'"],
-      },
-    })
-  );
+  if (process.env.NODE_ENV === "production") {
+    app.use(helmet());
+    app.use(
+      helmet.contentSecurityPolicy({
+        useDefaults: true,
+        directives: {
+          "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
+          "script-src": ["'self'"],
+        },
+      })
+    );
+  }
 
   app.use(function (req, res, next) {
     if (toobusy()) {
@@ -70,7 +70,7 @@ function setup(db) {
     saveUninitialized: false,
     name: "sesId-d48s",
     cookie: {
-      sameSite: true,
+      sameSite: 'lax',
       maxAge: 365 * 24 * 60 * 60 * 1000, // 365 days
     }
   };
@@ -81,7 +81,7 @@ function setup(db) {
   app.use(session(sessionOptions));
 
   // Authentication
-  initializePassport(passport);
+  GooglePassport.initialize(passport);
   app.use(passport.initialize());
   app.use(passport.session()); // Store our variables to be persisted across the whole session. Works with app.use(Session) above
 
@@ -91,6 +91,14 @@ function setup(db) {
 
   // Custom local variables
   app.use(addCustomLocals);
+  app.use((req, res, next) => {
+    const excludeUrls = [C.URLS.FIRST_RUN_SETUP, C.URLS.USER_LOGOUT];
+    if (req.isAuthenticated() && res.locals.user.first_run && excludeUrls.indexOf(req.url) === -1) {
+      res.redirect(C.URLS.FIRST_RUN_SETUP);
+    } else {
+      next();
+    }
+  })
 
 
   const router = addAsync(app);
@@ -117,29 +125,26 @@ function setup(db) {
 
 
   // // Samples
-  // app.getAsync("/samples/:thingId", Routes.Sample.viewSamples);
   router.postAsync(C.URLS.SUBMIT_SAMPLE_VOTE + ":sampleId", assertAuthenticated, Routes.Sample.submitSampleVote);
   router.getAsync(C.URLS.VIEW_SAMPLES + ":thingId", Routes.Sample.viewSamples);
   router.getAsync(C.URLS.VIEW_SAMPLE_RESULT + ":sampleId", Routes.Sample.viewSampleResult);
 
   // // Mods
-  // app.getAsync("/mods", assertAuthenticated, Routes.Mods.splash);
-  // router.postAsync("/submit/mod_vote", assertAuthenticated, Routes.Mods.submitVote);
   router.getAsync(C.URLS.QPOSTS_MOD_ACTIONS + ":id", assertMod, Routes.Mods.viewPostActions);
   router.postAsync(C.URLS.SUBMIT_QPOST_MOD_ACTION + ":field/:id", assertMod, Routes.Mods.submitPostAction);
 
 
   // Accounts
   router.get(C.URLS.USER_LOGIN, redirectAuthenticated, Routes.Account.login);
-  router.post(C.URLS.USER_LOGIN, passport.authenticate("local", { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
-  router.get(C.URLS.USER_REGISTER, redirectAuthenticated, Routes.Account.register);
-  router.postAsync(C.URLS.USER_REGISTER, Routes.Account.userRegister);
   router.get(C.URLS.USER_LOGOUT, Routes.Account.logout);
 
   router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);
   router.get(C.URLS.USER_SETTINGS, assertAuthenticated, Routes.Account.userSettings);
 
   // About
+  router.get(C.URLS.ABOUT_LEGAL, renderAbout(About.Legal, "Legal"));
+  router.get(C.URLS.ABOUT_PRIVACY, renderAbout(About.Privacy, "Privacy"));
+  router.get(C.URLS.ABOUT_TERMS_OF_SERVICE, renderAbout(About.TermsOfService, "Terms of service"));
   router.get(C.URLS.ABOUT_WHAT_IS_THIS, renderAbout(About.WhatIsThis, "What is this?"));
   router.get(C.URLS.ABOUT_FAQ, renderAbout(About.Faq, "Faq"));
   router.get(C.URLS.ABOUT_DEMOCRATIC_MODERATION, renderAbout(About.DemocraticModeration, "Democratic moderation"));
@@ -150,27 +155,12 @@ function setup(db) {
   router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
   BLOG_ENTRIES.forEach(entry => router.get(entry.url, renderBlog(entry)));
 
+  // Google
+  router.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', "https://www.googleapis.com/auth/userinfo.email"] }));
+  router.get('/auth/google/callback', passport.authenticate('google', { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
 
-
-
-
-  // GET /auth/google
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  The first step in Google authentication will involve
-//   redirecting the user to google.com.  After authorization, Google
-//   will redirect the user back to this application at /auth/google/callback
-router.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
-
-// GET /auth/google/callback
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function function will be called,
-//   which, in this example, will redirect the user to the home page.
-router.get('/auth/google/callback', 
-passport.authenticate('google', { failureRedirect: C.URLS.USER_LOGIN }),
-function(req, res) {
-  res.redirect('/');
-});
+  router.get(C.URLS.FIRST_RUN_SETUP, Routes.FirstRunSetup.firstRunSetup);
+  router.postAsync(C.URLS.FIRST_RUN_SETUP, Routes.FirstRunSetup.submitFirstRunSetup);
 
 
 

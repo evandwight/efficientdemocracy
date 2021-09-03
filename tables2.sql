@@ -102,6 +102,14 @@ CREATE TABLE sample_votes (
     PRIMARY KEY (sample_id, user_id)
 );
 
+ALTER TABLE users ALTER COLUMN name DROP NOT NULL;
+ALTER TABLE users ALTER COLUMN password DROP NOT NULL;
+ALTER TABLE users ADD COLUMN auth_type INT NOT NULL DEFAULT 0;
+-- ALTER TABLE users ADD COLUMN auth_info JSONB;
+ALTER TABLE users ADD COLUMN google_id VARCHAR(64) UNIQUE;
+ALTER TABLE users ADD COLUMN first_run BOOLEAN DEFAULT true;
+ALTER TABLE users ADD COLUMN send_emails BOOLEAN DEFAULT false;
+
 -- ALTER TABLE table_name ADD COLUMN new_column_name data_type constraint DEFAULT FALSE;
 -- ALTER TABLE table_name DROP COLUMN column_name;
 

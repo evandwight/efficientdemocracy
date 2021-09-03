@@ -2,6 +2,7 @@
 import React from "react";
 import ReactDOMServer from 'react-dom/server';
 import {Header} from "./header";
+import {Footer} from "./footer";
 import {Page as AboutHeader} from "./about/header";
 
 type reactRenderOptions = {
@@ -14,14 +15,14 @@ type reactRenderOptions = {
 
 export const reactRender = (res, element, options?: reactRenderOptions) => {
     options = options || {};
-    const showLogin = options.showLogin || true;
+    const showLogin = options.hasOwnProperty("showLogin") ? options.showLogin : true;
     const innerHtml = ReactDOMServer.renderToStaticMarkup(
         <div>
             <Header showLogin={showLogin} user={res.locals.user} csrfToken={res.locals.csrfToken}/>
             <div id="inner-content">
                 {element}
             </div>
-            <hr className="blue-400"/>
+            <Footer/>
         </div>);
     res.send(HtmlBoilerPlate(innerHtml, res.locals.csrfToken, options));
 }
@@ -34,7 +35,7 @@ export const reactAboutRender = (res, element: JSX.Element, title: string) => {
             <div id="about-content">
                 {element}
             </div>
-            <hr className="blue-400"/>
+            <Footer/>
         </div>);
     const options = {
         title
