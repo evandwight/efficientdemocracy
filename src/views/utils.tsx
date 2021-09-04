@@ -56,6 +56,7 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
     const chartData = includeChartJs ? `<script> var chartData = ${JSON.stringify(options.dangerousChartData)}</script>` : "";
     const includeVotesJs = options.includeVotesJs || false;
     // csrfToken is for client side api calls via axios
+    // <script>0</script> for firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -85,6 +86,7 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
     </div>
 
     ${includeChartJs ? `${chartData} <script src="/public/chart.js"></script>`: ""}
+    <script>0</script>
 </body>
 </html>
 `;

@@ -38,7 +38,10 @@ function setup(db) {
       useDefaults: true,
       directives: {
         "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
-        "script-src": ["'self'"],
+        "script-src": [
+          "'self'", 
+          "'sha256-X+zrZv/IbzjZUnhsbWlsecLbwjndTpG0ZynXOif7V+k='" // for script "0" workaround firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
+        ],
       },
     })
   );
