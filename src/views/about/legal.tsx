@@ -3,7 +3,7 @@ import * as C from "../../constant";
 
 export const Page = () =>
     <div>
-        
+        <h2>Legal</h2>
         <ul>
             <li>
                 <a href={C.URLS.ABOUT_PRIVACY}>Privacy policy</a>
