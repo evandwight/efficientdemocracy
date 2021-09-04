@@ -11,10 +11,6 @@ export const Page = () =>
                     <a href={C.URLS.ABOUT_STATUS}>alpha</a>
                     <span> | </span>
                     <a href={C.URLS.ABOUT_WHAT_IS_THIS}>what is this?</a>
-                    <span> | </span>
-                    <a href={C.URLS.BLOG}>blog</a>
-                    <span> | </span>
-                    <a href={C.URLS.ABOUT_FAQ}>faq</a>
                 </td>
             </tr>
         </table>

@@ -32,18 +32,16 @@ function setup(db) {
 
   // security settings:
   app.use(hpp()); // HTTP Parameter Pollution(HPP)
-  if (process.env.NODE_ENV === "production") {
-    app.use(helmet());
-    app.use(
-      helmet.contentSecurityPolicy({
-        useDefaults: true,
-        directives: {
-          "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
-          "script-src": ["'self'"],
-        },
-      })
-    );
-  }
+  app.use(helmet());
+  app.use(
+    helmet.contentSecurityPolicy({
+      useDefaults: true,
+      directives: {
+        "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
+        "script-src": ["'self'"],
+      },
+    })
+  );
 
   app.use(function (req, res, next) {
     if (toobusy()) {
