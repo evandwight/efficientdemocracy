@@ -47,18 +47,23 @@ export const ViewPost = ({ post, user }) => {
             {!!user && user.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod actions</a></span>}
             {post.has_samples > 0 && <span> | <a href={C.URLS.VIEW_SAMPLES + post.id}>view samples</a></span>}
           </div>
+          <div>
+              <Fields {... {post}}/>
+          </div>
         </td>
-      </tr>
-    </table>
-    <table>
-      <tr>
-        <td>{post.censor ? "censored" : "not censored"}</td>
-        <td><DisputeLink post={post} field={C.SAMPLE.FIELDS.CENSOR}/></td>
-      </tr>
-      <tr>
-        <td>{post.deeply_important ? "deeply important" : "not deeply important"}</td>
-        <td><DisputeLink post={post} field={C.SAMPLE.FIELDS.DEEPLY_IMPORTANT}/></td>
       </tr>
     </table>
   </div>
 }
+
+export const Fields = ({post}) => 
+  <span>
+    {C.SAMPLE.FIELD_LIST.reduce((acc, field, i) => [... acc, 
+        <span key={i}>
+          {i > 0 && <span>, </span>}
+          {C.SAMPLE.FIELDS_PRETTY[field][post[field] ? 1 : 0]}
+          <span> </span>
+          (<DisputeLink {... {post, field}}/>)
+        </span>
+      ], [])}
+  </span>
