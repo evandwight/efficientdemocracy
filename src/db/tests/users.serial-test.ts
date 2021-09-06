@@ -47,12 +47,21 @@ describe("Users", () => {
         });
     });
     
-    describe('getUsers', () => {
+    describe('getUserIds', () => {
         it('works', async () => {
             let id = await db.users.createUser({userName:"a", name: "a", email: "b", hashedPassword: "c"});
-            let users = await db.users.getUsers();
+            let users = await db.users.getUserIds();
             expect(users.length).toBe(1);
             expect(users[0]).toEqual(id);
+        });
+    });
+
+    describe('getUserIdByUnsubscribeKey', () => {
+        it('works', async () => {
+            const id = await testApi.createUser();
+            const user = await db.users.getUser(id);
+            const userId = await db.users.getUserIdByUnsubscribeKey(user.unsubscribe_key);
+            expect(userId).toEqual(id);
         });
     });
 });

@@ -5,6 +5,7 @@ type UUID = string;
 export type ThingId = UUID;
 export type UserId = Nominal<ThingId, "UserId">;
 export type SampleId = Nominal<ThingId, "SampleId">;
+export type UnsubscribeKey = Nominal<UUID, "UnsubscribeKey">;
 
 // Types
 export type VoteType = Nominal<number, "VoteType">;

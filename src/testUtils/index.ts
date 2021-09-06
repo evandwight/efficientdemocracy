@@ -101,9 +101,9 @@ export const testApi = {
     },
     createHackerUser: async ():Promise<UserId> => {
         await db.pool.query(
-            `INSERT INTO users (id, user_name, name, email, password, created_on, is_mod)
-            VALUES ($1, $2, $3, $4, $5, $6, false)`,
-            [C.BOT_ACCOUNT_USER_ID, "hacker", "hacker name", "hacker@h.com", "", new Date()]);
+            `INSERT INTO users (id, user_name, name, email, password, created_on, is_mod, unsubscribe_key)
+            VALUES ($1, $2, $3, $4, $5, $6, false, $7)`,
+            [C.BOT_ACCOUNT_USER_ID, "hacker", "hacker name", "hacker@h.com", "", new Date(), db.uuidv4()]);
         return C.BOT_ACCOUNT_USER_ID as UserId;
     },
     createPost: (args) => db.qPosts.submitPost({title: "a", url:"b", content:"c", ...args}),

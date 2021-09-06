@@ -7,6 +7,7 @@ import { Strikes } from '../views/strikes';
 import {UserSettings} from '../views/userSettings';
 import * as C from "../constant";
 import validator from 'validator';
+import assert from 'assert';
 
 export const USERNAME_REGEX = RegExp('[A-Za-z0-9_]*');
 
@@ -86,4 +87,16 @@ export async function strikes(req, res) {
 export async function userSettings(req, res) {
     const {user} = res.locals;
     reactRender(res, UserSettings({user}), {title: "User settings"});
+}
+
+export async function unsubscribe(req, res) {
+    const { keyId, userId } = req.params;
+    assert(validator.isUUID(keyId,4));
+    assert(validator.isUUID(userId,4));
+
+    const user = await db.users.getUser(userId);
+    assert.strictEqual(user.unsubscribe_key, keyId, "Invalid key");
+
+    await db.users.setSendEmails({userId, sendEmails:false});
+    res.send("You have successfully unsubscribed from all emails. To change your settings more go to user settings.");
 }

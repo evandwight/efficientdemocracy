@@ -1,7 +1,7 @@
 import { DatabaseApi } from "./databaseApi";
 import * as C from '../constant';
-import { selectOne } from '../db/utils';
-import { User, UserId } from './types';
+import { assertOne, selectOne, selectOneAttr, selectRows } from '../db/utils';
+import { UnsubscribeKey, User, UserId } from './types';
 
 export default class Users {
     db: DatabaseApi;
@@ -11,9 +11,9 @@ export default class Users {
     createUser({ userName, name, email, hashedPassword }): Promise<UserId> {
         return this.db.things.create(C.THINGS.USER).then(async id => {
             await this.db.pool.query(
-                `INSERT INTO users (id, user_name, name, email, password, created_on, is_mod)
-                VALUES ($1, $2, $3, $4, $5, $6, false)`,
-                [id, userName, name, email, hashedPassword, new Date()]);
+                `INSERT INTO users (id, user_name, name, email, password, created_on, unsubscribe_key, is_mod)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, false)`,
+                [id, userName, name, email, hashedPassword, new Date(), this.db.uuidv4()]);
             return id as UserId;
         });
     }
@@ -41,9 +41,13 @@ export default class Users {
 
     // TODO this could return millions of records
     // NO FIX
-    getUsers(): Promise<User[]> {
+    getUserIds(): Promise<UserId[]> {
         return this.db.pool.query(`SELECT id FROM users`)
             .then((result) => result.rows.map(row => row.id));
+    }
+
+    getUsers(): Promise<User[]> {
+        return this.db.pool.query(`SELECT * FROM users`).then(selectRows);
     }
 
     createGoogleUser({ userName, email, googleId}) {
@@ -76,5 +80,11 @@ export default class Users {
             SET send_emails = $2
             WHERE id = $1`,
             [userId, sendEmails]);
+    }
+
+    getUserIdByUnsubscribeKey(unsubscribeKey): Promise<User> {
+        return this.db.pool.query(`
+            SELECT id FROM users WHERE unsubscribe_key = $1`, [unsubscribeKey])
+            .then(selectOneAttr('id'));
     }
 }

@@ -22,7 +22,7 @@ export async function createSamples(sampleType, field) {
     const sampleSize = sampleType === C.SAMPLE.TYPE.LEVEL_1 ? 1 : null;
     const shouldCreateSample = sampleType === C.SAMPLE.TYPE.LEVEL_1 ? shouldCreateSampleLevel1 : shouldCreateReferendum;
 
-    const userIds = await db.users.getUsers();
+    const userIds = await db.users.getUserIds();
     const thingIds = await db.samples.getThingsWithDisputes({threshold:disputeThreshold, field});
     const listOfSamples = await Promise.all(thingIds.map(thingId => db.samples.getSamples({thingId, field})));
     await Promise.all(thingIds.map(async (thingId, i) => {

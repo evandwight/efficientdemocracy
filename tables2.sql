@@ -110,6 +110,13 @@ ALTER TABLE users ADD COLUMN google_id VARCHAR(64) UNIQUE;
 ALTER TABLE users ADD COLUMN first_run BOOLEAN DEFAULT true;
 ALTER TABLE users ADD COLUMN send_emails BOOLEAN DEFAULT false;
 
+
+-- Version 3
+ALTER TABLE users ADD COLUMN unsubscribe_key UUID; 
+CREATE INDEX idx_users_unsubscribe_key ON users(unsubscribe_key);
+-- run src/scripts/setAllUserUnsubscribeKey.ts
+ALTER TABLE users ALTER COLUMN unsubscribe_key SET NOT NULL; 
+
 -- ALTER TABLE table_name ADD COLUMN new_column_name data_type constraint DEFAULT FALSE;
 -- ALTER TABLE table_name DROP COLUMN column_name;
 

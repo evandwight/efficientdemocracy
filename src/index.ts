@@ -163,7 +163,9 @@ function setup(db) {
   router.get(C.URLS.FIRST_RUN_SETUP, Routes.FirstRunSetup.firstRunSetup);
   router.postAsync(C.URLS.FIRST_RUN_SETUP, Routes.FirstRunSetup.submitFirstRunSetup);
 
-
+  // Email
+  // Unsecure - get changes database state so it should be post, however it needs to be embedded in links in emails
+  router.getAsync(C.URLS.EMAIL_UNSUBSCRIBE + ':userId/:keyId', Routes.Account.unsubscribe);
 
   // Custom error handler
   router.use(function (err, req, res, next) {
