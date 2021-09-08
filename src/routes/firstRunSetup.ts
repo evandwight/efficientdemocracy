@@ -1,14 +1,5 @@
-import { reactRender } from '../views/utils';
 import db from '../db/databaseApi';
-import {FirstRunSetup} from '../views/firstRunSetup';
 import * as C from '../constant';
-
-export const USERNAME_REGEX = RegExp('[A-Za-z0-9_]*');
-
-export function firstRunSetup(req, res) {
-    const {csrfToken} = res.locals;
-    reactRender(res, FirstRunSetup({csrfToken}), {title:"Account setup"});
-}
 
 export async function submitFirstRunSetup(req, res) {
     const userId = req.user.id;

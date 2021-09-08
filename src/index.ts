@@ -92,15 +92,6 @@ function setup(db) {
 
   // Custom local variables
   app.use(addCustomLocals);
-  app.use((req, res, next) => {
-    const excludeUrls = [C.URLS.FIRST_RUN_SETUP, C.URLS.USER_LOGOUT];
-    if (req.isAuthenticated() && res.locals.user.first_run && excludeUrls.indexOf(req.url) === -1) {
-      res.redirect(C.URLS.FIRST_RUN_SETUP);
-    } else {
-      next();
-    }
-  })
-
 
   const router = addAsync(app);
 
@@ -160,7 +151,6 @@ function setup(db) {
   router.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', "https://www.googleapis.com/auth/userinfo.email"] }));
   router.get('/auth/google/callback', passport.authenticate('google', { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
 
-  router.get(C.URLS.FIRST_RUN_SETUP, Routes.FirstRunSetup.firstRunSetup);
   router.postAsync(C.URLS.FIRST_RUN_SETUP, Routes.FirstRunSetup.submitFirstRunSetup);
 
   // Email

@@ -1,6 +1,7 @@
 import React from "react";
 import * as C from "../constant";
 import {SampleCard} from "./sampleCard";
+import {FirstRunCard} from './firstRunCard';
 
 export const Header = ({ showLogin, user, csrfToken}) =>
     <div>
@@ -19,6 +20,7 @@ export const Header = ({ showLogin, user, csrfToken}) =>
             </tr>
         </table>
         {showLogin && user && user.sample && <SampleCard user={user} csrfToken={csrfToken}/>}
+        {showLogin && user && user.first_run && <FirstRunCard {...{csrfToken}}/>}
         <br/>
     </div>
 
