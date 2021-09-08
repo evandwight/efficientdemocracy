@@ -275,6 +275,14 @@ a {
 
 /* Tailwinds */
 
+.green-500 {
+    color: #10B981
+}
+
+.red-500 {
+    color: #EF4444
+}
+
 .gray-500 {
     color: #6B7280
 }

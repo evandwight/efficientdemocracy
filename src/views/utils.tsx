@@ -53,7 +53,6 @@ export const Checkbox = ({name, label, checked}: {name: string, label: string, c
 export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: reactRenderOptions): string {
     const title = options.title || "Efficient Democracy";
     const includeChartJs = options.includeChartJs || false;
-    const chartData = includeChartJs ? `<script> var chartData = ${JSON.stringify(options.dangerousChartData)}</script>` : "";
     const includeVotesJs = options.includeVotesJs || false;
     // csrfToken is for client side api calls via axios
     // <script>0</script> for firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
@@ -70,7 +69,11 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
         `<script src="/public/axios.min.js"></script>
         <script src="/public/index.js"></script>`
         : ""}
-    ${includeChartJs ? `<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js" crossorigin></script>` : ""}
+    ${includeChartJs ? 
+        `<script type="application/json" id="chartData">${JSON.stringify(options.dangerousChartData)}</script>
+        <script src="/public/sampleChart.js"></script>
+        <script src="/public/chart.min.js"></script>`
+        : ""}
     <link rel="stylesheet" href="/public/styles.css" />
     <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon/favicon-16x16.png" />
@@ -84,8 +87,6 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
     <div class="bg-gray-100 gray-900" id="content">
         ${innerHtml}
     </div>
-
-    ${includeChartJs ? `${chartData} <script src="/public/chart.js"></script>`: ""}
     <script>0</script>
 </body>
 </html>

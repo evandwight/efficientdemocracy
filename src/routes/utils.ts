@@ -61,5 +61,5 @@ export function redirectAuthenticated(req, res, next) {
 }
 
 export function assertFieldExists(field) {
-    assert(C.SAMPLE.FIELD_LIST.indexOf(field) !== -1, "Invalid field");
+    assert(C.FIELDS.LIST.indexOf(field) !== -1, "Invalid field");
 }

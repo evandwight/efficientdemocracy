@@ -20,9 +20,9 @@ export const PostModActions = ({ post, modActions, csrfToken }) =>
 
     <h4>Censor</h4>
 
-    <form action={C.URLS.SUBMIT_QPOST_MOD_ACTION + `${C.SAMPLE.FIELDS.CENSOR}/${post.id}`} method="POST">
+    <form action={C.URLS.SUBMIT_QPOST_MOD_ACTION + `${C.FIELDS.LABELS.CENSOR}/${post.id}`} method="POST">
       <input type="hidden" name="_csrf" value={csrfToken} />
-      <VersionInput field={C.SAMPLE.FIELDS.CENSOR} modActions={modActions} />
+      <VersionInput field={C.FIELDS.LABELS.CENSOR} modActions={modActions} />
       <Checkbox name="censor" label="Set censor:" checked={post.censor}/>
       <Checkbox name="strike_ups" label="Strike up voters:"/>
       <Checkbox name="strike_downs" label="Strike down voters:"/>
@@ -34,9 +34,9 @@ export const PostModActions = ({ post, modActions, csrfToken }) =>
 
     <h4>Deeply important</h4>
 
-    <form action={C.URLS.SUBMIT_QPOST_MOD_ACTION + `${C.SAMPLE.FIELDS.DEEPLY_IMPORTANT}/${post.id}`} method="POST">
+    <form action={C.URLS.SUBMIT_QPOST_MOD_ACTION + `${C.FIELDS.LABELS.DEEPLY_IMPORTANT}/${post.id}`} method="POST">
       <input type="hidden" name="_csrf" value={csrfToken} />
-      <VersionInput field={C.SAMPLE.FIELDS.DEEPLY_IMPORTANT} modActions={modActions} />
+      <VersionInput field={C.FIELDS.LABELS.DEEPLY_IMPORTANT} modActions={modActions} />
       <Checkbox name="value" label="Set deeply important:" checked={post.deeply_important}/>
       <div>
         <input type="submit" value="Submit" />

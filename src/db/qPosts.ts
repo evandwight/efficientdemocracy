@@ -60,7 +60,7 @@ export default class QPosts {
             FROM qposts 
                 INNER JOIN users ON qposts.user_id = users.id
                 INNER JOIN mod_actions ON qposts.id = mod_actions.thing_id
-            WHERE mod_actions.field = '${C.SAMPLE.FIELDS.DEEPLY_IMPORTANT}' and
+            WHERE mod_actions.field = '${C.FIELDS.LABELS.DEEPLY_IMPORTANT}' and
                 mod_actions.value
             ORDER BY created DESC
             LIMIT 30
@@ -94,7 +94,7 @@ export default class QPosts {
     async upsertHackerNewsPost(v: {id: number, title: string, score:number}): Promise<QPostId> {
         // TODO what if this query fails, modactions could not be set! Maybe retry?
         let postId = await this.getPostIdByHackerId(v.id);
-        const field = C.SAMPLE.FIELDS.DEEPLY_IMPORTANT;
+        const field = C.FIELDS.LABELS.DEEPLY_IMPORTANT;
         const botAccount = C.BOT_ACCOUNT_USER_ID;
         const priority = C.MOD_ACTIONS.PRIORTY.AUTO_MOD;
         const isDeeplyImportant = v.score > 600;

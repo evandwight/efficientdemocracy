@@ -2,7 +2,7 @@
 
 exports[`countsToChartData handles null results 1`] = `
 Object {
-  "shouldCensor": Object {
+  "voteCanvas": Object {
     "datasets": Array [
       Object {
         "data": Array [
@@ -24,24 +24,7 @@ Object {
 
 exports[`countsToChartData works 1`] = `
 Object {
-  "shouldCensor": Object {
-    "datasets": Array [
-      Object {
-        "data": Array [
-          1,
-          2,
-          3,
-        ],
-        "label": "# of Votes",
-      },
-    ],
-    "labels": Array [
-      "Yes",
-      "No",
-      "Didn't vote",
-    ],
-  },
-  "shouldStrike": Object {
+  "strikeCanvas": Object {
     "datasets": Array [
       Object {
         "data": Array [
@@ -58,6 +41,23 @@ Object {
       "Down voters",
       "Poster",
       "Disputers",
+    ],
+  },
+  "voteCanvas": Object {
+    "datasets": Array [
+      Object {
+        "data": Array [
+          1,
+          2,
+          3,
+        ],
+        "label": "# of Votes",
+      },
+    ],
+    "labels": Array [
+      "Yes",
+      "No",
+      "Didn't vote",
     ],
   },
 }

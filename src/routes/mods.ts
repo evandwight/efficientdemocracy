@@ -32,9 +32,9 @@ export async function submitPostAction(req, res) {
 
 
     assert.strictEqual(await db.things.getType(postId), C.THINGS.QPOST, "Invalid thing type");
-    if (field === C.SAMPLE.FIELDS.CENSOR) {
+    if (field === C.FIELDS.LABELS.CENSOR) {
         assert(value || !(strikeUps || strikeDowns || strikePoster), "Cannot strike when not censoring");
-    } else if (field === C.SAMPLE.FIELDS.DEEPLY_IMPORTANT) {
+    } else if (field === C.FIELDS.LABELS.DEEPLY_IMPORTANT) {
         assert(!(strikeUps || strikeDowns || strikePoster), "Cannot strike with field deeply important");
     }
 

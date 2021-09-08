@@ -1,6 +1,6 @@
 import { DatabaseApi } from "./databaseApi";
-import { UserId, Sample} from './types';
-import { selectOne, selectOneAttr, existsOne, assertOne, selectAttr } from "./utils";
+import { UserId, Sample, ThingId} from './types';
+import { selectOne, selectOneAttr, existsOne, assertOne, selectAttr, selectRows } from "./utils";
 import * as C from '../constant';
 import * as Utils from './utils';
 
@@ -112,8 +112,13 @@ export default class Samples {
             `SELECT * FROM samples WHERE id = $1`, [sampleId]).then(selectOne);
     }
 
-    getCompletedSamples({thingId, field}) {
-        return this.getSamples({thingId, field}).then(r => r.filter(sample => sample.is_complete));
+    getCompletedSamples(thingId: ThingId) {
+        return this.db.pool.query(
+            `SELECT * 
+            FROM samples 
+            WHERE samplee_id = $1 and is_complete
+            ORDER BY type ASC, field ASC`, [thingId])
+            .then(selectRows);
     }
 
     getSamples({thingId, field}) {

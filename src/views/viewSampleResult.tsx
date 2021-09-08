@@ -1,4 +1,5 @@
 import React from 'react';
+import * as C from '../constant';
 
 const prettyStrikesName = {
   'strikes_up': "up voters",
@@ -14,7 +15,7 @@ export function strikesTo(result) {
 export const stringifyResult = (sample) => {
   return !sample.result ? 
     "Inconclusive" : 
-    `Set censor to ${sample.result.vote}. Give strikes to ${strikesTo(sample.result)}.`;
+    `Set ${C.FIELDS.PROPS[sample.field].PRETTY_LABEL} to ${sample.result.vote}. Give strikes to ${strikesTo(sample.result)}.`;
 }
 
 export const RawTable = ({dataTable}) => {
@@ -23,20 +24,21 @@ export const RawTable = ({dataTable}) => {
     </table>
 }
 
+// TODO chart looks bad on mobile
 export const ViewSampleResult = ({ sample, dataTable }) => 
   <div>
     <h2>Result</h2>
     <div>{stringifyResult(sample)}</div>
-    <h2>Votes for should post be censored?</h2>
+    <h2>{C.FIELDS.PROPS[sample.field].VIEW_SAMPLE_RESULT.VOTE_CANVAS_TITLE}</h2>
     <div style={{width:"50%"}} className="center-h">
-      <canvas id="shouldCensor" width="400" height="400"></canvas>
+      <canvas id="voteCanvas" width="400" height="400"></canvas>
     </div>
     
     {!!sample.result && 
       <div>
         <h2>Votes for who should be given a strike</h2>
         <div style={{width:"50%"}} className="center-h">
-          <canvas id="shouldStrike" width="400" height="400"></canvas>
+          <canvas id="strikeCanvas" width="400" height="400"></canvas>
         </div>
       </div>}
     

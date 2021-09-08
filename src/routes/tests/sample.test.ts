@@ -1,4 +1,4 @@
-import { countsToDataTable, countsToChartData } from '../../routes/sample';
+import { countsToDataTable, dangerousCountsToChartData } from '../../routes/sample';
 
 
 describe('countsToDataTable', () => {
@@ -24,7 +24,7 @@ describe('countsToChartData', () => {
             result: {vote: false, strike_ups: true, strike_downs: true, strike_poster: true, strike_disputers: true},
             counts
         }
-        const res = countsToChartData(sample);
+        const res = dangerousCountsToChartData(sample);
         expect(res).toMatchSnapshot();
     });
     it('handles null results', () => {
@@ -37,7 +37,7 @@ describe('countsToChartData', () => {
             result: null,
             counts
         }
-        const res = countsToChartData(sample);
+        const res = dangerousCountsToChartData(sample);
         expect(res).toMatchSnapshot();
     });
 });

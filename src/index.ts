@@ -188,7 +188,13 @@ if (require.main === module) {
     console.log(`server started at http://localhost:${PORT}`);
   });
 
-  setInterval(runTasks, 5 * 60 * 1000);
+  setInterval(async () => {
+    try {
+      await runTasks()
+    } catch(err) {
+      logger.error({ severity: "error", message: err.message, stack: err.stack, time: Date.now() });
+    }
+  }, 5 * 60 * 1000);
 
 
   process.on("uncaughtException", function (err) {

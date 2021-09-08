@@ -1,6 +1,7 @@
 export * as SAMPLE from './samples';
 export * as URLS from './urls';
 export * as MOD_ACTIONS from './modActions';
+export * as FIELDS from './fields';
 
 export const SAMPLE_SIZE = 1;
 export const BAN_LENGTH = 90; // 90 days

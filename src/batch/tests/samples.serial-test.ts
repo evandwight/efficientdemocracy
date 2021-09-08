@@ -54,7 +54,7 @@ describe("Batch samples", () => {
 
     describe('createSamples', () => {
         it('works for sample lvl 1', async () => {
-            const field = C.SAMPLE.FIELDS.CENSOR;
+            const field = C.FIELDS.LABELS.CENSOR;
             const userId = await testApi.createUser();
             const thingId = await testApi.createPost({userId});
             await db.votes.submitDispute({thingId, userId, field, shouldBe:true});
@@ -65,7 +65,7 @@ describe("Batch samples", () => {
             await createSamples(C.SAMPLE.TYPE.LEVEL_1, field);
         });
         it('works for referendums', async () => {
-            const field = C.SAMPLE.FIELDS.CENSOR;
+            const field = C.FIELDS.LABELS.CENSOR;
             const {userId, thingId, sampleId} = await testApi.createPostSample();
             await Promise.all([2,3,4,5].map(v => testApi.createDispute({thingId, userId:db.uuidv4()})));
             await db.samples.setSampleIsCompleted({sampleId, count:null, result:null});
@@ -80,13 +80,13 @@ describe("Batch samples", () => {
             const {userId, thingId} = await testApi.createPostDispute();
             await Promise.all([2,3,4,5].map(v => testApi.createDispute({thingId, userId:db.uuidv4()})));
 
-            await createSamples(C.SAMPLE.TYPE.REFERENDUM, C.SAMPLE.FIELDS.CENSOR);
+            await createSamples(C.SAMPLE.TYPE.REFERENDUM, C.FIELDS.LABELS.CENSOR);
             let samples = await db.samples.getSamples({thingId, field: "censor"});
             expect(samples.length).toBe(0);
 
             const sampleId = await testApi.createSample({thingId, userIds:[userId]});
 
-            await createSamples(C.SAMPLE.TYPE.REFERENDUM, C.SAMPLE.FIELDS.CENSOR);
+            await createSamples(C.SAMPLE.TYPE.REFERENDUM, C.FIELDS.LABELS.CENSOR);
             samples = await db.samples.getSamples({thingId, field: "censor"});
             expect(samples.length).toBe(1);
         });

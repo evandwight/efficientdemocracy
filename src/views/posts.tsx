@@ -1,6 +1,6 @@
 import * as C from "../constant";
 import React from "react";
-import { DownVoteButton, UpVoteButton } from "./viewPost";
+import { DownVoteButton, Fields, UpVoteButton } from "./viewPost";
 
 
 export const Posts = ({ posts, user, showCensored, moreLink, offset }) => {
@@ -34,24 +34,18 @@ export const Post = ({post, i, user}) => {
             <div>
                 {post.censor ? "[Censored]" : post.title}
             </div>
-            <div>
-                by <span className="gray-900">{post.user_name}</span>
+            <div className="gray-500">
+                by {post.user_name}
                 {!!post.url && <span> | <a href={post.url}>link</a></span>}
                 <span> | <a href={C.URLS.QPOSTS_VIEW + post.id}>more info</a></span>
                 {!!user && user.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod actions</a></span>}
             </div>
             {hasInterestingFields(post) && 
-                <div>
-                    {fieldsToString(post)}
+                <div className="gray-500">
+                    <Fields post={post} showAllFields={false} showDisputes={false}/>
                 </div>}
         </td>
     </tr>
 }
 
-export const hasInterestingFields = (post) => C.SAMPLE.FIELD_LIST.filter(field => post[field]).length > 0;
-
-export const fieldsToString = (post) => 
-    C.SAMPLE.FIELD_LIST
-        .filter(field => post[field])
-        .map(field => C.SAMPLE.FIELDS_PRETTY[field][1])
-        .join(" | ");
+export const hasInterestingFields = (post) => C.FIELDS.LIST.filter(field => post[field]).length > 0;

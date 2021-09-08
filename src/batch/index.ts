@@ -11,10 +11,10 @@ export async function runTasks() {
 
     await db.pool.query(`REFRESH MATERIALIZED VIEW vote_count`);
 
-    await createSamples(C.SAMPLE.TYPE.LEVEL_1, C.SAMPLE.FIELDS.CENSOR);
-    await createSamples(C.SAMPLE.TYPE.REFERENDUM, C.SAMPLE.FIELDS.CENSOR);
-    await createSamples(C.SAMPLE.TYPE.LEVEL_1, C.SAMPLE.FIELDS.DEEPLY_IMPORTANT);
-    await createSamples(C.SAMPLE.TYPE.REFERENDUM, C.SAMPLE.FIELDS.DEEPLY_IMPORTANT);
+    await createSamples(C.SAMPLE.TYPE.LEVEL_1, C.FIELDS.LABELS.CENSOR);
+    await createSamples(C.SAMPLE.TYPE.REFERENDUM, C.FIELDS.LABELS.CENSOR);
+    await createSamples(C.SAMPLE.TYPE.LEVEL_1, C.FIELDS.LABELS.DEEPLY_IMPORTANT);
+    await createSamples(C.SAMPLE.TYPE.REFERENDUM, C.FIELDS.LABELS.DEEPLY_IMPORTANT);
 
     await endSamples();
 

@@ -48,7 +48,7 @@ export const ViewPost = ({ post, user }) => {
             {post.has_samples > 0 && <span> | <a href={C.URLS.VIEW_SAMPLES + post.id}>view samples</a></span>}
           </div>
           <div>
-              <Fields {... {post}}/>
+              <Fields post={post} showDisputes={true} showAllFields={true}/>
           </div>
         </td>
       </tr>
@@ -56,14 +56,18 @@ export const ViewPost = ({ post, user }) => {
   </div>
 }
 
-export const Fields = ({post}) => 
+export const Fields = ({post, showDisputes, showAllFields}) =>
   <span>
-    {C.SAMPLE.FIELD_LIST.reduce((acc, field, i) => [... acc, 
+    {C.FIELDS.LIST
+      .filter(field => !!showAllFields || post[field])
+      .reduce((acc, field, i) => [... acc, 
         <span key={i}>
           {i > 0 && <span>, </span>}
-          {C.SAMPLE.FIELDS_PRETTY[field][post[field] ? 1 : 0]}
-          <span> </span>
-          (<DisputeLink {... {post, field}}/>)
+          <span className={!!post[field] ? (C.FIELDS.PROPS[field].GOODNESS ? "green-500" : "red-500") : ""}>
+            {C.FIELDS.PROPS[field].PRETTY_PRINT[post[field] ? 1 : 0]}
+          </span>
+          {!!showDisputes && 
+            <span> (<DisputeLink {... {post, field}}/>)</span>}
         </span>
       ], [])}
   </span>

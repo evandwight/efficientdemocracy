@@ -93,7 +93,7 @@ export async function viewPost(req, res) {
 
     let post: any = await db.qPosts.getPost(postId);
     post = (await addFields([post]))[0];
-    post.has_samples = (await db.samples.getCompletedSamples({thingId:postId, field:C.SAMPLE.FIELDS.CENSOR})).length > 0;
+    post.has_samples = (await db.samples.getCompletedSamples(postId)).length > 0;
 
     reactRender(res, ViewPost({ post, user:res.locals.user }), {title: post.title, includeVotesJs: true});
 }

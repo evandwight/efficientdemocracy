@@ -36,7 +36,7 @@ async function getPosts() {
         `SELECT qposts.id as id, created, title, url
         FROM qposts 
             INNER JOIN mod_actions ON qposts.id = mod_actions.thing_id
-        WHERE mod_actions.field = '${C.SAMPLE.FIELDS.DEEPLY_IMPORTANT}' and mod_actions.value
+        WHERE mod_actions.field = '${C.FIELDS.LABELS.DEEPLY_IMPORTANT}' and mod_actions.value
             and (created BETWEEN $1 AND $2)
         ORDER BY created DESC`,[new Date(2021, 8, 1), new Date(2021, 8, 6)]).then(selectRows);
 }

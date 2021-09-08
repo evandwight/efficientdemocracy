@@ -18,7 +18,7 @@ export async function submitSampleVote(req, res) {
     assert(await db.samples.canUserVote({sampleId, userId}), "User not in sample");
 
     const {field} = await db.samples.getSampleResult(sampleId);
-    if (field === C.SAMPLE.FIELDS.DEEPLY_IMPORTANT) {
+    if (field === C.FIELDS.LABELS.DEEPLY_IMPORTANT) {
         assert(!(strikeUps || strikeDowns || strikePoster), "Cannot strike with field deeply important");
     }
 
@@ -42,10 +42,12 @@ export function countsToDataTable(counts) {
         ];
 }
 
-export function countsToChartData(sample) {
+export function dangerousCountsToChartData(sample) {
+    // Do not put user input into this data. This gets injected into a script tag
+    // Be careful what strings you use, I have not escaped this so for example </script> would break the page
     const {counts} = sample;
     let chartData: any = {
-        shouldCensor: {
+        voteCanvas: {
             labels: ["Yes", "No", "Didn't vote"],
             datasets: [{
                 label: '# of Votes',
@@ -54,7 +56,7 @@ export function countsToChartData(sample) {
         }
     };
     if (!!sample.result) {
-        chartData.shouldStrike = {
+        chartData.strikeCanvas = {
             labels: ["Up voters", "Down voters", "Poster", "Disputers"],
             datasets: [{
                 label: '# of Votes',
@@ -73,7 +75,7 @@ export async function viewSampleResult(req, res) {
     const sample = await db.samples.getSampleResult(sampleId);
     assert(sample.is_complete, "Sample must be complete to view");
 
-    const dangerousChartData = countsToChartData(sample);
+    const dangerousChartData = dangerousCountsToChartData(sample);
     const dataTable = countsToDataTable(sample.counts);
     
     reactRender(res, ViewSampleResult({ sample, dataTable }), {title: "Sample", includeChartJs: true, dangerousChartData});
