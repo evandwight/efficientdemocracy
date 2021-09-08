@@ -6,40 +6,13 @@ import db from './db/databaseApi';
 //   credentials (in this case, an accessToken, refreshToken, and Google
 //   profile), and invoke a callback with a user object.
 export const initialize = (passport) => {
-    passport.use(new GoogleStrategy({
+
+    const strategy = new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: process.env.GOOGLE_CALLBACK_URL
-    },
-        function (accessToken, refreshToken, profile, done) {
-            // id: '',
-            // displayName: '',
-            // name: { familyName: '', givenName: '' },
-            // emails: [ { value: 'a@gmail.com', verified: true } ],
-            // photos: [
-            //   {
-            //     value: 'url'
-            //   }
-            // ],
-            // provider: 'google',
-            db.users.getUserByGoogleId(profile.id).then(user => {
-                if (user) {
-                    return done(null, { id: user.id });
-                } else {
-                    const verifiedEmails = profile.emails.filter(e => e.verified);
-                    if (verifiedEmails.length === 0) {
-                        return done(new Error("No verified email"));
-                    }
-                    const email = verifiedEmails[0].value;
-                    return db.users.createGoogleUser({ userName: db.uuidv4(), email, googleId: profile.id }).then(id => {
-                        return done(null, { id });
-                    });
-                }
-            }).catch(error => {
-                done(error);
-            });
-        }
-    ));
+    }, verifyGoogleLogin);
+    passport.use(strategy);
 
     // Stores user details inside session. serializeUser determines which data of the user
     // object should be stored in the session. The result of the serializeUser method is attached
@@ -52,5 +25,34 @@ export const initialize = (passport) => {
     passport.deserializeUser((id, done) => {
         // console.log("desearlize id:" + id);
         return done(null, { id });
+    });
+}
+
+export function verifyGoogleLogin(accessToken, refreshToken, profile, done) {
+    // id: '',
+    // displayName: '',
+    // name: { familyName: '', givenName: '' },
+    // emails: [ { value: 'a@gmail.com', verified: true } ],
+    // photos: [
+    //   {
+    //     value: 'url'
+    //   }
+    // ],
+    // provider: 'google',
+    db.users.getUserByGoogleId(profile.id).then(async user => {
+        if (user) {
+            return done(null, { id: user.id });
+        } else {
+            const verifiedEmails = profile.emails.filter(e => e.verified);
+            if (verifiedEmails.length === 0) {
+                return done(new Error("No verified email"));
+            }
+            const email = verifiedEmails[0].value;
+            return db.users.createGoogleUserWithRandomName({email, googleId: profile.id }).then(id => {
+                return done(null, { id });
+            });
+        }
+    }).catch(error => {
+        done(error);
     });
 }

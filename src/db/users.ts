@@ -1,7 +1,8 @@
 import { DatabaseApi } from "./databaseApi";
 import * as C from '../constant';
-import { assertOne, selectOne, selectOneAttr, selectRows } from '../db/utils';
+import { assertOne, retryOnceOnUniqueError, selectOne, selectOneAttr, selectRows, WithTransaction } from '../db/utils';
 import { UnsubscribeKey, User, UserId } from './types';
+import { generateSlug } from "random-word-slugs";
 
 export default class Users {
     db: DatabaseApi;
@@ -50,14 +51,30 @@ export default class Users {
         return this.db.pool.query(`SELECT * FROM users`).then(selectRows);
     }
 
-    createGoogleUser({ userName, email, googleId}) {
-        return this.db.things.create(C.THINGS.USER).then(async id => {
-            await this.db.pool.query(
-                `INSERT INTO users (id, user_name, email, google_id, created_on, is_mod, auth_type)
-                VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.GOOGLE})`,
-                [id, userName, email, googleId, new Date()]);
-            return id as UserId;
+    async createGoogleUserWithRandomName({email, googleId}) {
+        return WithTransaction(this.db, async client => {
+            const id = await this.db.things.create(C.THINGS.USER, client);
+
+            await retryOnceOnUniqueError(async () => {
+                const userName = await this.generateUserName();
+                return client.query(
+                    `INSERT INTO users (id, user_name, email, google_id, created_on, is_mod, auth_type, unsubscribe_key)
+                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.GOOGLE}, $6)`,
+                    [id, userName, email, googleId, new Date(), this.db.uuidv4()]);
+            }).then(assertOne);
+            return id;
         });
+    }
+
+    async generateUserName(){
+        for (let i = 0; i < 10; i++) {
+            const userName = generateSlug();
+            const user = await this.getUserByUserName(userName);
+            if (!user) {
+                return userName;
+            }
+        }
+        throw new Error("Unable to find unique user name")
     }
 
     getUserByGoogleId(googleId) {

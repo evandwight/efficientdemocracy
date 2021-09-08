@@ -33,6 +33,7 @@ export async function notLoggedIn() {
 
 export async function login() {
     const [userId, userInfo] = await testApi.createHttpUser();
+    await db.users.setFirstRunComplete(userId);
     const router = setup(db);
     // When google auth is the only method to login, add a method to simulate a login via passport
     router.get("/test_force_login", (req, res) => {
