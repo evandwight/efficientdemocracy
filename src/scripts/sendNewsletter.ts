@@ -15,6 +15,7 @@ const lambda = new LambdaClient({
 async function run() {
     const users = (await db.users.getUsers())
         .filter(user => !!user.send_emails);
+    // const users = [{id: "asdf", unsubscribe_key: "asdf2", email: "testemail"}];
     console.log(users);
 
     const posts = await getPosts();
@@ -75,7 +76,7 @@ async function sendNewsletter({email, postsLink, unsubscribeLink, posts}) {
         to: email,
         html: html(Newsletter({posts, postsLink, unsubscribeLink})),
         text: postsToText({posts, postsLink, unsubscribeLink}),
-        subject: "Hacker news newsletter",
+        subject: "Efficient democracy - newsletter",
     });
 }
 
@@ -85,8 +86,15 @@ function sendEmail(json) {
         InvocationType: "RequestResponse",
         LogType: "None",
         Payload: new TextEncoder().encode(JSON.stringify(json)),
-    })).then(data => JSON.parse(new TextDecoder("utf-8").decode(data.Payload)))
-        .catch(err => console.log(err));
+    })).then(data => {
+        const payload = JSON.parse(new TextDecoder("utf-8").decode(data.Payload));
+        // TODO I don't know the correct way to catch errors
+        if (data.FunctionError !== undefined) {
+            throw new Error(JSON.stringify(payload));
+        } else {
+            return payload;
+        }
+    }).catch(err => console.log(err));
 }
 
 if (require.main === module) {
