@@ -12,34 +12,25 @@ const lambda = new LambdaClient({
     credentials: fromIni(),
 });
 
-async function run() {
+async function run(key) {
     const users = (await db.users.getUsers())
         .filter(user => !!user.send_emails);
     // const users = [{id: "asdf", unsubscribe_key: "asdf2", email: "testemail"}];
     console.log(users);
 
-    const posts = await getPosts();
+    const postIds = await db.kv.get(key);
+    const posts = await Promise.all(postIds.map(id => db.qPosts.getPost(id)));
     console.log(posts);
 
     console.log(postsToText({posts, postsLink:"asdf", unsubscribeLink: "adsf"}));
 
     await Promise.all(users.map(user => sendNewsletter({
         email: user.email,
-        postsLink: "TODO",
-        unsubscribeLink: `https://efficientdemocracy.com/email/unsubscribe/${user.id}/${user.unsubscribe_key}`,
+        postsLink: `https://efficientdemocracy.com${C.URLS.FROZEN_QPOSTS}${user.id}/${user.unsubscribe_key}`,
+        unsubscribeLink: `https://efficientdemocracy.com${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`,
         posts
     }).then(() => console.log(`sent email to ${user.email}`))));
     
-}
-
-async function getPosts() {
-    return db.pool.query(
-        `SELECT qposts.id as id, created, title, url
-        FROM qposts 
-            INNER JOIN mod_actions ON qposts.id = mod_actions.thing_id
-        WHERE mod_actions.field = '${C.FIELDS.LABELS.DEEPLY_IMPORTANT}' and mod_actions.value
-            and (created BETWEEN $1 AND $2)
-        ORDER BY created DESC`,[new Date(2021, 8, 1), new Date(2021, 8, 6)]).then(selectRows);
 }
 
 function postsToText({posts, postsLink, unsubscribeLink}) {
@@ -99,6 +90,8 @@ function sendEmail(json) {
 
 if (require.main === module) {
     console.log("Main mode");
+    const key = process.argv[2];
+    console.log(`Sending ${key}`);
     db.initialize();
-    run().then(() => db.end());
+    run(key).then(() => db.end());
 }

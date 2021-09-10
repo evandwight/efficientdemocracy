@@ -87,6 +87,30 @@ export async function listDeeplyImportant(req, res) {
     reactRender(res, Posts({ posts, user, showCensored:true, moreLink, offset }), {title:"New posts", includeVotesJs: true});
 }
 
+export async function listFrozen(req, res) {
+    const user = res.locals.user;
+
+    const page = req.params.page ? parseInt(req.params.page) : 0;
+    assert(page>= 0, "Page cannot be negative");
+    const offset = page*C.POSTS_PER_PAGE;
+
+    const key = req.params.key;
+    assert(key.length < 1024 && validator.isAlphanumeric(key, "en-US", {ignore: "-"}));
+    const postIds = await db.kv.get(key);
+    let posts: any[] = await Promise.all(postIds.map(postId => db.qPosts.getPost(postId)));
+    posts = await addVotes({posts,user});
+    posts = await addFields(posts);
+
+    // TODO title from key?
+    let moreLink = null;
+    if (posts.length - offset > C.POSTS_PER_PAGE) {
+        const moreLink = `${C.URLS.FROZEN_QPOSTS}${key}/${page+1}`;
+    }
+
+    posts = posts.slice(offset, C.POSTS_PER_PAGE);
+    reactRender(res, Posts({ posts, user, showCensored:true, moreLink, offset}), {title:"Frozen posts", includeVotesJs: true});
+}
+
 export async function viewPost(req, res) {
     const postId = req.params.id;
     assert(validator.isUUID(postId,4));

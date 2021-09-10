@@ -11,9 +11,10 @@ export const Posts = ({ posts, user, showCensored, moreLink, offset }) => {
         <table id="posts">
         {posts.filter(post => showCensored || !post.censor).map((post, i) => <Post key={i} i={i+offset} {... {post, user}}/>)}
         </table>
-        <div>
-            <a href={moreLink}>More</a>
-        </div>
+        {!!moreLink && 
+            <div>
+                <a href={moreLink}>More</a>
+            </div>}
     </div>
 }
 

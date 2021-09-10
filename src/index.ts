@@ -104,9 +104,10 @@ function setup(db) {
   router.get(C.URLS.SORT, Routes.Misc.Sort);
 
   // // Qiri Posts
-  router.getAsync(C.URLS.QPOSTS + "(/:page)?", Routes.QPost.list);
-  router.getAsync(C.URLS.NEW_QPOSTS + "(/:page)?", Routes.QPost.listNew);
-  router.getAsync(C.URLS.DEEPLY_IMPORTANT_QPOSTS + "(/:page)?", Routes.QPost.listDeeplyImportant);
+  router.getAsync(C.URLS.QPOSTS + "/:page?", Routes.QPost.list);
+  router.getAsync(C.URLS.NEW_QPOSTS + "/:page?", Routes.QPost.listNew);
+  router.getAsync(C.URLS.DEEPLY_IMPORTANT_QPOSTS + "/:page?", Routes.QPost.listDeeplyImportant);
+  router.getAsync(C.URLS.FROZEN_QPOSTS + ":key/:page?", Routes.QPost.listFrozen);
 
   router.getAsync(C.URLS.QPOSTS_VIEW + ":id", Routes.QPost.viewPost);
   router.getAsync(C.URLS.SUBMIT_QPOST, [assertAuthenticated, assertNotBanned], Routes.QPost.viewSubmitPost);

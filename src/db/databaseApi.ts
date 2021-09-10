@@ -9,6 +9,7 @@ import Strikes from "./strikes";
 import { UUID } from './types';
 import Users from "./users";
 import Things from "./things";
+import Kv from "./kv";
 
 
 export class DatabaseApi {
@@ -22,6 +23,7 @@ export class DatabaseApi {
     strikes: Strikes;
     users: Users;
     things: Things;
+    kv: Kv;
     isInitialized: boolean;
 
     constructor() {
@@ -33,6 +35,7 @@ export class DatabaseApi {
         this.strikes = new Strikes(this);
         this.users = new Users(this);
         this.things = new Things(this);
+        this.kv = new Kv(this);
         this.isInitialized = false;
     }
     end() {

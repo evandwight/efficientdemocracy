@@ -130,3 +130,10 @@ SELECT
 FROM 
 (SELECT thing_id, count(*) as up_votes_nullable FROM votes WHERE votes.vote = 2 GROUP BY thing_id) as up_vote_count
 FULL JOIN (SELECT thing_id, count(*) as down_votes_nullable FROM votes WHERE votes.vote = 0 GROUP BY thing_id) as down_vote_count ON  up_vote_count.thing_id = down_vote_count.thing_id;
+
+
+-- Version 4
+CREATE TABLE kv (
+    key VARCHAR(1024) PRIMARY KEY,
+    value JSONB not null
+);

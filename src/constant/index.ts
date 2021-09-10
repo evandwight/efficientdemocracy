@@ -42,3 +42,5 @@ export const DB = {
         UNIQUE_VIOLATION: '23505',
     }
 }
+
+export const POSTS_PER_PAGE = 30;
