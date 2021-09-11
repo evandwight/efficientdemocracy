@@ -1,5 +1,5 @@
 import * as C from '../../constant';
-import {testApi, login, getCsrfToken} from '../../testUtils';
+import {testApi, login, getCsrfToken, notLoggedIn} from '../../testUtils';
 import db from '../../db/databaseApi';
 
 beforeAll(() => {
@@ -43,6 +43,20 @@ describe("account", () => {
                     }).expect(302);
             const user = await db.users.getUser(request.userId);
             expect(user.send_emails).toBe(true);
+        });
+    });
+    describe('unsubscribe', () => {
+        it('works', async () => {
+            const request = await notLoggedIn();
+            const userId = await testApi.createUser({});
+            await db.users.setSendEmails({userId, sendEmails: true});
+            let user = await db.users.getUser(userId);
+            expect(user.send_emails).toBe(true);
+            const res = await request.get(`${C.URLS.EMAIL_UNSUBSCRIBE}${userId}/${user.unsubscribe_key}`)
+                .send()
+                .expect(200);
+            user = await db.users.getUser(userId)
+            expect(user.send_emails).toBe(false);
         });
     });
 });
