@@ -23,7 +23,7 @@ export const PostModActions = ({ post, modActions, csrfToken }) =>
     <form action={C.URLS.SUBMIT_QPOST_MOD_ACTION + `${C.FIELDS.LABELS.CENSOR}/${post.id}`} method="POST">
       <input type="hidden" name="_csrf" value={csrfToken} />
       <VersionInput field={C.FIELDS.LABELS.CENSOR} modActions={modActions} />
-      <Checkbox name="censor" label="Set censor:" checked={post.censor}/>
+      <Checkbox name="value" label="Set censor:" checked={post.censor}/>
       <Checkbox name="strike_ups" label="Strike up voters:"/>
       <Checkbox name="strike_downs" label="Strike down voters:"/>
       <Checkbox name="strike_poster" label="Strike poster:"/>
