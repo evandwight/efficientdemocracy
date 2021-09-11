@@ -33,7 +33,7 @@ export const USER_REGISTER = "/users/register";
 export const USER_LOGOUT = "/users/logout";
 export const USER_STRIKES = "/user/strikes";
 export const USER_SETTINGS = "/user/settings";
-export const FIRST_RUN_SETUP = "/first-run-setup";
+export const SUBMIT_USER_SETTINGS = "/submit/user/settings";
 export const EMAIL_UNSUBSCRIBE = "/email/unsubscribe/";
 
 

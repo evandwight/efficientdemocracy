@@ -45,6 +45,8 @@ function setup(db) {
       },
     })
   );
+  // needed for redirecting form submissions
+  app.use(helmet.referrerPolicy({ policy: "same-origin" }));
 
   app.use(function (req, res, next) {
     if (toobusy()) {
@@ -133,6 +135,7 @@ function setup(db) {
 
   router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);
   router.get(C.URLS.USER_SETTINGS, assertAuthenticated, Routes.Account.userSettings);
+  router.postAsync(C.URLS.SUBMIT_USER_SETTINGS, assertAuthenticated, Routes.Account.submitUserSettings)
 
   // About
   router.get(C.URLS.ABOUT_LEGAL, renderAbout(About.Legal, "Legal"));
@@ -151,8 +154,6 @@ function setup(db) {
   // Google
   router.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', "https://www.googleapis.com/auth/userinfo.email"] }));
   router.get('/auth/google/callback', passport.authenticate('google', { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
-
-  router.postAsync(C.URLS.FIRST_RUN_SETUP, Routes.FirstRunSetup.submitFirstRunSetup);
 
   // Email
   // Unsecure - get changes database state so it should be post, however it needs to be embedded in links in emails

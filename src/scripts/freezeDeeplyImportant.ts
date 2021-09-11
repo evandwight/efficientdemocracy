@@ -1,4 +1,3 @@
-import { fromIni } from "@aws-sdk/credential-providers";
 import db from "../db/databaseApi";
 import * as C from "../constant";
 import { selectAttr } from "../db/utils";

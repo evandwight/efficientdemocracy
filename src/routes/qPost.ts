@@ -7,7 +7,7 @@ import { SubmitPost } from '../views/submitPost';
 import assert from 'assert';
 import validator from 'validator';
 import { assertFieldExists } from '../routes/utils';
-import { QPost, QPostId, UserId } from '../db/types';
+import { QPost, QPostId } from '../db/types';
 
 export async function addVotes({posts, user}: {posts: QPost[], user: any}): Promise<QPost[]> {
     if (user) {

@@ -20,7 +20,7 @@ export const Header = ({ showLogin, user, csrfToken}) =>
             </tr>
         </table>
         {showLogin && user && user.sample && <SampleCard user={user} csrfToken={csrfToken}/>}
-        {showLogin && user && user.first_run && <FirstRunCard {...{csrfToken}}/>}
+        {showLogin && user && user.first_run && <FirstRunCard {...{user, csrfToken}}/>}
         <br/>
     </div>
 

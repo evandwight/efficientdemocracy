@@ -2,7 +2,6 @@ import { fromIni } from "@aws-sdk/credential-providers";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import db from "../db/databaseApi";
 import * as C from "../constant";
-import { selectRows } from "../db/utils";
 import ReactDOMServer from 'react-dom/server';
 import { Newsletter } from "./newsletter";
 

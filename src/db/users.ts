@@ -1,7 +1,7 @@
 import { DatabaseApi } from "./databaseApi";
 import * as C from '../constant';
 import { assertOne, retryOnceOnUniqueError, selectOne, selectOneAttr, selectRows, WithTransaction } from '../db/utils';
-import { UnsubscribeKey, User, UserId } from './types';
+import { User, UserId } from './types';
 import { generateSlug } from "random-word-slugs";
 
 export default class Users {
