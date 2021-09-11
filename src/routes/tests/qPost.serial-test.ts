@@ -3,7 +3,8 @@ import * as C from '../../constant';
 const uuid = require('uuid');
 import * as Routes from '../../routes';
 import { getCsrfToken, login, notLoggedIn, testApi } from '../../testUtils';
-import { addFields } from '../../routes/qPost';
+import { addFields, addPosts } from '../../routes/qPost';
+import { QPost } from '../../db/types';
 
 beforeAll(() => {
     return db.initialize();
@@ -65,15 +66,56 @@ describe("qPost", () => {
         });
     });
 
+    describe('addPosts', () => {
+        it('works', async () => {
+            const userId = await testApi.createUser();
+            const postId = await testApi.createPost({title:"a", userId});
+            const posts = await addPosts([postId]);
+            expect(posts.length).toBe(1);
+            console.log(posts);
+            expect(posts[0].title).toEqual("a");
+        });
+    });
+
     describe('addFields', () => {
         it('works', async () => {
             const creatorId = db.uuidv4();
             const userId = await testApi.createUser();
             const thingId = await testApi.createPost({userId});
             const modActionId = await testApi.createModAction({thingId, creatorId, field:"censor", value:true});
-            let posts = await db.qPosts.getNewPosts();
-            posts = await addFields(posts);
+            const postIds = await db.qPosts.getNewPosts();
+            const posts = await addFields(postIds.map(v => ({id: v})) as QPost[]);
             expect(posts[0].censor).toBe(true);
+        });
+    });
+
+    describe('/qposts', () => {
+        it('works when not logged in', async () => {
+            const request = await notLoggedIn();
+            const thingId = await testApi.createPost({});
+            let res = await request.get(C.URLS.QPOSTS)
+                .send()
+                .expect(200);
+        });
+    });
+    describe('/deeply-important-qposts', () => {
+        it('works when not logged in', async () => {
+            const request = await notLoggedIn();
+            const userId = await testApi.createUser();
+            const thingId = await testApi.createPost({userId});
+            let res = await request.get(C.URLS.DEEPLY_IMPORTANT_QPOSTS)
+                .send()
+                .expect(200);
+        });
+    });
+    describe('/new_qposts', () => {
+        it('works when not logged in', async () => {
+            const request = await notLoggedIn();
+            const userId = await testApi.createUser();
+            const thingId = await testApi.createPost({userId});
+            let res = await request.get(C.URLS.NEW_QPOSTS)
+                .send()
+                .expect(200);
         });
     });
 });

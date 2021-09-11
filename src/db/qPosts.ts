@@ -1,6 +1,6 @@
 import { DatabaseApi } from "./databaseApi";
 import {QPost, QPostId, UserId} from "./types";
-import { assertOne, selectOne, selectOneAttr } from "./utils";
+import { assertOne, selectAttr, selectOne, selectOneAttr } from "./utils";
 import * as C from '../constant';
 
 export default class QPosts {
@@ -27,45 +27,49 @@ export default class QPosts {
             .then(selectOneAttr('id'));
     }
 
-    getHackerNewsPosts(offset=0): Promise<QPost[]> {
+    getPostsByIds(postIds: QPostId[]): Promise<QPost[]> {
         return this.db.pool.query(
             `SELECT qposts.id as id, created, title, url, content, qposts.user_id as user_id,
-                user_name,
-                ((extract(epoch from created) - 1134028003)/45000 + log(GREATEST(abs(hackernews_points)*2, 1))*sign(hackernews_points)) as hot
+                user_name
             FROM qposts 
                 INNER JOIN users ON qposts.user_id = users.id
+            WHERE qposts.id = ANY ($1)`, [postIds])
+            .then(result => result.rows as QPost[]);
+    }
+
+    getHackerNewsPosts(offset=0): Promise<{id: QPostId, hot: number}[]> {
+        return this.db.pool.query(
+            `SELECT id,
+                ((extract(epoch from created) - 1134028003)/45000 + log(GREATEST(abs(hackernews_points)*2, 1))*sign(hackernews_points)) as hot
+            FROM qposts
             WHERE qposts.hackernews_points is not null
             ORDER BY hot DESC
-            LIMIT 30
+            LIMIT ${C.POSTS_PER_PAGE + 1}
             OFFSET $1`, [offset])
-            .then(result => result.rows) as Promise<QPost[]>;
+            .then(result => result.rows) as Promise<{id: QPostId, hot: number}[]>;
     }
 
-    getNewPosts(offset=0): Promise<QPost[]> {
+    getNewPosts(offset=0): Promise<QPostId[]> {
         return this.db.pool.query(
-            `SELECT qposts.id as id, created, title, url, content, qposts.user_id as user_id,
-                user_name
-            FROM qposts 
-                INNER JOIN users ON qposts.user_id = users.id
+            `SELECT id
+            FROM qposts
             ORDER BY created DESC
-            LIMIT 30
+            LIMIT ${C.POSTS_PER_PAGE + 1}
             OFFSET $1`, [offset])
-            .then(result => result.rows) as Promise<QPost[]>;
+            .then(selectAttr("id")) as Promise<QPostId[]>;
     }
 
-    getDeeplyImportantPosts(offset=0): Promise<QPost[]> {
+    getDeeplyImportantPosts(offset=0): Promise<QPostId[]> {
         return this.db.pool.query(
-            `SELECT qposts.id as id, created, title, url, content, qposts.user_id as user_id,
-                user_name
+            `SELECT qposts.id as id
             FROM qposts 
-                INNER JOIN users ON qposts.user_id = users.id
                 INNER JOIN mod_actions ON qposts.id = mod_actions.thing_id
             WHERE mod_actions.field = '${C.FIELDS.LABELS.DEEPLY_IMPORTANT}' and
                 mod_actions.value
             ORDER BY created DESC
-            LIMIT 30
+            LIMIT ${C.POSTS_PER_PAGE + 1}
             OFFSET $1`, [offset])
-            .then(result => result.rows) as Promise<QPost[]>;
+            .then(selectAttr("id")) as Promise<QPostId[]>;
     }
 
     getPosts(offset=0): Promise<QPost[]> {

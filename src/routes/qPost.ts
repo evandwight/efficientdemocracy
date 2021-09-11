@@ -7,108 +7,115 @@ import { SubmitPost } from '../views/submitPost';
 import assert from 'assert';
 import validator from 'validator';
 import { assertFieldExists } from '../routes/utils';
-import { QPost } from '../db/types';
+import { QPost, QPostId, UserId } from '../db/types';
 
-async function addVotes({posts, user}) {
+export async function addVotes({posts, user}: {posts: QPost[], user: any}): Promise<QPost[]> {
     if (user) {
         const ids = posts.map(v => v.id);
-        const votes = await db.votes.getVotes({ thingIds: ids });
-        const idToVote = votes.reduce((pv, cv) => { pv[cv.thing_id] = cv.vote; return pv; }, {});
-        posts = posts.map(v => ({ ...v, vote: idToVote[v.id] } as QPost));
+        const votes = await db.votes.getVotes({ thingIds: ids, userId: user.id});
+        const voteMap = listToMap(votes, vote => vote.thing_id, vote => ({vote: vote.vote}));
+        posts = combine(posts, voteMap, post => post.id);
     }
     return posts;
 }
 
-export async function addFields(posts) {
+export async function addFields(posts: QPost[]): Promise<QPost[]> {
     const ids = posts.map(v => v.id);
     const modActions = await db.modActions.getModActionsForThingIds(ids);
-    const modActionMap = modActions.reduce((acc, val) => {
-        const thingId = val.thing_id
-        if (! acc.hasOwnProperty(thingId)) {
-            acc[thingId] = {};
-        }
-        acc[thingId][val.field] = val.value;
-        return acc;
+    const valueFunc = (modAction, pv) => ({ ... (!!pv ? pv : {}), [modAction.field]: modAction.value});
+    const modActionMap = listToMap(modActions, modAction => modAction.thing_id, valueFunc);
+    return combine(posts, modActionMap, post => post.id);
+}
+
+export async function addPosts(postIds: QPostId[]): Promise<QPost[]> {
+    const postList = await db.qPosts.getPostsByIds(postIds);
+    const postMap = listToMap(postList, post => post.id, post => post);
+    return postIds.map(id => postMap[id] as QPost);
+}
+
+export function listToMap(list, keyFunc: (element: any) => string, valueFunc: (element: any, previousMapEntry) => any) {
+    return list.reduce((pv, cv) => { 
+        const key = keyFunc(cv);
+        pv[key] = valueFunc(cv, pv[key]); 
+        return pv; 
     }, {});
-    return posts.map(v => ({ 
-        ... v,
-        ... modActionMap[v.id]
-    } as QPost));
+}
+
+export function combine(list, map, keyFunc) {
+    return list.map(v => ({...v, ...map[keyFunc(v)]}));
+} 
+
+export async function addAllExtrasToPost({postIds, user}: {postIds: QPostId[], user: any}): Promise<QPost[]> {
+    let posts = await addPosts(postIds);
+    posts = await addVotes({posts, user});
+    posts = await addFields(posts);
+    return posts;
+}
+
+export function getListParams(req, res) {
+    const user = res.locals.user;
+
+    const page = req.params.page ? parseInt(req.params.page) : 0;
+    assert(page>= 0, "Page cannot be negative");
+    
+    const offset = page*C.POSTS_PER_PAGE;
+    return {user, page, offset};
+}
+
+export function trimPosts({posts, moreLinkBase, page}) {
+    let moreLink = null;
+    if (posts.length > C.POSTS_PER_PAGE) {
+        moreLink = `${moreLinkBase}/${page+1}`;
+        posts = posts.slice(0, C.POSTS_PER_PAGE);
+    }
+    return {posts, moreLink};
+}
+
+export function renderPosts({res, title, moreLinkBase, showCensored, page, offset, posts, user}) {
+    let moreLink = null;
+    ({posts, moreLink} = trimPosts({moreLinkBase, posts, page}));
+    reactRender(res, Posts({ posts, user, showCensored, moreLink, offset }), {title, includeVotesJs: true});
 }
 
 export async function list(req, res) {
-    const user = res.locals.user;
+    const {user, page, offset} = getListParams(req, res);
 
-    const page = req.params.page ? parseInt(req.params.page) : 0;
-    assert(page>= 0, "Page cannot be negative");
+    const postIdsPlus = await db.qPosts.getHackerNewsPosts(offset);
+    const postIds = postIdsPlus.map(v => v.id);
+    let posts = await addAllExtrasToPost({postIds, user});
+    posts = posts.map((v, i) => ({... v, ... postIdsPlus[i]}));
 
-
-    const offset = page*30;
-
-    let posts = await db.qPosts.getHackerNewsPosts(offset);
-    posts = await addVotes({posts,user});
-    posts = await addFields(posts);
-
-    const moreLink = `${C.URLS.QPOSTS}/${page+1}`
-    reactRender(res, Posts({ posts, user, showCensored:false, moreLink, offset }), {title:"Posts", includeVotesJs: true});
+    renderPosts({res, page, offset, user, posts, title: "Posts", showCensored: false, moreLinkBase: C.URLS.QPOSTS});
 }
 
 export async function listNew(req, res) {
-    const user = res.locals.user;
+    const {user, page, offset} = getListParams(req, res);
 
-    const page = req.params.page ? parseInt(req.params.page) : 0;
-    assert(page>= 0, "Page cannot be negative");
+    const postIds = await db.qPosts.getNewPosts(offset);
+    const posts = await addAllExtrasToPost({postIds, user});
 
-
-    const offset = page*30;
-    
-    let posts = await db.qPosts.getNewPosts(offset);
-    posts = await addVotes({posts,user});
-    posts = await addFields(posts);
-
-    const moreLink = `${C.URLS.NEW_QPOSTS}/${page+1}`
-    reactRender(res, Posts({ posts, user, showCensored:true, moreLink, offset }), {title:"New posts", includeVotesJs: true});
+    renderPosts({res, page, offset, user, posts, title: "New posts", showCensored: true, moreLinkBase: C.URLS.NEW_QPOSTS});
 }
 
 export async function listDeeplyImportant(req, res) {
-    const user = res.locals.user;
+    const {user, page, offset} = getListParams(req, res);
 
-    const page = req.params.page ? parseInt(req.params.page) : 0;
-    assert(page>= 0, "Page cannot be negative");
+    const postIds = await db.qPosts.getDeeplyImportantPosts(offset);
+    const posts = await addAllExtrasToPost({postIds, user});
 
-
-    const offset = page*30;
-    
-    let posts = await db.qPosts.getDeeplyImportantPosts(offset);
-    posts = await addVotes({posts,user});
-    posts = await addFields(posts);
-
-    const moreLink = `${C.URLS.DEEPLY_IMPORTANT_QPOSTS}/${page+1}`
-    reactRender(res, Posts({ posts, user, showCensored:true, moreLink, offset }), {title:"New posts", includeVotesJs: true});
+    renderPosts({res, page, offset, user, posts, title: "Deeply important posts", showCensored: true, moreLinkBase: C.URLS.DEEPLY_IMPORTANT_QPOSTS});
 }
 
 export async function listFrozen(req, res) {
-    const user = res.locals.user;
-
-    const page = req.params.page ? parseInt(req.params.page) : 0;
-    assert(page>= 0, "Page cannot be negative");
-    const offset = page*C.POSTS_PER_PAGE;
-
+    const {user, page, offset} = getListParams(req, res);
+    
     const key = req.params.key;
     assert(key.length < 1024 && validator.isAlphanumeric(key, "en-US", {ignore: "-"}));
+
     const postIds = await db.kv.get(key);
-    let posts: any[] = await Promise.all(postIds.map(postId => db.qPosts.getPost(postId)));
-    posts = await addVotes({posts,user});
-    posts = await addFields(posts);
+    let posts = await addAllExtrasToPost({postIds, user});
 
-    // TODO title from key?
-    let moreLink = null;
-    if (posts.length - offset > C.POSTS_PER_PAGE) {
-        const moreLink = `${C.URLS.FROZEN_QPOSTS}${key}/${page+1}`;
-    }
-
-    posts = posts.slice(offset, C.POSTS_PER_PAGE);
-    reactRender(res, Posts({ posts, user, showCensored:true, moreLink, offset}), {title:"Frozen posts", includeVotesJs: true});
+    renderPosts({res, page, offset, user, posts, title: "Frozen posts", showCensored: true, moreLinkBase: `${C.URLS.FROZEN_QPOSTS}${key}`});
 }
 
 export async function viewPost(req, res) {

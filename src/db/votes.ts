@@ -8,12 +8,12 @@ export default class Votes {
         this.db = db;
     }
 
-    getVotes({thingIds}) : Promise<[Vote]> {
+    getVotes({thingIds, userId}) : Promise<[Vote]> {
         return this.db.pool.query(
             `SELECT thing_id, vote
             FROM votes 
-            WHERE votes.thing_id = ANY ($1)
-            `, [thingIds]).then(result => result.rows) as Promise<[Vote]>;
+            WHERE user_id = $2 AND votes.thing_id = ANY ($1)
+            `, [thingIds, userId]).then(result => result.rows) as Promise<[Vote]>;
     }
 
     getVote({ thingId, userId }) {

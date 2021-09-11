@@ -21,7 +21,8 @@ describe("Votes", () => {
             const thingId = db.uuidv4();
             const parentId = db.uuidv4();
             const voteId = await db.votes.insertVote({thingId, userId, vote: C.VOTE.UP});
-            const votes = await db.votes.getVotes({thingIds: [thingId]});
+            const voteId2 = await db.votes.insertVote({thingId, userId: db.uuidv4(), vote: C.VOTE.UP});
+            const votes = await db.votes.getVotes({thingIds: [thingId], userId});
             expect(votes).toEqual([{thing_id: thingId, vote: C.VOTE.UP}]);
         });
         it('handles 100,000 ids', async () => {
@@ -29,7 +30,7 @@ describe("Votes", () => {
             const thingId = db.uuidv4();
             const parentId = db.uuidv4();
             const voteId = await db.votes.insertVote({thingId, userId, vote: C.VOTE.UP});
-            const votes = await db.votes.getVotes({thingIds: Array(100000).fill(thingId)});
+            const votes = await db.votes.getVotes({thingIds: Array(100000).fill(thingId), userId});
             expect(votes).toEqual([{thing_id: thingId, vote: C.VOTE.UP}]);
         });
     });
