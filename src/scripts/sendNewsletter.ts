@@ -14,7 +14,7 @@ const lambda = new LambdaClient({
 async function run(key) {
     const users = (await db.users.getUsers())
         .filter(user => !!user.send_emails);
-    // const users = [{id: "asdf", unsubscribe_key: "asdf2", email: "testemail"}];
+    // const users = [{id: "asdf", unsubscribe_key: "TESTKEY", email: "TESTEMAIL"}];
     console.log(users);
 
     const postIds = await db.kv.get(key);
@@ -25,7 +25,7 @@ async function run(key) {
 
     await Promise.all(users.map(user => sendNewsletter({
         email: user.email,
-        postsLink: `https://efficientdemocracy.com${C.URLS.FROZEN_QPOSTS}${user.id}/${user.unsubscribe_key}`,
+        postsLink: `https://efficientdemocracy.com${C.URLS.FROZEN_QPOSTS}${key}`,
         unsubscribeLink: `https://efficientdemocracy.com${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`,
         posts
     }).then(() => console.log(`sent email to ${user.email}`))));
