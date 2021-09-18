@@ -49,7 +49,8 @@ export const ABOUT_FAQ = ABOUT + "faq";
 export const ABOUT_STATUS = ABOUT + "alpha";
 
 export const BLOG = "/blog";
-export const BLOG_REACT_STATIC_RENDER = "/blog/post/react-static-render"
-export const BLOG_JEST_SERIAL_CODE_COVERAGE = "/blog/post/jest-serial-code-coverage"
-export const BLOG_CSP_INLINE_SCRIPT = "/blog/post/csp-inline-script"
+export const BLOG_REACT_STATIC_RENDER = "/blog/post/react-static-render";
+export const BLOG_JEST_SERIAL_CODE_COVERAGE = "/blog/post/jest-serial-code-coverage";
+export const BLOG_CSP_INLINE_SCRIPT = "/blog/post/csp-inline-script";
+export const BLOG_SAMPLING_IS_MAGIC = "/blog/post/sampling-is-magic";
 

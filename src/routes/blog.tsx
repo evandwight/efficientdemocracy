@@ -5,9 +5,9 @@ import * as Blogs from '../views/blog';
 // https://www.npmjs.com/package/markdown-it
 // put entries in the database and load them
 
-export const renderBlog = (page: {element: () => JSX.Element, title: string}) => {
+export const renderBlog = (page: {element: () => JSX.Element, title: string, includeScript?: string}) => {
     return (req, res) => {
-        reactAboutRender(res, page.element(), page.title);
+        reactAboutRender(res, page.element(), page.title, page.includeScript);
     }
 } 
 
@@ -25,6 +25,7 @@ export const index = (req, res) => {
 }
 
 export const BLOG_ENTRIES = [
+    Blogs.SamplingIsMagic,
     Blogs.CspInlineScript,
     Blogs.JestSerialCodeCoverage,
     Blogs.ReactStaticRender

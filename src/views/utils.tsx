@@ -11,6 +11,7 @@ type reactRenderOptions = {
     includeChartJs?: boolean,
     dangerousChartData?: any,
     includeVotesJs?: boolean,
+    includeScript?: string,
 }
 
 export const reactRender = (res, element, options?: reactRenderOptions) => {
@@ -28,7 +29,7 @@ export const reactRender = (res, element, options?: reactRenderOptions) => {
 }
 
 
-export const reactAboutRender = (res, element: JSX.Element, title: string) => {
+export const reactAboutRender = (res, element: JSX.Element, title: string, includeScript?: string) => {
     const innerHtml = ReactDOMServer.renderToStaticMarkup(
         <div>
             <AboutHeader />
@@ -38,7 +39,8 @@ export const reactAboutRender = (res, element: JSX.Element, title: string) => {
             <Footer/>
         </div>);
     const options = {
-        title
+        title,
+        includeScript,
     }
     res.send(HtmlBoilerPlate(innerHtml, res.locals.csrfToken, options));
 }
@@ -54,6 +56,7 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
     const title = options.title || "Efficient Democracy";
     const includeChartJs = options.includeChartJs || false;
     const includeVotesJs = options.includeVotesJs || false;
+    const includeScript = options.includeScript || false;
     // csrfToken is for client side api calls via axios
     // <script>0</script> for firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
     return `
@@ -73,6 +76,9 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
         `<script type="application/json" id="chartData">${JSON.stringify(options.dangerousChartData)}</script>
         <script src="/public/sampleChart.js"></script>
         <script src="/public/chart.min.js"></script>`
+        : ""}
+    ${includeScript ? 
+        `<script src="${includeScript}"></script>`
         : ""}
     <link rel="stylesheet" href="/public/styles.css" />
     <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png" />
