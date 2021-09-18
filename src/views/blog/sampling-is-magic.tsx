@@ -50,12 +50,12 @@ const element = () =>
             <p>The answer is sample will be pretty close to the whole group <span id="sample-big-difference-percent">Z%</span> of the time[1].</p>
         </div>
         
-        <p>Too long, didn't burn electricity: the number of abductees directly affects how accurate your guesses are. Here is a handy graph of their loving relationship:</p>
+        <p>Too long, didn't burn electricity: the number of abductees (sample size) directly affects how accurate your guesses are. Here is a handy graph of their loving relationship:</p>
         <img src={IMG_URL + "accuracy-sample-size.png"}/>
 
         <p>A difference closer to 0 is better - slimmer is better. The graph shows that a sample size of 50 is not that useful for accurately guessing how blue people feel, but is pretty good at letting us guess at whether the population is 80% blue or 80% red. With small sample sizes we can detect extremes.</p>
 
-        <p>With the power to detect extremes we can filter out bold faced lies, identify clearly misleading articles, censor clearly objectionable content.</p>
+        <p>With the power to detect extremes we can filter out posts that most people think are lies, misleading, or reprehensible.</p>
 
         <h4>Notes</h4>
         <ul style={{listStyleType:"none"}}>
