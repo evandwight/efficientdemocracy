@@ -30,6 +30,7 @@ function runOne(event) {
   drawSampleCanvas(persons);
 
   var sampleBluePercent = calcBluePercent(persons);
+  document.getElementById("run-one-result").style.display = "block";
   document.getElementById("sample-percent").innerText = sampleBluePercent;
   document.getElementById("sample-percent-difference").innerText = Math.abs(percentBlue - sampleBluePercent);
 }
@@ -72,6 +73,7 @@ function runItABunch(event) {
   // for (var i = 0; i < 10000; i++) {
   //   samples.push(calcBluePercent(sample()));
   // }
+  document.getElementById("run-it-a-bunch-result").style.display = "block";
   runSamplesRecursive(10000).then(function(samples) {
     console.log("done");
     var overPercent = samples.filter(function(v) { return Math.abs(percentBlue - v) > 10}).length/100;

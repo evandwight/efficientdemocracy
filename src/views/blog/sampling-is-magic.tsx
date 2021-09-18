@@ -16,6 +16,7 @@ const element = () =>
 
         <p>Lets see how this works! We can skip the theoretical by using the immense brute force of modern computers to consider hypothetical worlds. Below are 10,000 people, you get to select how many are red and how many are blue.</p>
 
+        <p>The 10,000:</p>
         <canvas width="500" height="500" id="people-canvas"></canvas>
         <p>Percent blue: <input type="text" id="people-percent-blue" defaultValue="50"/>%</p>
 
@@ -27,8 +28,11 @@ const element = () =>
 
         <button id="run-one">Run</button>
 
-        <canvas width="500" height="5" id="sample-canvas"></canvas>
-        <p>The abductees are <span id="sample-percent">X</span>% blue. Thats a difference of <span id="sample-percent-difference">Y</span> percentage points from the full group.</p>
+        <div id="run-one-result" style={{display:"none"}} className="card">
+            <p>The abductees:</p>
+            <canvas width="500" height="5" id="sample-canvas"></canvas>
+            <p>The abductees are <span id="sample-percent">X</span>% blue. Thats a difference of <span id="sample-percent-difference">Y</span> percentage points from the full group.</p>
+        </div>
 
         <p>You've probably noticed a few things:</p>
         <ul>
@@ -39,9 +43,12 @@ const element = () =>
         <p>You may be asking yourself, how often is it really wrong? For that we will need to use the central limit theorem to approximate the bernoulli process as a guassian distributon, allowing us to use Z-test[0]. OR if like me you don't really know what that means, then you can just run it a bunch.</p>
 
         <button id="run-it-a-bunch">Run it a bunch</button>
-        <p>Runs: <span id="run-it-a-bunch-tries">0</span></p>
 
-        <p>The answer is sample will be pretty close to the whole group <span id="sample-big-difference-percent">Z%</span> of the time[1].</p>
+        <div id="run-it-a-bunch-result" style={{display:"none"}} className="card">
+            <p>Runs: <span id="run-it-a-bunch-tries">0</span></p>
+
+            <p>The answer is sample will be pretty close to the whole group <span id="sample-big-difference-percent">Z%</span> of the time[1].</p>
+        </div>
         
         <p>Too long, didn't burn electricity: the number of abductees directly affects how accurate your guesses are. Here is a handy graph of their loving relationship:</p>
         <img src={IMG_URL + "accuracy-sample-size.png"}/>
