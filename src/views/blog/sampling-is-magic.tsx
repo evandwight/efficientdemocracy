@@ -29,7 +29,7 @@ const element = () =>
 
         <div id="run-one-result" style={{display:"none"}} className="card">
             <p>The abductees:</p>
-            <canvas width="500" height="5" id="sample-canvas"></canvas>
+            <canvas width="450" height="5" id="sample-canvas"></canvas>
             <p>The abductees are <span id="sample-percent">X</span>% blue. Thats a difference of <span id="sample-percent-difference">Y</span> percentage points from the full group.</p>
         </div>
 

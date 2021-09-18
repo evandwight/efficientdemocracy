@@ -41,8 +41,8 @@ function drawSampleCanvas(persons) {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, 500, 500);
   for (var i = 0; i < persons.length; i++) {
-    var x = i % 100;
-    var y = (i - x)/100;
+    var x = i % 95;
+    var y = (i - x)/95;
     ctx.drawImage(persons[i] == "blue" ? bluePersonImg : redPersonImg, x*5, y*5);
   }
 }
