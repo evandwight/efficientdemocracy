@@ -27,6 +27,8 @@ export const DownVoteButton = ({post, i} : {post:any, i?: number}) => {
     </a>
 }
 
+export const HackerCommentsLink = ({id}) => <a href={`https://news.ycombinator.com/item?id=${id}`}>hn comments</a>
+
 export const ViewPost = ({ post, user }) => {
   return <div>
     <table>
@@ -44,6 +46,7 @@ export const ViewPost = ({ post, user }) => {
           <div>
             by <span className="gray-900">{post.user_name}</span>
             {!!post.url && <span> | <a href={post.url}>link</a></span>}
+            {!!post.hackernews_id && <span> | <HackerCommentsLink id={post.hackernews_id}/></span>}
             {!!user && user.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod actions</a></span>}
             {post.has_samples > 0 && <span> | <a href={C.URLS.VIEW_SAMPLES + post.id}>view samples</a></span>}
           </div>

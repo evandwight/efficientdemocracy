@@ -1,6 +1,6 @@
 import * as C from "../constant";
 import React from "react";
-import { DownVoteButton, Fields, UpVoteButton } from "./viewPost";
+import { DownVoteButton, Fields, HackerCommentsLink, UpVoteButton } from "./viewPost";
 
 
 export const Posts = ({ posts, user, showCensored, moreLink, offset }) => {
@@ -38,6 +38,7 @@ export const Post = ({post, i, user}) => {
             <div className="gray-500">
                 by {post.user_name}
                 {!!post.url && <span> | <a href={post.url}>link</a></span>}
+                {!!post.hackernews_id && <span> | <HackerCommentsLink id={post.hackernews_id}/></span>}
                 <span> | <a href={C.URLS.QPOSTS_VIEW + post.id}>more info</a></span>
                 {!!user && user.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod actions</a></span>}
             </div>

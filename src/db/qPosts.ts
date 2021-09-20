@@ -11,7 +11,7 @@ export default class QPosts {
 
     getPost(postId): Promise<QPost> {
         return this.db.pool.query(
-            `SELECT qposts.id as id, created, title, url, content, qposts.user_id as user_id,
+            `SELECT qposts.id as id, created, title, url, content, hackernews_id, qposts.user_id as user_id,
                 user_name
             FROM qposts 
                 INNER JOIN users ON qposts.user_id = users.id
@@ -29,7 +29,7 @@ export default class QPosts {
 
     getPostsByIds(postIds: QPostId[]): Promise<QPost[]> {
         return this.db.pool.query(
-            `SELECT qposts.id as id, created, title, url, content, qposts.user_id as user_id,
+            `SELECT qposts.id as id, created, title, url, content, hackernews_id, qposts.user_id as user_id,
                 user_name
             FROM qposts 
                 INNER JOIN users ON qposts.user_id = users.id
@@ -74,7 +74,7 @@ export default class QPosts {
 
     getPosts(offset=0): Promise<QPost[]> {
         return this.db.pool.query(
-            `SELECT qposts.id as id, created, title, url, content, qposts.user_id as user_id,
+            `SELECT qposts.id as id, created, title, url, content, hackernews_id, qposts.user_id as user_id,
                 user_name,
                 COALESCE(up_votes,0) as up_votes,  COALESCE(down_votes,0) as down_votes,
                 ((extract(epoch from created) - 1134028003)/45000 + log(GREATEST(abs(COALESCE(up_votes,0) - COALESCE(down_votes,0))*2, 1))*sign(COALESCE(up_votes,0)-COALESCE(down_votes,0))) as hot
@@ -95,7 +95,7 @@ export default class QPosts {
         return thingId as QPostId;
     }
 
-    async upsertHackerNewsPost(v: {id: number, title: string, score:number}): Promise<QPostId> {
+    async upsertHackerNewsPost(v: {id: number, title: string, score:number, url?: string}): Promise<QPostId> {
         // TODO what if this query fails, modactions could not be set! Maybe retry?
         let postId = await this.getPostIdByHackerId(v.id);
         const field = C.FIELDS.LABELS.DEEPLY_IMPORTANT;
@@ -117,7 +117,7 @@ export default class QPosts {
                 `INSERT INTO qposts  
                 (id, user_id, title, url, content, created, hackernews_id, hackernews_points) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-                [postId, botAccount, v.title, `https://news.ycombinator.com/item?id=${v.id}`, "", new Date(), v.id, v.score])
+                [postId, botAccount, v.title, v.url, "", new Date(), v.id, v.score])
                 .then(assertOne);
             if (isDeeplyImportant) {
                 await this.db.modActions.upsertModAction({thingId:postId, value:true, version: 0, ... modActionArgs});
