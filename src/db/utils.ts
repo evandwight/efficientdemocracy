@@ -126,4 +126,18 @@ export async function WithTransaction<T>(db, func: (PoolClient) => Promise<T>): 
 export function daysFromNow(days) {
     return new Date(Date.now() + days * 24 * 60 * 60 * 1000)
 }
+
+export function lastSaturday(date?: Date) {
+    date = date || new Date();
+    let prevDate = new Date(date);
+    // day = date.getDay => daysSinceSaturday 
+    // saturday = 6 => 7
+    // sunday = 0 => 1
+    const daysSinceLastSaturday = date.getDay() + 1; 
+
+    // getDate gives day of the month, setDate handles negatives
+    prevDate.setDate(date.getDate() - daysSinceLastSaturday);
+
+    return prevDate;
+}
 // module.exports = {selectOne, selectCount, assertOne, retryOnceOnUniqueError, selectOneAttr};

@@ -1,6 +1,6 @@
 import { DatabaseApi } from "./databaseApi";
 import {QPost, QPostId, UserId} from "./types";
-import { assertOne, selectAttr, selectOne, selectOneAttr } from "./utils";
+import { assertOne, lastSaturday, selectAttr, selectOne, selectOneAttr } from "./utils";
 import * as C from '../constant';
 
 export default class QPosts {
@@ -65,10 +65,11 @@ export default class QPosts {
             FROM qposts 
                 INNER JOIN mod_actions ON qposts.id = mod_actions.thing_id
             WHERE mod_actions.field = '${C.FIELDS.LABELS.DEEPLY_IMPORTANT}' and
-                mod_actions.value
+                mod_actions.value and
+                qposts.created >= $2 
             ORDER BY created DESC
             LIMIT ${C.POSTS_PER_PAGE + 1}
-            OFFSET $1`, [offset])
+            OFFSET $1`, [offset, lastSaturday()])
             .then(selectAttr("id")) as Promise<QPostId[]>;
     }
 
