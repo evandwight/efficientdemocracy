@@ -43,3 +43,9 @@ export type QPost = {
     censor?: boolean,
     deeply_important?: boolean,
 }
+
+export type CacheEntry = {
+    data: any,
+    expiry: Date,
+    loadingExpiry: Date,
+}

@@ -8,6 +8,7 @@ import assert from 'assert';
 import validator from 'validator';
 import { assertFieldExists } from '../routes/utils';
 import { QPost, QPostId } from '../db/types';
+import { CachedDB } from '../db/cachedDb';
 
 export async function addVotes({posts, user}: {posts: QPost[], user: any}): Promise<QPost[]> {
     if (user) {
@@ -80,7 +81,7 @@ export function renderPosts({res, title, moreLinkBase, showCensored, page, offse
 export async function list(req, res) {
     const {user, page, offset} = getListParams(req, res);
 
-    const postIdsPlus = await db.qPosts.getHackerNewsPosts(offset);
+    const postIdsPlus = await CachedDB.getHackerNewsPosts(offset);
     const postIds = postIdsPlus.map(v => v.id);
     let posts = await addAllExtrasToPost({postIds, user});
     posts = posts.map((v, i) => ({... v, ... postIdsPlus[i]}));

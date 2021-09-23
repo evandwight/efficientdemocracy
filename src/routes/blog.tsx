@@ -25,8 +25,9 @@ export const index = (req, res) => {
 }
 
 export const BLOG_ENTRIES = [
+    Blogs.Caching,
     Blogs.SamplingIsMagic,
     Blogs.CspInlineScript,
     Blogs.JestSerialCodeCoverage,
-    Blogs.ReactStaticRender
+    Blogs.ReactStaticRender,
 ];
