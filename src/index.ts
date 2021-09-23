@@ -146,6 +146,7 @@ function setup(db) {
   router.get(C.URLS.ABOUT_DEMOCRATIC_MODERATION, renderAbout(About.DemocraticModeration, "Democratic moderation"));
   router.get(C.URLS.ABOUT_MODERATE_VISIBILITY, renderAbout(About.ModerateVisibilty, "Moderate visibility"));
   router.get(C.URLS.ABOUT_STATUS, renderAbout(About.Alpha, "Alpha"));
+  router.get(C.URLS.ABOUT_COSTS, renderAbout(About.Costs, "Costs"));
 
   // Blog
   router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);

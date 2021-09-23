@@ -47,6 +47,7 @@ export const ABOUT_DEMOCRATIC_MODERATION = ABOUT + "democratic-moderation";
 export const ABOUT_MODERATE_VISIBILITY = ABOUT + "moderate-visibility";
 export const ABOUT_FAQ = ABOUT + "faq";
 export const ABOUT_STATUS = ABOUT + "alpha";
+export const ABOUT_COSTS = ABOUT + "costs";
 
 export const BLOG = "/blog";
 export const BLOG_REACT_STATIC_RENDER = "/blog/post/react-static-render";
