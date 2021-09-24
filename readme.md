@@ -11,4 +11,4 @@ The eventual goal is to recreate Reddit with the discussion reflecting the desir
 
 *   Democratic moderation: elected moderators, statistical sampling, referendums, and designated proxies
 *   Moderating visibility: up voting a post makes you as responsible for it as the poster
-*   Being optimized for users, not investors.
+*   Being optimized for users, not investors
