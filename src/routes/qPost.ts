@@ -101,7 +101,7 @@ export async function listNew(req, res) {
 export async function listDeeplyImportant(req, res) {
     const {user, page, offset} = getListParams(req, res);
 
-    const postIds = await db.qPosts.getDeeplyImportantPosts(offset);
+    const postIds = await CachedDB.getDeeplyImportantPosts(offset);
     const posts = await addAllExtrasToPost({postIds, user});
 
     renderPosts({res, page, offset, user, posts, title: "Deeply important posts", showCensored: true, moreLinkBase: C.URLS.DEEPLY_IMPORTANT_QPOSTS});

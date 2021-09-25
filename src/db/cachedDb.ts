@@ -8,6 +8,10 @@ export class CachedDB {
         const key = "getHackerNewsPosts-"+offset;
         return CachedDB.getFromCache(key, () => db.qPosts.getHackerNewsPosts(offset));
     }
+    static getDeeplyImportantPosts(offset) {
+        const key = "getDeeplyImportantPosts-"+offset;
+        return CachedDB.getFromCache(key, () => db.qPosts.getDeeplyImportantPosts(offset));
+    }
     static async getFromCache(key: string, dbFunc: () => any, depth?: number) {
         depth = depth || 0;
 
