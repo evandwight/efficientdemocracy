@@ -1,6 +1,6 @@
 const utils = require('../utils');
 import crypto from 'crypto';
-import { lastSaturday } from '../utils';
+import { lastSaturday, lastWeekday } from '../utils';
 
 jest.mock('crypto');
 let mockedCrypto: any = crypto as any;
@@ -11,19 +11,19 @@ beforeEach(() => {
 describe("db.utils", () => {
     describe('generateUniqueRandom', () => {
         it('handles 0 attempts', () => {
-            let res = utils.generateUniqueRandom(2,0);
+            let res = utils.generateUniqueRandom(2, 0);
             expect(res.length).toBe(0);
         });
         it('handles 1 attempts', () => {
-            let res = utils.generateUniqueRandom(3,1);
+            let res = utils.generateUniqueRandom(3, 1);
             expect(res.length).toBe(1);
         });
         it('handles 10 attempts', () => {
-            let res = utils.generateUniqueRandom(10,10);
+            let res = utils.generateUniqueRandom(10, 10);
             expect(res.length).toBe(10);
         });
         it('handles more attempts then possible values', () => {
-            expect(() => utils.generateUniqueRandom(0,2)).toThrow("Too few numValues");
+            expect(() => utils.generateUniqueRandom(0, 2)).toThrow("Too few numValues");
         });
     });
 
@@ -39,7 +39,7 @@ describe("db.utils", () => {
             mockedCrypto.randomInt
                 .mockReturnValueOnce(0);
             let res = utils.generateUniqueRandom(1, 1);
-            const {calls} = mockedCrypto.randomInt.mock;
+            const { calls } = mockedCrypto.randomInt.mock;
             expect(calls[0]).toEqual([0, 2]);
             expect(res).toEqual([0]);
         });
@@ -55,29 +55,43 @@ describe("db.utils", () => {
 
     describe('selectOneAttr', () => {
         it('handles 0 rows', () => {
-            const result = utils.selectOneAttr('id')({rowCount: 0, rows: []});
+            const result = utils.selectOneAttr('id')({ rowCount: 0, rows: [] });
             expect(result).toEqual(null);
         });
         it('handles 1 row', () => {
-            const result = utils.selectOneAttr('id')({rowCount: 1, rows: [{'id': 1}]});
+            const result = utils.selectOneAttr('id')({ rowCount: 1, rows: [{ 'id': 1 }] });
             expect(result).toEqual(1);
         });
         it('handles 2 row', () => {
             expect(() => {
-                utils.selectOneAttr('id')({rowCount: 2, rows: [{'id': 1}, {'id': 2}]})
+                utils.selectOneAttr('id')({ rowCount: 2, rows: [{ 'id': 1 }, { 'id': 2 }] })
             }).toThrow();
         });
     });
     describe('lastSaturday', () => {
         it('handles mid month days', () => {
-            expect(lastSaturday(new Date(2021, 8, 20))).toEqual(new Date(2021,8, 18));
+            expect(lastSaturday(new Date(2021, 8, 20))).toEqual(new Date(2021, 8, 18));
         });
         it('handles saturdays', () => {
-            expect(lastSaturday(new Date(2021, 8, 18))).toEqual(new Date(2021,8, 11));
+            expect(lastSaturday(new Date(2021, 8, 18))).toEqual(new Date(2021, 8, 11));
         });
         it('handles beginning of the month days', () => {
-            expect(lastSaturday(new Date(2021, 8, 4))).toEqual(new Date(2021,7, 28));
-            expect(lastSaturday(new Date(2021, 8, 1))).toEqual(new Date(2021,7, 28));
+            expect(lastSaturday(new Date(2021, 8, 4))).toEqual(new Date(2021, 7, 28));
+            expect(lastSaturday(new Date(2021, 8, 1))).toEqual(new Date(2021, 7, 28));
+        });
+    });
+    describe('lastWeekDay', () => {
+        it('handles mondays', () => {
+            expect(lastWeekday(1, new Date(2021, 8, 20))).toEqual(new Date(2021, 8, 13));
+            expect(lastWeekday(1, new Date(2021, 8, 3))).toEqual(new Date(2021, 7, 30));
+        });
+        it('handles sundays', () => {
+            expect(lastWeekday(0, new Date(2021, 8, 20))).toEqual(new Date(2021, 8, 19));
+            expect(lastWeekday(0, new Date(2021, 8, 3))).toEqual(new Date(2021, 7, 29));
+        });
+        it('handles saturdays', () => {
+            expect(lastWeekday(6, new Date(2021, 8, 20))).toEqual(new Date(2021, 8, 18));
+            expect(lastWeekday(6, new Date(2021, 8, 3))).toEqual(new Date(2021, 7, 28));
         });
     });
 });

@@ -3,9 +3,12 @@ import * as C from "../constant";
 import { selectAttr } from "../db/utils";
 
 
-async function run(start, end, key) {
+export async function run(start, end) {
+    const key = `deeply-important-${dateToStr(start)}-to-${dateToStr(end)}`;
+    console.log(`Saving posts to ${key}`);
     const posts = await getPosts(start, end);
-    return db.kv.set(key, posts);   
+    await db.kv.set(key, posts);   
+    return key;
 }
 
 async function getPosts(start, end) {
@@ -26,8 +29,8 @@ if (require.main === module) {
     console.log("Main mode");
     const start = new Date(process.argv[2]);
     const end = new Date(process.argv[3]);
-    const key = `deeply-important-${dateToStr(start)}-to-${dateToStr(end)}`;
-    console.log(`Saving posts to ${key}`);
+
+
     db.initialize();
-    run(start, end, key).then(() => db.end());
+    run(start, end).then(() => db.end());
 }

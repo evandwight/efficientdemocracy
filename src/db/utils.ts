@@ -128,15 +128,24 @@ export function daysFromNow(days) {
 }
 
 export function lastSaturday(date?: Date) {
+    return lastWeekday(6, date);
+}
+
+export function lastWeekday(weekDay: number, date?: Date) {
     date = date || new Date();
     let prevDate = new Date(date);
-    // day = date.getDay => daysSinceSaturday 
-    // saturday = 6 => 7
-    // sunday = 0 => 1
-    const daysSinceLastSaturday = date.getDay() + 1; 
+
+    // day = date.getDay
+    // saturday = 6
+    // sunday = 0
+    let dateDay = date.getDay();
+    if (dateDay <= weekDay) {
+        dateDay += 7;
+    }
+    const daysSince = dateDay - weekDay; 
 
     // getDate gives day of the month, setDate handles negatives
-    prevDate.setDate(date.getDate() - daysSinceLastSaturday);
+    prevDate.setDate(date.getDate() - daysSince);
 
     return prevDate;
 }

@@ -11,7 +11,7 @@ const lambda = new LambdaClient({
     credentials: fromIni(),
 });
 
-async function run(key) {
+export async function run(key) {
     const users = (await db.users.getUsers())
         .filter(user => !!user.send_emails);
     // const users = [{id: "asdf", unsubscribe_key: "TESTKEY", email: "TESTEMAIL"}];
