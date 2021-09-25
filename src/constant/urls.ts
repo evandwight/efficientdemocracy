@@ -1,25 +1,25 @@
 
 // QPosts
-export const QPOSTS = "/qposts";
-export const NEW_QPOSTS = "/new_qposts";
+export const QPOSTS = "/hot-qposts";
+export const NEW_QPOSTS = "/new-qposts";
 export const DEEPLY_IMPORTANT_QPOSTS = "/deeply-important-qposts";
 export const FROZEN_QPOSTS = "/frozen-qposts/";
 export const QPOSTS_VIEW = "/qposts/view/";
-export const SUBMIT_QPOST_VOTE = "/submit/qpost_vote/";
+export const SUBMIT_QPOST_VOTE = "/submit/qpost-vote/";
 export const SUBMIT_QPOST = "/submit/qpost";
-export const SUBMIT_QPOST_DISPUTE = "/submit/qpost_dispute/";
+export const SUBMIT_QPOST_DISPUTE = "/submit/qpost-dispute/";
 export const SORT = "/sort";
 
 // Samples
-export const SUBMIT_SAMPLE_VOTE = "/submit/sample_vote/";
-export const VIEW_SAMPLE_RESULT = "/view_sample_result/";
+export const SUBMIT_SAMPLE_VOTE = "/submit/sample-vote/";
+export const VIEW_SAMPLE_RESULT = "/view_sample-result/";
 export const VIEW_SAMPLES = "/samples/view/"
 
 // Mods
 export const MODS_VIEW = "/mods";
 
 // QPosts Mods
-export const QPOSTS_MOD_ACTIONS = "/qposts/mod_actions/";
+export const QPOSTS_MOD_ACTIONS = "/qposts/mod-actions/";
 export const SUBMIT_QPOST_MOD_ACTION = "/submit/post_mod_action/set/";
 
 // QComments

@@ -86,7 +86,7 @@ export async function list(req, res) {
     let posts = await addAllExtrasToPost({postIds, user});
     posts = posts.map((v, i) => ({... v, ... postIdsPlus[i]}));
 
-    renderPosts({res, page, offset, user, posts, title: "Posts", showCensored: false, moreLinkBase: C.URLS.QPOSTS});
+    renderPosts({res, page, offset, user, posts, title: "Hot posts", showCensored: false, moreLinkBase: C.URLS.QPOSTS});
 }
 
 export async function listNew(req, res) {
@@ -173,5 +173,5 @@ export async function submitPost(req, res) {
 
     // TODO validate title
     await db.qPosts.submitPost({ userId, url, title });
-    res.redirect(C.URLS.QPOSTS);
+    res.redirect(req.get("Referrer"));
 }

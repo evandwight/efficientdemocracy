@@ -14,17 +14,23 @@ type reactRenderOptions = {
     includeScript?: string,
 }
 
+export const DefaultWrapper = (props: {showLogin, user, csrfToken, children}) => 
+    <div>
+        <Header {... props}/>
+            <div id="inner-content">
+                {props.children}
+            </div>
+        <Footer/>
+    </div>
+
 export const reactRender = (res, element, options?: reactRenderOptions) => {
     options = options || {};
     const showLogin = options.hasOwnProperty("showLogin") ? options.showLogin : true;
     const innerHtml = ReactDOMServer.renderToStaticMarkup(
-        <div>
-            <Header showLogin={showLogin} user={res.locals.user} csrfToken={res.locals.csrfToken}/>
-            <div id="inner-content">
-                {element}
-            </div>
-            <Footer/>
-        </div>);
+        <DefaultWrapper showLogin={showLogin} user={res.locals.user} csrfToken={res.locals.csrfToken}>
+            {element}
+        </DefaultWrapper>
+        );
     res.send(HtmlBoilerPlate(innerHtml, res.locals.csrfToken, options));
 }
 

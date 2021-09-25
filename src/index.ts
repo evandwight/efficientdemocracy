@@ -99,7 +99,7 @@ function setup(db) {
 
   // Routes
   router.get("/favicon.ico", (req, res) => res.sendFile('favicon.ico', { root: __dirname + '/../public' }))
-  router.get("/", (req, res) => res.redirect(C.URLS.QPOSTS));
+  router.get("/", (req, res) => res.redirect(C.URLS.DEEPLY_IMPORTANT_QPOSTS));
 
 
   // Misc

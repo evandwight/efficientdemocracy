@@ -1,9 +1,10 @@
 import * as C from "../constant";
 import React from "react";
 import { DownVoteButton, Fields, HackerCommentsLink, UpVoteButton } from "./viewPost";
+import { QPost, User } from "../db/types";
 
 
-export const Posts = ({ posts, user, showCensored, moreLink, offset }) => {
+export const Posts = ({ posts, user, showCensored, moreLink, offset } : {posts: QPost[], user: User, showCensored: boolean, moreLink: string, offset: number}) => {
     if (posts.length === 0) {
         return <div>No results found</div>;
     }
@@ -18,7 +19,7 @@ export const Posts = ({ posts, user, showCensored, moreLink, offset }) => {
     </div>
 }
 
-export const Post = ({post, i, user}) => {
+export const Post = ({post, i, user}: {post: QPost, i: number, user:User}) => {
     return <tr className={i % 2 === 1 ? "bg-gray-200" : ""}>
         <td className="rank-col">
                 {i + 1}

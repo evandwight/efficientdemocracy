@@ -47,5 +47,5 @@ export async function submitPostAction(req, res) {
 
     await db.modActions.upsertModAction({ thingId: postId, creatorId: userId, strikeUps, strikeDowns, strikePoster, strikeDisputers: false, priority, banLength: C.BAN_LENGTH, version, value, field });
 
-    res.redirect(C.URLS.QPOSTS);
+    res.redirect(req.get("Referrer"));
 }
