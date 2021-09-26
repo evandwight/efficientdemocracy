@@ -75,7 +75,7 @@ export function trimPosts({posts, moreLinkBase, page}) {
 export function renderPosts({res, title, moreLinkBase, showCensored, page, offset, posts, user}) {
     let moreLink = null;
     ({posts, moreLink} = trimPosts({moreLinkBase, posts, page}));
-    reactRender(res, Posts({ posts, user, showCensored, moreLink, offset }), {title, includeVotesJs: true});
+    reactRender(res, Posts({ posts, user, showCensored, moreLink, offset, sortType:title}), {title, includeVotesJs: true});
 }
 
 export async function list(req, res) {

@@ -63,7 +63,7 @@ function setup(db) {
   // Static files
   // use before session, otherwise it creates multiple sessions on each page load
   // https://www.airpair.com/express/posts/expressjs-and-passportjs-sessions-deep-dive
-  app.use('/public', express.static(__dirname + '/../public'));
+  app.use('/public', express.static(__dirname + '/../public', {maxAge: '30d'}));
 
   // Sessions
   let sessionOptions: any = {

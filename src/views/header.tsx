@@ -13,8 +13,6 @@ export const Header = ({ showLogin, user, csrfToken}) =>
                     <a href={C.URLS.ABOUT_STATUS}>alpha</a>
                     <span> | </span>
                     <a href={C.URLS.ABOUT_WHAT_IS_THIS}>what is this?</a>
-                    <span> | </span>
-                    <a href={C.URLS.SORT}>sort</a>
                 </td>
                 {showLogin ? <td id="userInfo"> <LoginInfo user={user} /> </td> : null}
             </tr>

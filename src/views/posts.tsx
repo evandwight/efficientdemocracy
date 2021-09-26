@@ -4,11 +4,14 @@ import { DownVoteButton, Fields, HackerCommentsLink, UpVoteButton } from "./view
 import { QPost, User } from "../db/types";
 
 
-export const Posts = ({ posts, user, showCensored, moreLink, offset } : {posts: QPost[], user: User, showCensored: boolean, moreLink: string, offset: number}) => {
+export const Posts = ({ posts, user, showCensored, moreLink, offset, sortType } : {posts: QPost[], user: User, showCensored: boolean, moreLink: string, offset: number, sortType: string}) => {
     if (posts.length === 0) {
         return <div>No results found</div>;
     }
     return <div>
+        <div>
+            <b>{sortType}</b> | <a href={C.URLS.SORT}>change sort</a>
+        </div>
         <table id="posts">
         {posts.filter(post => showCensored || !post.censor).map((post, i) => <Post key={i} i={i+offset} {... {post, user}}/>)}
         </table>
