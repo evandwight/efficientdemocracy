@@ -147,6 +147,7 @@ function setup(db) {
   router.get(C.URLS.ABOUT_MODERATE_VISIBILITY, renderAbout(About.ModerateVisibilty, "Moderate visibility"));
   router.get(C.URLS.ABOUT_STATUS, renderAbout(About.Alpha, "Alpha"));
   router.get(C.URLS.ABOUT_COSTS, renderAbout(About.Costs, "Costs"));
+  router.get(C.URLS.ABOUT_HOW_IT_WORKS, renderAbout(About.HowItWorks, "How it works"));
 
   // Blog
   router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
