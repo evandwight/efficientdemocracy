@@ -9,6 +9,7 @@ import validator from 'validator';
 import { assertFieldExists } from '../routes/utils';
 import { QPost, QPostId } from '../db/types';
 import { CachedDB } from '../db/cachedDb';
+import { lastSaturday } from '../db/utils';
 
 export async function addVotes({posts, user}: {posts: QPost[], user: any}): Promise<QPost[]> {
     if (user) {
@@ -104,7 +105,8 @@ export async function listDeeplyImportant(req, res) {
     const postIds = await CachedDB.getDeeplyImportantPosts(offset);
     const posts = await addAllExtrasToPost({postIds, user});
 
-    renderPosts({res, page, offset, user, posts, title: "Deeply important posts", showCensored: true, moreLinkBase: C.URLS.DEEPLY_IMPORTANT_QPOSTS});
+    const sinceStr = lastSaturday().toLocaleDateString("EN-US", {month:"short", day:"numeric"});
+    renderPosts({res, page, offset, user, posts, title: `Deeply important posts since ${sinceStr}`, showCensored: true, moreLinkBase: C.URLS.DEEPLY_IMPORTANT_QPOSTS});
 }
 
 export async function listFrozen(req, res) {
@@ -115,7 +117,7 @@ export async function listFrozen(req, res) {
 
     const postIds = await db.kv.get(key);
     let posts = await addAllExtrasToPost({postIds, user});
-
+    
     renderPosts({res, page, offset, user, posts, title: "Frozen posts", showCensored: true, moreLinkBase: `${C.URLS.FROZEN_QPOSTS}${key}`});
 }
 

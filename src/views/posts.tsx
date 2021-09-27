@@ -11,7 +11,7 @@ export const Posts = ({ posts, user, showCensored, moreLink, offset, sortType }:
     if (posts.length === 0) {
         return <div>
             <SortHeader sortType={sortType}/>
-            <div>No results found</div>
+            <div>All done! There are no posts to read, try another sort.</div>
         </div>;
     }
     return <div>
