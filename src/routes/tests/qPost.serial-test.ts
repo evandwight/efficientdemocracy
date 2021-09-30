@@ -92,7 +92,8 @@ describe("qPost", () => {
     describe('/qposts', () => {
         it('works when not logged in', async () => {
             const request = await notLoggedIn();
-            const thingId = await testApi.createPost({});
+            const userId = await testApi.createUser();
+            const thingId = await testApi.createPost({userId});
             let res = await request.get(C.URLS.QPOSTS)
                 .send()
                 .expect(200);

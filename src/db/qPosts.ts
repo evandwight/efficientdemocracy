@@ -39,10 +39,15 @@ export default class QPosts {
 
     getHackerNewsPosts(offset=0): Promise<{id: QPostId, hot: number}[]> {
         return this.db.pool.query(
-            `SELECT id,
-                ((extract(epoch from created) - 1134028003)/45000 + log(GREATEST(abs(hackernews_points)*2, 1))*sign(hackernews_points)) as hot
-            FROM qposts
-            WHERE qposts.hackernews_points is not null
+            `WITH scored_posts as (
+                SELECT qposts.id as id, qposts.created,
+                (COALESCE(hackernews_points, 0) + 10 * (COALESCE(up_votes, 0) - COALESCE(down_votes,0))) as score
+                FROM qposts 
+                    LEFT JOIN vote_count ON qposts.id = vote_count.id
+            )
+            SELECT id,
+                ((extract(epoch from created) - 1134028003)/45000 + log(GREATEST(abs(score)*2, 1))*sign(score)) as hot
+            FROM scored_posts
             ORDER BY hot DESC
             LIMIT ${C.POSTS_PER_PAGE + 1}
             OFFSET $1`, [offset])
