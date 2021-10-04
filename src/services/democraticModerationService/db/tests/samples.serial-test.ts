@@ -1,6 +1,7 @@
-import db from '../../db/databaseApi';
-import * as C from '../../constant';
-const {testApi} = require('../../testUtils');
+import db from '../../../../db/databaseApi';
+import * as C from '../../../../constant';
+import Samples from '../samples';
+import {testApi} from '../../../../testUtils';
 const uuid = require('uuid');
 
 beforeAll(() => {
@@ -26,11 +27,11 @@ describe("Samples", () => {
     describe('canUserVote', () => {
         it('works', async () => {
             const {userId, thingId, sampleId} = await testApi.createPostSample();
-            let res = await db.samples.canUserVote({sampleId, userId});
+            let res = await Samples.canUserVote({sampleId, userId});
             expect(res).toBe(true);
 
             const userId2 = db.uuidv4();
-            res = await db.samples.canUserVote({sampleId, userId:userId2});
+            res = await Samples.canUserVote({sampleId, userId:userId2});
             expect(res).toBe(false);
         });
     });
@@ -39,7 +40,7 @@ describe("Samples", () => {
         it('works', async () => {
             const userId = db.uuidv4();
             let sampleId = await testApi.createSample({thingId:db.uuidv4(),userIds: [userId]});
-            await db.samples.vote({sampleId, userId, vote:true, strikeUps: false, strikeDowns: false, strikePoster: false, strikeDisputers: false});
+            await Samples.vote({sampleId, userId, vote:true, strikeUps: false, strikeDowns: false, strikePoster: false, strikeDisputers: false});
             expect(true).toBeTruthy();
         });
     });
@@ -47,7 +48,7 @@ describe("Samples", () => {
     describe('getOldestSample', () => {
         it('works', async () => {
             const {userId, thingId, sampleId} = await testApi.createPostSample();
-            const res = await db.samples.getOldestSample(userId);
+            const res = await Samples.getOldestSample(userId);
             expect(res.id).toEqual(sampleId);
             expect(res.post.id).toEqual(thingId);
         });
@@ -55,31 +56,31 @@ describe("Samples", () => {
     describe('countVotes', () => {
         it('works', async () => {
             const {userId, thingId, sampleId} = await testApi.createPostSample();
-            await db.samples.vote({sampleId, userId, vote:null, strikeUps: false, strikeDowns: true, strikePoster: false, strikeDisputers: false});
-            const count = await db.samples.countVotes(sampleId);
+            await Samples.vote({sampleId, userId, vote:null, strikeUps: false, strikeDowns: true, strikePoster: false, strikeDisputers: false});
+            const count = await Samples.countVotes(sampleId);
             expect(count).toEqual([{vote:null, strike_ups: false, strike_downs: true, strike_poster: false, strike_disputers: false, count: 1}]);
         });
     });
     describe('setSampleIsComplete', () => {
         it('works', async () => {
             const {userId, thingId, sampleId} = await testApi.createPostSample();
-            await db.samples.setSampleIsCompleted({sampleId, result:null, count:[{asdf:1}]});
+            await Samples.setSampleIsCompleted({sampleId, result:null, count:[{asdf:1}]});
         });
     });
     describe('completeSample', () => {
         it('works', async () => {
             const {userId, thingId, sampleId} = await testApi.createPostSample();
-            const sample = await db.samples.getOldestSample(userId);
+            const sample = await Samples.getOldestSample(userId);
             const result = {vote: true, strike_ups:true, strike_downs:true, strike_poster:true, strike_disputers:true};
             const count = [{asdf:1}, {asdf:2}];
-            await db.samples.completeSample({sample, result, count})
+            await Samples.completeSample({sample, result, count})
         });
         it('handles a null result', async () => {
             const {userId, thingId, sampleId} = await testApi.createPostSample();
-            const sample = await db.samples.getOldestSample(userId);
+            const sample = await Samples.getOldestSample(userId);
             const result = null;
             const count = [{asdf:1}, {asdf:2}];
-            await db.samples.completeSample({sample, result, count})
+            await Samples.completeSample({sample, result, count})
         });
     });
 });

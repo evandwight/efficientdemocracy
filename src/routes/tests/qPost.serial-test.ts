@@ -5,6 +5,7 @@ import * as Routes from '../../routes';
 import { getCsrfToken, login, notLoggedIn, testApi } from '../../testUtils';
 import { addFields, addPosts } from '../../routes/qPost';
 import { QPost } from '../../db/types';
+import Samples from '../../services/democraticModerationService/db/samples';
 
 beforeAll(() => {
     return db.initialize();
@@ -40,7 +41,7 @@ describe("qPost", () => {
         it('displays sample link when it exists', async () => {
             const request = await notLoggedIn();
             const {userId, thingId, sampleId} = await testApi.createPostSample();
-            await db.samples.setSampleIsCompleted({sampleId, result:null, count:[]});
+            await Samples.setSampleIsCompleted({sampleId, result:null, count:[]});
 
             let res = await request.get(C.URLS.QPOSTS_VIEW + thingId)
                 .send()
@@ -72,7 +73,6 @@ describe("qPost", () => {
             const postId = await testApi.createPost({title:"a", userId});
             const posts = await addPosts([postId]);
             expect(posts.length).toBe(1);
-            console.log(posts);
             expect(posts[0].title).toEqual("a");
         });
     });

@@ -4,25 +4,20 @@ import { reactRender } from '../views/utils';
 import assert from 'assert';
 import validator from 'validator';
 import { ViewSampleResult } from '../views/viewSampleResult';
-import { sum } from '../batch/samples';
+import { sum } from '../services/democraticModerationService/endSamples';
 import { ViewSamples } from '../views/viewSamples';
+import DemocraticModerationService from '../services/democraticModerationService';
+import { formToStrikes } from './utils';
 
 export async function submitSampleVote(req, res) {
     const {sampleId} = req.params;
     assert(validator.isUUID(sampleId, 4), "Invalid sampleId");
     const userId = req.user.id;
     const body = {... req.body};
-    const [vote, strikeUps, strikeDowns, strikePoster, strikeDisputers] = 
-        ["vote", "strike_ups", "strike_downs", "strike_poster", "strike_disputers"].map((v) => body.hasOwnProperty(v));
-
-    assert(await db.samples.canUserVote({sampleId, userId}), "User not in sample");
-
-    const {field} = await db.samples.getSampleResult(sampleId);
-    if (field === C.FIELDS.LABELS.DEEPLY_IMPORTANT) {
-        assert(!(strikeUps || strikeDowns || strikePoster), "Cannot strike with field deeply important");
-    }
-
-    db.samples.vote({sampleId, userId, vote, strikeUps, strikeDowns, strikePoster, strikeDisputers})
+    const vote = body.hasOwnProperty("vote");
+    const strikes = formToStrikes(body);
+    
+    await DemocraticModerationService.sampleVote({sampleId, userId, vote, strikes});
 
     res.redirect(req.get("Referrer"));
 }
@@ -72,7 +67,7 @@ export async function viewSampleResult(req, res) {
     const {sampleId} = req.params;
     assert(validator.isUUID(sampleId, 4));
 
-    const sample = await db.samples.getSampleResult(sampleId);
+    const sample = await DemocraticModerationService.getSampleResult(sampleId);
     assert(sample.is_complete, "Sample must be complete to view");
 
     const dangerousChartData = dangerousCountsToChartData(sample);
@@ -85,7 +80,7 @@ export async function viewSamples(req, res) {
     const {thingId} = req.params;
     assert(validator.isUUID(thingId, 4));
 
-    const samples = await db.samples.getCompletedSamples(thingId);
+    const samples = await DemocraticModerationService.getCompletedSamples(thingId);
     
     reactRender(res, ViewSamples({ samples }), {title: "Samples"});
 }

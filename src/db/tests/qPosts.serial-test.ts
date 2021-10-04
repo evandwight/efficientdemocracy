@@ -56,12 +56,6 @@ describe("QPosts", () => {
             const userId = await testApi.createHackerUser();
             const postId = await db.qPosts.upsertHackerNewsPost(hackerPost);
             expect((await db.qPosts.getPost(postId)).title).toEqual("a");
-            const params = {thingId: postId, field: C.FIELDS.LABELS.DEEPLY_IMPORTANT};
-            expect((await db.modActions.getModAction(params)).value).toBe(true);
-            
-            hackerPost.score = 1;
-            await db.qPosts.upsertHackerNewsPost(hackerPost);
-            expect((await db.modActions.getModAction(params)).value).toBe(false);
         });
     });
 });

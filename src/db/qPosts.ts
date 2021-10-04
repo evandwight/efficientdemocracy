@@ -104,42 +104,21 @@ export default class QPosts {
     async upsertHackerNewsPost(v: {id: number, title: string, score:number, url?: string}): Promise<QPostId> {
         // TODO what if this query fails, modactions could not be set! Maybe retry?
         let postId = await this.getPostIdByHackerId(v.id);
-        const field = C.FIELDS.LABELS.DEEPLY_IMPORTANT;
-        const botAccount = C.BOT_ACCOUNT_USER_ID;
-        const priority = C.MOD_ACTIONS.PRIORTY.AUTO_MOD;
-        const isDeeplyImportant = v.score > 600;
-        const modActionArgs = {
-            field,
-            creatorId: botAccount, 
-            strikeUps:false, 
-            strikeDowns: false, 
-            strikePoster: false,
-            strikeDisputers: false,
-            priority,
-            banLength: 30};
+
         if (!postId) {
             postId = await this.db.things.create(C.THINGS.QPOST);
             await this.db.pool.query(
                 `INSERT INTO qposts  
                 (id, user_id, title, url, content, created, hackernews_id, hackernews_points) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-                [postId, botAccount, v.title, v.url, "", new Date(), v.id, v.score])
+                [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", new Date(), v.id, v.score])
                 .then(assertOne);
-            if (isDeeplyImportant) {
-                await this.db.modActions.upsertModAction({thingId:postId, value:true, version: 0, ... modActionArgs});
-            }
         } else {
             await this.db.pool.query(
                 `UPDATE qposts 
                 SET hackernews_points = $2
                 WHERE id = $1`,
                 [postId, v.score]).then(assertOne);
-            const modAction = await this.db.modActions.getModAction({thingId: postId, field});
-            const version = !!modAction ? modAction.version : 0;
-            if ((!modAction && isDeeplyImportant) ||
-                (!!modAction && modAction.priority <= priority && modAction.value !== isDeeplyImportant)) {
-                await this.db.modActions.upsertModAction({thingId:postId, value:isDeeplyImportant, version, ... modActionArgs});
-            }
         }
         
         return postId;

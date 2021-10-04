@@ -1,7 +1,8 @@
-import db from '../../db/databaseApi';
-const {testApi} = require('../../testUtils');
-import * as C from '../../constant';
-import { UserId } from '../types';
+import db from '../../../../db/databaseApi';
+import {testApi} from '../../../../testUtils';
+import * as C from '../../../../constant';
+import { UserId } from '../../../../db/types';
+import ModActions from '../modActions';
 
 beforeAll(() => {
     return db.initialize();
@@ -21,8 +22,8 @@ describe("ModActions", () => {
             const thingId = db.uuidv4();
             const field = "censor";
             const modActionId = await testApi.createModAction({thingId, creatorId, strikeDowns:false, strikePoster:false});
-            await db.modActions.deleteModAction({thingId, version:1, priority:0, field});
-            const res = await db.modActions.getModAction({thingId, field});
+            await ModActions.deleteModAction({thingId, version:1, priority:0, field});
+            const res = await ModActions.getModAction({thingId, field});
             expect(res).toBe(null);
         });
     });
@@ -84,7 +85,7 @@ describe("ModActions", () => {
             const thingId = await db.qPosts.submitPost({title:"", userId});
             await db.votes.insertVote({thingId, userId, vote: C.VOTE.UP});
             const modActionId = await testApi.createModAction({thingId, creatorId});
-            const res = await db.modActions.getStrikes(userId);
+            const res = await ModActions.getStrikes(userId);
             expect(res.length).toBe(1);
             expect(res[0]).toEqual({
                 thing_id: thingId,
@@ -98,7 +99,7 @@ describe("ModActions", () => {
             const {userId, thingId, sampleId} = await testApi.createPostSample();
             await db.votes.insertVote({thingId, userId, vote: C.VOTE.UP});
             const modActionId = await testApi.createModAction({thingId, creatorId:sampleId});
-            const res = await db.modActions.getStrikes(userId);
+            const res = await ModActions.getStrikes(userId);
             expect(res.length).toBe(1);
             expect(res[0]).toEqual({
                 thing_id: thingId,

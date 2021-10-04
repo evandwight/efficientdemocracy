@@ -2,6 +2,7 @@ import * as C from './constant';
 import db from "./db/databaseApi";
 import validator from 'validator';
 import assert from 'assert';
+import DemocraticModerationService from './services/democraticModerationService';
 
 export async function addCustomLocals(req, res, next) {
     let user;
@@ -12,7 +13,7 @@ export async function addCustomLocals(req, res, next) {
         // console.log("here");
         user = await db.users.getUser(userId);
         // console.log(user);
-        user.sample = await db.samples.getOldestSample(user.id);
+        user.sample = await DemocraticModerationService.getOldestSample(user.id);
       } catch (error) {
         console.log(error)
 

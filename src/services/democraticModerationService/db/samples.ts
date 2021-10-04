@@ -1,18 +1,15 @@
-import { DatabaseApi } from "./databaseApi";
-import { UserId, Sample, ThingId} from './types';
-import { selectOne, selectOneAttr, existsOne, assertOne, selectAttr, selectRows } from "./utils";
-import * as C from '../constant';
-import * as Utils from './utils';
+import dbPool from "../../../db/dbPool";
+import { UserId, Sample, ThingId} from '../../../db/types';
+import { selectOne, selectOneAttr, existsOne, assertOne, selectAttr, selectRows } from "../../../db/utils";
+import * as C from '../../../constant';
+import * as Utils from '../../../db/utils';
+import db from '../../../db/databaseApi';
+import ModActions from "./modActions";
 
 
 export default class Samples {
-    db: DatabaseApi;
-    constructor(db: DatabaseApi) {
-        this.db = db;
-    }
-
-    vote({sampleId, userId, vote, strikeUps, strikeDowns, strikePoster, strikeDisputers}) {
-        return this.db.pool.query(
+    static vote({sampleId, userId, vote, strikeUps, strikeDowns, strikePoster, strikeDisputers}) {
+        return dbPool.query(
             `UPDATE sample_votes  
             SET (vote, strike_ups, strike_downs, strike_poster, strike_disputers, has_voted) 
             = ($3, $4, $5, $6, $7, true)
@@ -20,23 +17,23 @@ export default class Samples {
             [sampleId, userId, vote, strikeUps, strikeDowns, strikePoster, strikeDisputers]).then(assertOne);
     }
 
-    canUserVote({sampleId, userId}) {
-        return this.db.pool.query(`
+    static canUserVote({sampleId, userId}) {
+        return dbPool.query(`
             SELECT sample_id
             FROM sample_votes
             WHERE sample_id = $1 and user_id = $2 and has_voted = false`, 
             [sampleId, userId]).then(existsOne);
     }
 
-    async getOldestSample(userId: UserId): Promise<Sample> {
-        const sample = await this.db.pool.query(`
+    static async getOldestSample(userId: UserId): Promise<Sample> {
+        const sample = await dbPool.query(`
             SELECT id, samplee_id, field
             FROM sample_votes as sv INNER JOIN samples ON sv.sample_id = samples.id
             WHERE user_id = $1 and has_voted = false and expires > NOW()
             ORDER BY expires DESC
             LIMIT 1`, [userId]).then(selectOne);
         if (sample) {
-            sample.post = await this.db.qPosts.getPost(sample.samplee_id).then(r => {
+            sample.post = await db.qPosts.getPost(sample.samplee_id).then(r => {
                 if (r === null) {
                     throw new Error("Cannot find post for sample");
                 } else {
@@ -47,7 +44,7 @@ export default class Samples {
         return sample;
     }
 
-    async createSample({thingId, userIds, type, field, sampleSize}) {
+    static async createSample({thingId, userIds, type, field, sampleSize}) {
         // select users
         let usersInSample;
         if (!!sampleSize) {
@@ -57,8 +54,8 @@ export default class Samples {
         }
         const expiry = Utils.daysFromNow(1);
         // create samples and sample votes
-        let id = await this.db.things.create(C.THINGS.SAMPLE);
-        return Utils.WithTransaction(this.db, async (client) => {
+        let id = await db.things.create(C.THINGS.SAMPLE);
+        return Utils.WithTransaction(db, async (client) => {
             const sampleId = await client.query(
                 `INSERT INTO samples (id, samplee_id, type, expires, field, is_complete)
                 VALUES ($1, $2, $3, $4, $5, false)
@@ -71,8 +68,8 @@ export default class Samples {
         });
     }
 
-    getThingsWithDisputes({field, threshold}) {
-        return this.db.pool.query(`
+    static getThingsWithDisputes({field, threshold}) {
+        return dbPool.query(`
             SELECT d.thing_id as thing_id
             FROM disputes as d
             LEFT JOIN mod_actions as ma ON d.thing_id = ma.thing_id and d.field = ma.field
@@ -83,14 +80,14 @@ export default class Samples {
             HAVING count(d.thing_id) >= $1`, [threshold, field]).then(selectAttr('thing_id'));
     }
 
-    getExpiredSamples() {
-        return this.db.pool.query(
+    static getExpiredSamples() {
+        return dbPool.query(
             `SELECT * from samples
             WHERE is_complete = false and expires < NOW()`).then(result => result.rows);
     }
 
-    countVotes(sampleId) {
-        return this.db.pool.query(
+    static countVotes(sampleId) {
+        return dbPool.query(
             `SELECT vote, strike_ups, strike_downs, strike_poster, strike_disputers, COUNT(*) as count 
             FROM sample_votes INNER JOIN samples ON sample_id = id
             WHERE sample_id = $1
@@ -98,8 +95,8 @@ export default class Samples {
             .then(result => result.rows.map(v => ({... v, count: parseInt(v.count)})));
     }
 
-    setSampleIsCompleted({sampleId, result, count}, client?) {
-        client  = client || this.db.pool;
+    static setSampleIsCompleted({sampleId, result, count}, client?) {
+        client  = client || dbPool;
         return client.query(
             `UPDATE samples
             SET is_complete = true, result = $2, counts = $3
@@ -107,13 +104,13 @@ export default class Samples {
             [sampleId, JSON.stringify(result), JSON.stringify(count)]).then(assertOne);
     }
 
-    getSampleResult(sampleId) {
-        return this.db.pool.query(
+    static getSampleResult(sampleId) {
+        return dbPool.query(
             `SELECT * FROM samples WHERE id = $1`, [sampleId]).then(selectOne);
     }
 
-    getCompletedSamples(thingId: ThingId) {
-        return this.db.pool.query(
+    static getCompletedSamples(thingId: ThingId) {
+        return dbPool.query(
             `SELECT * 
             FROM samples 
             WHERE samplee_id = $1 and is_complete
@@ -121,25 +118,25 @@ export default class Samples {
             .then(selectRows);
     }
 
-    getSamples({thingId, field}) {
-        return this.db.pool.query(
+    static getSamples({thingId, field}) {
+        return dbPool.query(
             `SELECT * FROM samples WHERE samplee_id = $1 and field = $2`,
             [thingId, field]).then(r => r.rows);
     }
 
-    async completeSample({sample, result, count}) {
+    static async completeSample({sample, result, count}) {
         const {field} = sample;
-        const modAction = await this.db.modActions.getModAction({thingId: sample.samplee_id, field});
+        const modAction = await ModActions.getModAction({thingId: sample.samplee_id, field});
         const version = modAction ? modAction.version : undefined;
         const priority = sample.type === C.SAMPLE.TYPE.LEVEL_1 ? 
             C.MOD_ACTIONS.PRIORTY.SAMPLE_1 : C.MOD_ACTIONS.PRIORTY.REFERENDUM;
         if (result === null) {
-            return this.setSampleIsCompleted({sampleId:sample.id, result, count});
+            return Samples.setSampleIsCompleted({sampleId:sample.id, result, count});
         }
-        return Utils.WithTransaction(this.db, async (client) => {
+        return Utils.WithTransaction(db, async (client) => {
             return Promise.all([
-                this.setSampleIsCompleted({sampleId:sample.id, result, count}, client),
-                this.db.modActions.upsertModAction({
+                Samples.setSampleIsCompleted({sampleId:sample.id, result, count}, client),
+                ModActions.upsertModAction({
                     thingId: sample.samplee_id,
                     field,
                     creatorId: sample.id,

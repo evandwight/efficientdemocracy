@@ -1,45 +1,42 @@
-import { DatabaseApi } from "./databaseApi";
-import { ThingId } from './types';
-import { assertOne, selectOne, selectRows, daysFromNow } from "./utils";
-import * as C from '../constant';
+import { ThingId } from '../../../db/types';
+import { assertOne, selectOne, selectRows, daysFromNow } from "../../../db/utils";
+import * as C from '../../../constant';
+import dbPool from "../../../db/dbPool";
+import db from '../../../db/databaseApi';
+import Strikes from './strikes';
 
 export default class ModActions {
-    db: DatabaseApi;
-    constructor(db: DatabaseApi) {
-        this.db = db;
-    }
-
-    getModAction({thingId, field})  {
-        return this.db.pool.query(
+    static getModAction({thingId, field})  {
+        return dbPool.query(
             `SELECT * FROM mod_actions WHERE thing_id = $1 and field = $2`,
             [thingId, field]).then(selectOne);
     }
 
-    getModActions(thingId)  {
-        return this.db.pool.query(
+    static getModActions(thingId)  {
+        return dbPool.query(
             `SELECT * FROM mod_actions WHERE thing_id = $1`,
             [thingId]).then(selectRows);
     }
 
-    getModActionsForThingIds(thingIds: ThingId[]) {
-        return this.db.pool.query(
+    static getModActionsForThingIds(thingIds: ThingId[]) {
+        return dbPool.query(
             `SELECT *
             FROM mod_actions 
             WHERE thing_id = ANY ($1)`, 
             [thingIds]).then(selectRows);
     }
 
-    deleteModAction({thingId, field, version, priority})  {
-        return this.db.pool.query(
+    static deleteModAction({thingId, field, version, priority})  {
+        return dbPool.query(
             `DELETE FROM mod_actions WHERE thing_id = $1 and field = $4 and version = $2 and priority <= $3`,
             [thingId, version, priority, field]).then(assertOne);
     }
 
-    async upsertModAction({thingId, field, creatorId, strikeUps, strikeDowns, strikePoster, strikeDisputers, priority, banLength, version, value }, client?) {
+    static async upsertModAction({thingId, field, creatorId, strikeUps, strikeDowns, strikePoster, strikeDisputers, priority, banLength, version, value }, client?) {
         if (!client) {
-            client = this.db.pool;
+            client = dbPool;
         }
-        const id = await this.db.things.create(C.THINGS.MOD_ACTION, client);
+        const id = await db.things.create(C.THINGS.MOD_ACTION, client);
         const expiry = daysFromNow(banLength);
         version = version || 0;
 
@@ -58,19 +55,20 @@ export default class ModActions {
             [id, thingId, creatorId, expiry, priority, value, version, field]).then(assertOne);
 
         if (strikeUps || strikeDowns) {
-            await this.db.strikes.createStrikesForVoters(client, {strikeUps, strikeDowns, thingId, modActionId:id});
+            await Strikes.createStrikesForVoters(client, {strikeUps, strikeDowns, thingId, modActionId:id});
         }
         if (strikePoster) {
-            await this.db.strikes.createStrikesForPoster(client, {thingId, modActionId:id});
+            await Strikes.createStrikesForPoster(client, {thingId, modActionId:id});
         }
         if (strikeDisputers) {
-            await this.db.strikes.createStrikesForDisputers(client, {thingId, modActionId:id, field, value});
+            await Strikes.createStrikesForDisputers(client, {thingId, modActionId:id, field, value});
         }
 
         return id;
     }
-    getStrikes(userId) {
-        return this.db.pool.query(
+    
+    static getStrikes(userId) {
+        return dbPool.query(
             `SELECT mod_actions.thing_id, mod_actions.creator_id,  mod_actions.field,
                 things.type as thing_type, users.user_name
             FROM mod_actions 

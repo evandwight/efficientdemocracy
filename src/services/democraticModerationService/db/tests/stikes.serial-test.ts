@@ -1,7 +1,9 @@
-import db from '../../db/databaseApi';
-const {testApi} = require('../../testUtils');
-import * as C from '../../constant';
-import { UserId } from '../types';
+import db from '../../../../db/databaseApi';
+import {testApi} from '../../../../testUtils';
+import * as C from '../../../../constant';
+import { UserId } from '../../../../db/types';
+import ModActions from '../modActions';
+import Strikes from '../strikes';
 
 beforeAll(() => {
     return db.initialize();
@@ -21,7 +23,7 @@ describe("Strikes", () => {
             const thingId = await db.qPosts.submitPost({title:"", userId});
             await db.votes.insertVote({thingId, userId, vote: C.VOTE.UP});
             const modActionId = await testApi.createModAction({thingId, creatorId});
-            const res = await db.modActions.getStrikes(userId);
+            const res = await ModActions.getStrikes(userId);
             expect(res.length).toBe(1);
             expect(res[0]).toEqual({
                 thing_id: thingId,
@@ -35,7 +37,7 @@ describe("Strikes", () => {
             const {userId, thingId, sampleId} = await testApi.createPostSample();
             await db.votes.insertVote({thingId, userId, vote: C.VOTE.UP});
             const modActionId = await testApi.createModAction({thingId, creatorId:sampleId});
-            const res = await db.modActions.getStrikes(userId);
+            const res = await ModActions.getStrikes(userId);
             expect(res.length).toBe(1);
             expect(res[0]).toEqual({
                 thing_id: thingId,
@@ -56,7 +58,7 @@ describe("Strikes", () => {
             await Promise.all(posts.map(p => db.votes.insertVote({ thingId: p, userId, vote: C.VOTE.UP })));
             await Promise.all(posts.map(p => 
                 testApi.createModAction({thingId:p,creatorId: db.uuidv4(), strikeDowns: false, strikePoster: false})));
-            await db.strikes.updateStrikes();
+            await Strikes.updateStrikes();
             const user = await db.users.getUser(userId);
             expect(user.is_banned).toBe(true);
             expect(user.strike_count).toBe(3);
@@ -70,12 +72,12 @@ describe("Strikes", () => {
             await Promise.all(posts.map(p => db.votes.insertVote({ thingId: p, userId, vote: C.VOTE.UP })));
             await Promise.all(posts.map(p => 
                 testApi.createModAction({thingId:p,creatorId: db.uuidv4(), strikeDowns: false, strikePoster: false})));
-            await db.strikes.updateStrikes();
+            await Strikes.updateStrikes();
             let user = await db.users.getUser(userId);
             expect(user.is_banned).toBe(true);
             expect(user.strike_count).toBe(3);
-            await db.modActions.deleteModAction({ thingId: p1, version: 1, priority: 0, field: "censor" });
-            await db.strikes.updateStrikes();
+            await ModActions.deleteModAction({ thingId: p1, version: 1, priority: 0, field: "censor" });
+            await Strikes.updateStrikes();
             user = await db.users.getUser(userId);
             expect(user.is_banned).toBe(false);
             expect(user.strike_count).toBe(2);

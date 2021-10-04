@@ -1,6 +1,7 @@
 import db from "../db/databaseApi";
 import * as C from "../constant";
 import assert from "assert";
+import { StrikesInfo } from "../services/democraticModerationService/types";
 
 export function assertAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -62,4 +63,20 @@ export function redirectAuthenticated(req, res, next) {
 
 export function assertFieldExists(field) {
     assert(C.FIELDS.LIST.indexOf(field) !== -1, "Invalid field");
+}
+
+export function snakeToCamelCase(s) {
+    return s.replace(/([-_][a-z])/ig, ($1) => {
+        return $1.toUpperCase()
+            .replace('_', '');
+    });
+}
+
+export function formToStrikes(body, options: {disallowStrikeDisputers?: boolean} = {}): StrikesInfo {
+    let strikes = Object.fromEntries(["strike_ups", "strike_downs", "strike_poster", "strike_disputers"]
+        .map((v) => [snakeToCamelCase(v), body.hasOwnProperty(v)]));
+    if (options.disallowStrikeDisputers) {
+        strikes.strikeDisputers = false;
+    }
+    return strikes;
 }

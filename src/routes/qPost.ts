@@ -6,10 +6,10 @@ import { ViewPost } from '../views/viewPost';
 import { SubmitPost } from '../views/submitPost';
 import assert from 'assert';
 import validator from 'validator';
-import { assertFieldExists } from '../routes/utils';
 import { QPost, QPostId } from '../db/types';
 import { CachedDB } from '../db/cachedDb';
 import { lastSaturday } from '../db/utils';
+import DemocraticModerationService from '../services/democraticModerationService';
 
 export async function addVotes({posts, user}: {posts: QPost[], user: any}): Promise<QPost[]> {
     if (user) {
@@ -23,7 +23,7 @@ export async function addVotes({posts, user}: {posts: QPost[], user: any}): Prom
 
 export async function addFields(posts: QPost[]): Promise<QPost[]> {
     const ids = posts.map(v => v.id);
-    const modActions = await db.modActions.getModActionsForThingIds(ids);
+    const modActions = await DemocraticModerationService.getModActionsForThingIds(ids);
     const valueFunc = (modAction, pv) => ({ ... (!!pv ? pv : {}), [modAction.field]: modAction.value});
     const modActionMap = listToMap(modActions, modAction => modAction.thing_id, valueFunc);
     return combine(posts, modActionMap, post => post.id);
@@ -127,7 +127,7 @@ export async function viewPost(req, res) {
 
     let post: any = await db.qPosts.getPost(postId);
     post = (await addFields([post]))[0];
-    post.has_samples = (await db.samples.getCompletedSamples(postId)).length > 0;
+    post.has_samples = (await DemocraticModerationService.getCompletedSamples(postId)).length > 0;
 
     reactRender(res, ViewPost({ post, user:res.locals.user }), {title: post.title, includeVotesJs: true});
 }
@@ -154,12 +154,8 @@ export async function submitDispute(req, res) {
     assert(validator.isUUID(postId,4));
     const shouldBe = req.params.should_be === "true" ? true : false;
     const {field} = req.params;
-    assertFieldExists(field);
 
-    const thingType = await db.things.getType(postId);
-    assert.strictEqual(thingType, C.THINGS.QPOST, "Thing must be a qpost");
-
-    await db.votes.submitDispute({ userId, thingId: postId, field, shouldBe});
+    await DemocraticModerationService.submitDispute({userId, thingId:postId, field, shouldBe});
 
     res.sendStatus(200);
 }

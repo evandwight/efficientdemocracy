@@ -1,14 +1,9 @@
-import { DatabaseApi } from "./databaseApi";
-import * as C from '../constant';
+import * as C from '../../../constant';
+import dbPool from "../../../db/dbPool";
 
 export default class Strikes {
-    db: DatabaseApi;
-    constructor(db: DatabaseApi) {
-        this.db = db;
-    }
-
-    updateStrikes() {
-        return this.db.pool.query(`
+    static updateStrikes() {
+        return dbPool.query(`
             WITH count_strikes AS (
                 SELECT s.user_id as user_id, count(mod_actions.id) as strike_count, (count(mod_actions.id) > 2) as is_banned
                 FROM strikes as s LEFT JOIN mod_actions ON s.mod_action_id = mod_actions.id
@@ -21,7 +16,7 @@ export default class Strikes {
             `)
     }
 
-    createStrikesForVoters(client, {strikeUps, strikeDowns, modActionId, thingId}) {
+    static createStrikesForVoters(client, {strikeUps, strikeDowns, modActionId, thingId}) {
         return client.query(
             `INSERT INTO strikes (mod_action_id, user_id)
             SELECT $1, user_id 
@@ -33,7 +28,7 @@ export default class Strikes {
             [modActionId, thingId]);
     }
 
-    createStrikesForPoster(client, {modActionId, thingId}) {
+    static createStrikesForPoster(client, {modActionId, thingId}) {
         return client.query(
             `INSERT INTO strikes (mod_action_id, user_id)
             SELECT $1, user_id
@@ -43,7 +38,7 @@ export default class Strikes {
             [modActionId, thingId]);
     }
 
-    createStrikesForDisputers(client, {modActionId, thingId, value, field}) {
+    static createStrikesForDisputers(client, {modActionId, thingId, value, field}) {
         return client.query(
             `INSERT INTO strikes (mod_action_id, user_id)
             SELECT $1, user_id 
@@ -53,8 +48,8 @@ export default class Strikes {
             [modActionId, thingId, value, field]);
     }
 
-    getStrikes(userId) {
-        return this.db.pool.query(
+    static getStrikes(userId) {
+        return dbPool.query(
             `SELECT mod_actions.thing_id, mod_actions.creator_id,  mod_actions.field,
                 things.type as thing_type, users.user_name
             FROM mod_actions 

@@ -5,6 +5,8 @@ import supertest from 'supertest';
 import * as C from '../constant';
 import { UserId } from '../db/types';
 import {setup} from '../index';
+import ModActions from '../services/democraticModerationService/db/modActions';
+import Samples from '../services/democraticModerationService/db/samples';
 
 export const TEST_URL = "http://localhost:3005";
 
@@ -107,7 +109,7 @@ export const testApi = {
         return C.BOT_ACCOUNT_USER_ID as UserId;
     },
     createPost: (args) => db.qPosts.submitPost({title: "a", url:"b", content:"c", ...args}),
-    createSample: (args) => db.samples.createSample({
+    createSample: (args) => Samples.createSample({
         type: C.SAMPLE.TYPE.LEVEL_1,
         field: "censor",
         sampleSize: 1,
@@ -118,7 +120,7 @@ export const testApi = {
         shouldBe:true,
         ... args
     }),
-    createModAction: (args) => db.modActions.upsertModAction({ 
+    createModAction: (args) => ModActions.upsertModAction({ 
         strikeUps:true, strikeDowns:true, strikePoster:true, 
         priority:0,
         banLength:1000,
@@ -129,7 +131,7 @@ export const testApi = {
     createPostSample: async (type?) => {
         type = type || C.SAMPLE.TYPE.LEVEL_1;
         const {userId, thingId} = await testApi.createPostDispute();
-        const sampleId = await db.samples.createSample({thingId,userIds:[userId], type, field:"censor", sampleSize:1});
+        const sampleId = await Samples.createSample({thingId,userIds:[userId], type, field:"censor", sampleSize:1});
         return {userId, thingId, sampleId};
     },
     createPostDispute: async () => {

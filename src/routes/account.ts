@@ -6,6 +6,7 @@ import {UserSettings} from '../views/userSettings';
 import validator from 'validator';
 import assert from 'assert';
 import * as C from '../constant';
+import DemocraticModerationService from '../services/democraticModerationService';
 
 export function login(req, res) {
     reactRender(res, Login(), {showLogin: false, title:"Login"});
@@ -18,7 +19,7 @@ export async function logout(req, res) {
 
 export async function strikes(req, res) {
     const {user} = res.locals;
-    const strikes = await db.modActions.getStrikes(user.id);
+    const strikes = await DemocraticModerationService.getStrikes(user.id);
     reactRender(res, Strikes({user, strikes}), {title: "Strikes"});
 }
 

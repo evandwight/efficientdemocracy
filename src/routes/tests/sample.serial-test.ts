@@ -1,6 +1,7 @@
 import * as C from '../../constant';
 import {testApi, login, getCsrfToken, notLoggedIn, getFormAction} from '../../testUtils';
 import db from '../../db/databaseApi';
+import Samples from '../../services/democraticModerationService/db/samples';
 
 beforeAll(() => {
     return db.initialize();
@@ -31,7 +32,7 @@ describe('sample', () => {
                 .type('form')
                 .send({
                     _csrf: csrfToken,
-                    censor: true,
+                    vote: true,
                     strike_ups: false,
                     strike_downs: true,
                     strike_poster: false,
@@ -47,7 +48,7 @@ describe('sample', () => {
             const userId = await testApi.createUser();
             const thingId = await testApi.createPost({userId});
             const sampleId = await testApi.createSample({thingId, userIds:[userId]});
-            await db.samples.setSampleIsCompleted({sampleId, result:null, count:[]});
+            await Samples.setSampleIsCompleted({sampleId, result:null, count:[]});
     
             let res = await request.get(C.URLS.VIEW_SAMPLE_RESULT + sampleId)
                 .send()
@@ -60,7 +61,7 @@ describe('sample', () => {
             const userId = await testApi.createUser();
             const thingId = await testApi.createPost({userId});
             const sampleId = await testApi.createSample({thingId, userIds:[userId]});
-            await db.samples.setSampleIsCompleted({sampleId, result:null, count:[]});
+            await Samples.setSampleIsCompleted({sampleId, result:null, count:[]});
     
             let res = await request.get(C.URLS.VIEW_SAMPLES + thingId)
                 .send()
