@@ -22,7 +22,7 @@ async function getPosts(start, end) {
 }
 
 function dateToStr(date) {
-    return date.toLocaleString(undefined, {year: 'numeric', month: '2-digit', day: '2-digit'});
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
 if (require.main === module) {
