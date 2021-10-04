@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import { getPool } from "./dbConfig";
 import { Pool } from "pg";
 import QPosts from './qPosts';
 import Votes from "./votes";

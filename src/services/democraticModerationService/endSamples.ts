@@ -1,5 +1,4 @@
 import * as C from '../../constant';
-import db from '../../db/databaseApi';
 import Samples from './db/samples';
 
 export function normalize(l) {

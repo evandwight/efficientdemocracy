@@ -5,7 +5,7 @@ import { PostModActions } from '../views/postModActions';
 import assert from 'assert';
 import validator from 'validator';
 import DemocraticModerationService from '../services/democraticModerationService';
-import { formToStrikes, snakeToCamelCase } from './utils';
+import { formToStrikes } from './utils';
 
 export async function viewPostActions(req, res) {
     const { id } = req.params;

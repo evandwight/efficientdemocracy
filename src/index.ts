@@ -163,11 +163,15 @@ function setup(db) {
 
   // Custom error handler
   router.use(function (err, req, res, next) {
-    logger.error({ severity: "error", url: req.originalUrl, method: req.method, ip: req.ip, message: err.message, stack: err.stack, time: Date.now() });
-    if (process.env.NODE_ENV !== "production") {
-      console.log(err);
+    if (err) {
+      logger.error({ severity: "error", url: req.originalUrl, method: req.method, ip: req.ip, message: err.message, stack: err.stack, time: Date.now() });
+      if (process.env.NODE_ENV !== "production") {
+        console.log(err);
+      }
+      res.sendStatus(500);
+    } else {
+      next();
     }
-    res.sendStatus(500);
   });
 
   return router;

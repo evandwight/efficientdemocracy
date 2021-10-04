@@ -5,7 +5,6 @@ import { Strikes } from '../views/strikes';
 import {UserSettings} from '../views/userSettings';
 import validator from 'validator';
 import assert from 'assert';
-import * as C from '../constant';
 import DemocraticModerationService from '../services/democraticModerationService';
 
 export function login(req, res) {
