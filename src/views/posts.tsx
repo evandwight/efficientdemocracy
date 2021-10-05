@@ -2,6 +2,7 @@ import * as C from "../constant";
 import React from "react";
 import { DownVoteButton, Fields, HackerCommentsLink, UpVoteButton } from "./viewPost";
 import { QPost, User } from "../db/types";
+import { dateToTimeSince } from "./utils";
 
 const SortHeader = ({sortType}) =>
     <div>
@@ -44,7 +45,7 @@ export const Post = ({ post, i, user }: { post: QPost, i: number, user: User }) 
                 {post.censor ? "[Censored]" : post.title}
             </div>
             <div className="gray-500">
-                by {post.user_name}
+                by {post.user_name}, {dateToTimeSince(post.created)}
                 {!!post.url && <span> | <a href={post.url}>link</a></span>}
                 {!!post.hackernews_id && <span> | <HackerCommentsLink id={post.hackernews_id} /></span>}
                 <span> | <a href={C.URLS.QPOSTS_VIEW + post.id}>more info</a></span>

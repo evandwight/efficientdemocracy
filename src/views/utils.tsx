@@ -58,6 +58,27 @@ export const Checkbox = ({name, label, checked}: {name: string, label: string, c
     </div>;
 }
 
+export const dateToTimeSince = (date: Date) => {
+    const now = new Date();
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  
+    const INTERVALS = [
+        {interval: 31536000, epochStr: "year"},
+        {interval: 2592000, epochStr: "month"},
+        {interval: 86400, epochStr: "day"},
+        {interval: 3600, epochStr: "hour"},
+        {interval: 60, epochStr: "minute"},
+        {interval: 1, epochStr: "second"}
+    ];
+
+    for (const {interval, epochStr} of INTERVALS) {
+        const epochs = Math.floor(seconds/interval);
+        if (epochs >= 1 || interval === 1) {
+            return `${epochs} ${epochStr}${epochs !== 1 ? "s" : ""} ago`;
+        }
+    }
+  }
+
 export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: reactRenderOptions): string {
     const title = options.title || "Efficient Democracy";
     const includeChartJs = options.includeChartJs || false;

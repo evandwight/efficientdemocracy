@@ -1,5 +1,6 @@
 import * as C from '../constant';
 import React from 'react';
+import { dateToTimeSince } from './utils';
 
 export const DisputeLink = ({post, field}) => 
   <a className="onclick-post" 
@@ -44,7 +45,7 @@ export const ViewPost = ({ post, user }) => {
         <td className="title-col">
           <div>{post.title}</div>
           <div>
-            by <span className="gray-900">{post.user_name}</span>
+            by <span className="gray-900">{post.user_name}</span>,  {dateToTimeSince(post.created)}
             {!!post.url && <span> | <a href={post.url}>link</a></span>}
             {!!post.hackernews_id && <span> | <HackerCommentsLink id={post.hackernews_id}/></span>}
             {!!user && user.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod actions</a></span>}

@@ -35,6 +35,7 @@ export type QPostId = Nominal<ThingId, "QPostId">;
 export type QPost = {
     id: QPostId,
     title: string,
+    created: Date,
     url?: string,
     content?: string,
     user_name: string,
