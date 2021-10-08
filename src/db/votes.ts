@@ -1,5 +1,5 @@
 import { DatabaseApi} from "./databaseApi";
-import { assertOne, selectOneAttr } from "./utils";
+import { existsOne, internalAssertOne, selectOneAttr } from "./utils";
 import { Vote } from './types';
 
 export default class Votes {
@@ -28,7 +28,7 @@ export default class Votes {
         return this.db.pool.query(
             `INSERT INTO votes  
             (thing_id, user_id, vote) VALUES ($1, $2, $3)`,
-            [thingId, userId, vote]).then(assertOne);
+            [thingId, userId, vote]).then(internalAssertOne);
     }
 
     upsertVote({ thingId, userId, vote }) {
@@ -37,7 +37,7 @@ export default class Votes {
             (thing_id, user_id, vote) VALUES ($1, $2, $3)
             ON CONFLICT (thing_id, user_id)
             DO UPDATE SET vote = $3`,
-            [thingId, userId, vote]).then(assertOne);
+            [thingId, userId, vote]).then(internalAssertOne);
     }
 
     submitDispute({thingId, userId, field, shouldBe}) {
@@ -46,7 +46,7 @@ export default class Votes {
             (thing_id, user_id, field, should_be) VALUES ($1, $2, $3, $4)
             ON CONFLICT (thing_id, user_id, field)
             DO NOTHING`,
-            [thingId, userId, field, shouldBe]).then(assertOne);
+            [thingId, userId, field, shouldBe]).then(existsOne);
     }
 
 }

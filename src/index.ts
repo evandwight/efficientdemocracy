@@ -5,7 +5,7 @@ import session from "express-session";
 import csrf from 'csurf';
 import { addAsync } from '@awaitjs/express';
 import * as Routes from './routes';
-import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403 } from './routes/utils';
+import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403, ValidationError } from './routes/utils';
 import { addCustomLocals } from './utils';
 import * as C from "./constant";
 import { runTasks } from "./batch";
@@ -164,11 +164,15 @@ function setup(db) {
   // Custom error handler
   router.use(function (err, req, res, next) {
     if (err) {
-      logger.error({ severity: "error", url: req.originalUrl, method: req.method, ip: req.ip, message: err.message, stack: err.stack, time: Date.now() });
       if (process.env.NODE_ENV !== "production") {
         console.log(err);
       }
-      res.sendStatus(500);
+      if (err instanceof ValidationError) {
+        res.status(err.code).send(`Error: ${err.message}`);
+      } else {
+        logger.error({ severity: "error", url: req.originalUrl, method: req.method, ip: req.ips[1], message: err.message, stack: err.stack, time: Date.now(), prettyTime: Date.now().toLocaleString() });
+        res.sendStatus(500);
+      }
     } else {
       next();
     }
@@ -190,13 +194,13 @@ if (require.main === module) {
     try {
       await runTasks()
     } catch(err) {
-      logger.error({ severity: "error", message: err.message, stack: err.stack, time: Date.now() });
+      logger.error({ severity: "error", message: err.message, stack: err.stack, time: Date.now(), prettyTime: Date.now().toLocaleString()  });
     }
   }, 5 * 60 * 1000);
 
 
   process.on("uncaughtException", function (err) {
-    logger.error({ severity: "error", message: err.message, stack: err.stack, time: Date.now() });
+    logger.error({ severity: "error", message: err.message, stack: err.stack, time: Date.now(), prettyTime: Date.now().toLocaleString() });
     process.exit(); // exit the process to avoid unknown state
   });
 }

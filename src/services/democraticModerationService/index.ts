@@ -1,6 +1,5 @@
 import db from '../../db/databaseApi';
 import * as C from '../../constant';
-import assert from 'assert';
 import { SampleId, ThingId, UserId } from '../../db/types';
 import { StrikesInfo } from './types';
 import { createSamples } from './createSamples';
@@ -8,6 +7,7 @@ import { endSamples } from './endSamples';
 import Samples from './db/samples';
 import Strikes from './db/strikes';
 import ModActions from './db/modActions';
+import { validationAssert, ValidationError } from '../../routes/utils';
 
 class DemocraticModerationService {
     static hasTrueStrikes(strikes) {
@@ -15,11 +15,11 @@ class DemocraticModerationService {
     }
 
     static async getFields(thingId) {
-        return ModActions.getModActions({ thingId }).then(r =>
+        return ModActions.getModActions(thingId).then(r =>
             r.reduce((acc, val) => { acc[val.field] = val; return acc; }, {}));
     }
 
-    static async thingTypeHasField(type, field) {
+    static thingTypeHasField(type, field) {
         const fields = THING_CONFIGS?.[type].FIELDS || [];
         return fields.indexOf(field) !== -1;
     }
@@ -62,14 +62,14 @@ class DemocraticModerationService {
         isAutoMod = !!isAutoMod; // default to false
 
         const type = await db.things.getType(thingId);
-        assert(DemocraticModerationService.thingTypeHasField(type, field), "Thing does not have field");
+        validationAssert(DemocraticModerationService.thingTypeHasField(type, field), "Thing does not have field", 400);
 
-        assert(DemocraticModerationService.strikesAllowed(type, field, value, strikes), "Cannot set those strikes");
+        validationAssert(DemocraticModerationService.strikesAllowed(type, field, value, strikes), "Cannot set those strikes", 400);
 
         const priority = isAutoMod ? C.MOD_ACTIONS.PRIORTY.AUTO_MOD : await DemocraticModerationService.creatorIdToPriority(creatorId);
 
         if (!DemocraticModerationService.isHigherThanCurrentPriority(thingId, field, priority)) {
-            throw new Error("Higher priority action already taken");
+            throw new ValidationError("Higher priority action already taken", 400);
         }
 
         const { strikeUps, strikeDowns, strikePoster, strikeDisputers } = strikes;
@@ -82,9 +82,10 @@ class DemocraticModerationService {
     static async submitDispute({ userId, thingId, field, shouldBe }
         : { userId: UserId, thingId: ThingId, field: string, shouldBe: boolean }) {
         const type = await db.things.getType(thingId);
-        assert(DemocraticModerationService.thingTypeHasField(type, field), "Thing does not have field");
+        validationAssert(DemocraticModerationService.thingTypeHasField(type, field), "Thing does not have field", 400);
 
-        await db.votes.submitDispute({ userId, thingId, field, shouldBe });
+        const success = await db.votes.submitDispute({ userId, thingId, field, shouldBe });
+        return success;
     }
 
     static getSampleResult(sampleId) {
@@ -101,7 +102,7 @@ class DemocraticModerationService {
     static async sampleVote({ sampleId, userId, vote, strikes }
         : { sampleId: SampleId, userId: UserId, vote: boolean, strikes: StrikesInfo }) {
 
-        assert(await DemocraticModerationService.canUserVote({ sampleId, userId }), "User not in sample");
+        validationAssert(await DemocraticModerationService.canUserVote({ sampleId, userId }), "User not in sample", 400);
 
         // TODO restrict what you can strike? I don't know that this is necessary.
         // const {field, samplee_id} = await getSampleResult(sampleId);

@@ -1,5 +1,5 @@
 import { ThingId } from '../../../db/types';
-import { assertOne, selectOne, selectRows, daysFromNow } from "../../../db/utils";
+import { assertOne, selectOne, selectRows, daysFromNow, internalAssertOne } from "../../../db/utils";
 import * as C from '../../../constant';
 import dbPool from "../../../db/dbPool";
 import db from '../../../db/databaseApi';
@@ -12,7 +12,7 @@ export default class ModActions {
             [thingId, field]).then(selectOne);
     }
 
-    static getModActions(thingId)  {
+    static getModActions(thingId: ThingId)  {
         return dbPool.query(
             `SELECT * FROM mod_actions WHERE thing_id = $1`,
             [thingId]).then(selectRows);
@@ -29,7 +29,7 @@ export default class ModActions {
     static deleteModAction({thingId, field, version, priority})  {
         return dbPool.query(
             `DELETE FROM mod_actions WHERE thing_id = $1 and field = $4 and version = $2 and priority <= $3`,
-            [thingId, version, priority, field]).then(assertOne);
+            [thingId, version, priority, field]).then(internalAssertOne);
     }
 
     static async upsertModAction({thingId, field, creatorId, strikeUps, strikeDowns, strikePoster, strikeDisputers, priority, banLength, version, value }, client?) {

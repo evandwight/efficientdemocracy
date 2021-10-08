@@ -4,8 +4,8 @@ import { Login } from '../views/login';
 import { Strikes } from '../views/strikes';
 import {UserSettings} from '../views/userSettings';
 import validator from 'validator';
-import assert from 'assert';
 import DemocraticModerationService from '../services/democraticModerationService';
+import { validationAssert } from './utils';
 
 export function login(req, res) {
     reactRender(res, Login(), {showLogin: false, title:"Login"});
@@ -43,11 +43,14 @@ export async function submitUserSettings(req, res) {
 
 export async function unsubscribe(req, res) {
     const { keyId, userId } = req.params;
-    assert(validator.isUUID(keyId,4));
-    assert(validator.isUUID(userId,4));
+    // Always send the same error code for invalid requests to avoid leaking information
+    const validateRequestAssert = (value) => validationAssert(value, "Invalid request arguments", 400);
+
+    validateRequestAssert(validator.isUUID(keyId,4));
+    validateRequestAssert(validator.isUUID(userId,4));
 
     const user = await db.users.getUser(userId);
-    assert.strictEqual(user.unsubscribe_key, keyId, "Invalid key");
+    validateRequestAssert(user.unsubscribe_key === keyId);
 
     await db.users.setSendEmails({userId, sendEmails:false});
     res.send("You have successfully unsubscribed from all emails. To change your settings more go to user settings.");

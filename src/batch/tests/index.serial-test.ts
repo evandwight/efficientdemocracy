@@ -20,7 +20,7 @@ describe("Batch", () => {
     describe("hackernews", () => {
         it("works", async () => {
             const list = await axios.get("https://hacker-news.firebaseio.com/v0/topstories.json");
-            expect(list.data.length).toBe(500);
+            expect(list.data.length).toBeGreaterThan(1);
             const item = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${list.data[0]}.json`);
             expect(typeof item.data.title).toEqual('string');
             expect(typeof item.data.url).toEqual('string');

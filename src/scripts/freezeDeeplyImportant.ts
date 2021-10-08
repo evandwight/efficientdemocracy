@@ -1,13 +1,16 @@
 import db from "../db/databaseApi";
 import * as C from "../constant";
 import { selectAttr } from "../db/utils";
+import { assert } from "console";
 
 
 export async function run(start, end) {
     const key = `deeply-important-${dateToStr(start)}-to-${dateToStr(end)}`;
     console.log(`Saving posts to ${key}`);
     const posts = await getPosts(start, end);
-    await db.kv.set(key, posts);   
+    const success = await db.kv.set(key, posts);   
+    assert(success, "Failed to set kv");
+    
     return key;
 }
 

@@ -80,3 +80,20 @@ export function formToStrikes(body, options: {disallowStrikeDisputers?: boolean}
     }
     return strikes;
 }
+
+export function validationAssert(value: boolean, message: string, code: number) {
+    if (!value) {
+        throw new ValidationError(message, code);
+    }
+}
+
+export class ValidationError extends Error {
+    code: number;
+    constructor(message, code) {
+        super(message);
+        this.code = code;
+    }
+}
+
+export class InternalError extends Error {
+}

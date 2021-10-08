@@ -1,15 +1,14 @@
 import { reactRender } from '../views/utils';
-import assert from 'assert';
 import validator from 'validator';
 import { ViewSampleResult } from '../views/viewSampleResult';
 import { sum } from '../services/democraticModerationService/endSamples';
 import { ViewSamples } from '../views/viewSamples';
 import DemocraticModerationService from '../services/democraticModerationService';
-import { formToStrikes } from './utils';
+import { formToStrikes, validationAssert } from './utils';
 
 export async function submitSampleVote(req, res) {
     const {sampleId} = req.params;
-    assert(validator.isUUID(sampleId, 4), "Invalid sampleId");
+    validationAssert(validator.isUUID(sampleId, 4), "Invalid sample id", 400);
     const userId = req.user.id;
     const body = {... req.body};
     const vote = body.hasOwnProperty("vote");
@@ -63,10 +62,11 @@ export function dangerousCountsToChartData(sample) {
 
 export async function viewSampleResult(req, res) {
     const {sampleId} = req.params;
-    assert(validator.isUUID(sampleId, 4));
+    validationAssert(validator.isUUID(sampleId, 4), "Invalid sample id", 400);
 
     const sample = await DemocraticModerationService.getSampleResult(sampleId);
-    assert(sample.is_complete, "Sample must be complete to view");
+    validationAssert(!!sample, "Sample not found", 404);
+    validationAssert(sample.is_complete, "Sample must be complete to view", 400);
 
     const dangerousChartData = dangerousCountsToChartData(sample);
     const dataTable = countsToDataTable(sample.counts);
@@ -76,7 +76,7 @@ export async function viewSampleResult(req, res) {
 
 export async function viewSamples(req, res) {
     const {thingId} = req.params;
-    assert(validator.isUUID(thingId, 4));
+    validationAssert(validator.isUUID(thingId, 4), "Invalid thing id", 400);
 
     const samples = await DemocraticModerationService.getCompletedSamples(thingId);
     

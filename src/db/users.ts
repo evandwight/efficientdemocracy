@@ -1,6 +1,6 @@
 import { DatabaseApi } from "./databaseApi";
 import * as C from '../constant';
-import { assertOne, retryOnceOnUniqueError, selectOne, selectOneAttr, selectRows, WithTransaction } from '../db/utils';
+import { internalAssertOne, retryOnceOnUniqueError, selectOne, selectOneAttr, selectRows, WithTransaction } from '../db/utils';
 import { User, UserId } from './types';
 import { generateSlug } from "random-word-slugs";
 
@@ -61,7 +61,7 @@ export default class Users {
                     `INSERT INTO users (id, user_name, email, google_id, created_on, is_mod, auth_type, unsubscribe_key)
                     VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.GOOGLE}, $6)`,
                     [id, userName, email, googleId, new Date(), this.db.uuidv4()]);
-            }).then(assertOne);
+            }).then(internalAssertOne);
             return id;
         });
     }

@@ -1,5 +1,5 @@
 import { DatabaseApi} from "./databaseApi";
-import { assertOne, selectOneAttr } from "./utils";
+import { existsOne, selectOneAttr } from "./utils";
 
 export default class Kv {
     db: DatabaseApi;
@@ -11,7 +11,7 @@ export default class Kv {
         return this.db.pool.query(
             `INSERT INTO kv  
             (key, value) VALUES ($1, $2)
-            `, [key, {data: value}]).then(assertOne);
+            `, [key, {data: value}]).then(existsOne);
     }
 
     get(key) {

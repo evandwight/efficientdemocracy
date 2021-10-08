@@ -1,4 +1,5 @@
 import * as C from '../constant'
+import { InternalError } from '../routes/utils';
 const crypto = require('crypto');
 
 export function selectAttr(attr) {
@@ -33,10 +34,22 @@ export function assertOne(result) {
         return result;
     }
     else {
-        console.log(result);
         throw new Error("Didn't get one result");
     }
 }
+
+export function assertOneCustomError(errorFunc) {
+    return (result) => {
+        if (result.rowCount === 1) {
+            return result;
+        }
+        else {
+            throw errorFunc();
+        }
+    }
+}
+
+export const internalAssertOne = assertOneCustomError(() => new InternalError("Didn't get one result"));
 
 export function existsOne(result) {
     if (result.rowCount === 1) {

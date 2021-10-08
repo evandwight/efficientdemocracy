@@ -1,6 +1,6 @@
 import { DatabaseApi } from "./databaseApi";
 import {QPost, QPostId, UserId} from "./types";
-import { assertOne, lastSaturday, selectAttr, selectOne, selectOneAttr } from "./utils";
+import { internalAssertOne, lastSaturday, selectAttr, selectOne, selectOneAttr } from "./utils";
 import * as C from '../constant';
 
 export default class QPosts {
@@ -112,13 +112,13 @@ export default class QPosts {
                 (id, user_id, title, url, content, created, hackernews_id, hackernews_points) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
                 [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", new Date(), v.id, v.score])
-                .then(assertOne);
+                .then(internalAssertOne);
         } else {
             await this.db.pool.query(
                 `UPDATE qposts 
                 SET hackernews_points = $2
                 WHERE id = $1`,
-                [postId, v.score]).then(assertOne);
+                [postId, v.score]).then(internalAssertOne);
         }
         
         return postId;
