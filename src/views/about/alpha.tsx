@@ -9,6 +9,7 @@ export const Page = () =>
             <li>Designated proxies</li>
         </ul>
         <h4>Disabled features:</h4>
+        <p>Some features are currently disabled as they require a critical mass of users (1000) to make them function well.</p>
         <ul>
             <li>Automatic sample creation</li>
         </ul>

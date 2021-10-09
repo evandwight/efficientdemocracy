@@ -5,10 +5,7 @@ export const Page = () =>
     <div>
         <h2>How it works:</h2>
         <p>
-            In order to curate posts we <a href={C.URLS.ABOUT_DEMOCRATIC_MODERATION}>estimate</a> the result of a referendum on "is this deeply important for you to know?". This lets the community decide for itself what is important. A combination of statistics and incentives allow us to make an educated guess what you will find important without even asking you - thereby providing a curated feed with no dictators.
-        </p>
-        <p>
-            These are the tools we use:
+            This site is a work in progress. The following are the tools we use to reimagine Reddit so the discussion reflects the desires of all users and not just the most active and passionate.
         </p>
         <ul>
             <li>
@@ -22,6 +19,6 @@ export const Page = () =>
             </li>
         </ul>
         <p>
-            The eventual goal is to recreate Reddit with the discussion reflecting the desires of all users and not just the most active and passionate. Though currently not all <a href={C.URLS.ABOUT_STATUS}>features</a> are implemented or activated.
+            Currently not all <a href={C.URLS.ABOUT_STATUS}>features</a> are implemented or activated.
         </p>
     </div>
