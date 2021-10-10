@@ -10,10 +10,10 @@ export const Page = () =>
             Community curated news: keep up to date with hacker news in less time.
         </p>
         <p>
-            We no longer live with a scarcity of information but with an abundance. Hacker News excels at collecting interesting information but is flawed. It’s an addictive infinite list. Efficient Democracy converts endless scrolling to a weekly newsletter of just the important stories. No more addiction. Only the news you need.
+            We no longer live with a scarcity of information but with an abundance. Hacker News excels at collecting interesting information but it’s an addictive infinite list. Efficient Democracy converts endless scrolling to a weekly newsletter of just the important stories. No more addiction. Only the news you need.
         </p>
         <p>
-            Hacker News works so well because people are mostly the same; what engages others, engages you. Instead of using this similarity to maximize engagement, we use it to find those important stories. If your peers think a story is important then we mark it as such. We crowdsource curation so you don't have to do it alone.
+            Hacker News excels because people are mostly the same; what engages others, engages you. Instead of using this similarity to maximize engagement, we use it to identitfy important stories. If your peers mark it as important, so do we. We crowdsource curation so you don't have to do it alone.
         </p>
         <p>
             Scroll less; feel better.
@@ -29,13 +29,13 @@ export const Page = () =>
             Our process begins by using moderators elected by the people. Moderators allow for quickly categorizing posts but unfortunately aren't accurately representative despite being elected. In order to correct their mistakes without needing to fire them, the community can dispute individual issues. The disputed issues then get corrected using a statistical sample or even a full referendum.
         </p>
         <p>
-            This process requires participants to answer a few questions a week. For those who don’t want to participate at that level but still want their voices heard, they can designate a proxy to participate on their behalf. To stay enrolled in the proxy program, they must answer a question per quarter to help validate that the proxies accurately represent their views. Proxies give a voice to the silent majority. [33]
+            If you don't want the hassle of answering a few questions a week, you can have your voice heard by designating a proxy to participate on your behalf. We ensure the proxies are representative by asking you one question per quarter. Statistical sampling makes this efficient - the more users, the less work. [33]
         </p>
         <p>
-            No artificial intelligence. Just people working together to build a better community. An efficient democracy.
+            No artificial intelligence. No magic. Just people working together to build a better community. An efficient democracy.
         </p>
         <p>
-            Want to find out if it can work? <a href={SIGNUP}>Sign up</a>!
+            Take the power back. <a href={SIGNUP}>Sign up</a> and have your voice heard!
         </p>
         <h3>What else can it do?</h3>
         <p>
@@ -50,7 +50,7 @@ export const Page = () =>
             Most importantly it allows a community to moderate themselves and doesn’t let the loudest control the conversation[22].
         </p>
         <p>
-            Want to start a revolution? <a href={SIGNUP}>Sign up</a>!
+            Want to find out if it can work? <a href={SIGNUP}>Sign up</a>!
         </p>
 
         <h3>How could this possibly work when election polls are so often wrong?</h3>
@@ -58,11 +58,11 @@ export const Page = () =>
             Close elections are difficult to predict, blowouts are not. We are trying to categorize posts where there is clear consensus - a super majority. A 51% to 49% split only shows that the categorization is contentious, and that you need to make up your own mind.
         </p>
         <p>
-            When an issue is contentious and important to be decided (highly disputed) then a referendum is called.
+            When an issue is contentious and important to be decided (highly disputed) then a referendum is called to remove all possibility of a mistake.
         </p>
         <h3>How do we stop fake accounts?</h3>
         <p>
-            Once fake accounts begin to become a problem we will verify identities for all new accounts[11]. Depending on the severity of the problem we may need to physically mail one time codes to verify addresses.
+            Once fake accounts become a problem, we will verify identities for all new accounts[11]. Depending on the severity of the problem we may need to physically mail one time codes to verify addresses.
         </p>
         <p>
             Please don’t create fake accounts. If you’ve already signed up, then don’t <a href={SIGNUP}>sign up</a>!
