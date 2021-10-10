@@ -144,12 +144,15 @@ const DMS = DemocraticModerationService;
 
 const THING_CONFIGS = {
     [C.THINGS.QPOST]: {
-        FIELDS: [C.FIELDS.LABELS.CENSOR, C.FIELDS.LABELS.DEEPLY_IMPORTANT],
+        FIELDS: [C.FIELDS.LABELS.CENSOR, C.FIELDS.LABELS.DEEPLY_IMPORTANT, C.FIELDS.LABELS.TECHNICAL],
         FIELD_CONFIGS: {
             [C.FIELDS.LABELS.CENSOR]: {
                 CHECK_STRIKES: (value: boolean, strikes: StrikesInfo) => value || !DMS.hasTrueStrikes(strikes),
             },
             [C.FIELDS.LABELS.DEEPLY_IMPORTANT]: {
+                CHECK_STRIKES: (value: boolean, strikes: StrikesInfo) => !DMS.hasTrueStrikes(strikes),
+            },
+            [C.FIELDS.LABELS.TECHNICAL]: {
                 CHECK_STRIKES: (value: boolean, strikes: StrikesInfo) => !DMS.hasTrueStrikes(strikes),
             },
         }

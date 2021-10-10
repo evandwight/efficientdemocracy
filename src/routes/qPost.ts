@@ -100,6 +100,15 @@ export async function listNew(req, res) {
     renderPosts({res, page, offset, user, posts, title: "New posts", showCensored: true, moreLinkBase: C.URLS.NEW_QPOSTS});
 }
 
+export async function listTechnical(req, res) {
+    const {user, page, offset} = getListParams(req, res);
+
+    const postIds = await CachedDB.getTechnical(offset);
+    const posts = await addAllExtrasToPost({postIds, user});
+
+    renderPosts({res, page, offset, user, posts, title: `Technically hot`, showCensored: false, moreLinkBase: C.URLS.TECHNICAL_QPOSTS});
+}
+
 export async function listDeeplyImportant(req, res) {
     const {user, page, offset} = getListParams(req, res);
 

@@ -78,6 +78,26 @@ export default class QPosts {
             .then(selectAttr("id")) as Promise<QPostId[]>;
     }
 
+    getTechnical(offset=0): Promise<QPostId[]> {
+        return this.db.pool.query(
+            `WITH scored_posts as (
+                SELECT qposts.id as id, qposts.created,
+                (COALESCE(hackernews_points, 0) + 10 * (COALESCE(up_votes, 0) - COALESCE(down_votes,0))) as score
+                FROM qposts 
+                    LEFT JOIN vote_count ON qposts.id = vote_count.id
+            )
+            SELECT scored_posts.id as id,
+                ((extract(epoch from created) - 1134028003)/45000 + log(GREATEST(abs(score)*2, 1))*sign(score)) as hot
+            FROM scored_posts
+                INNER JOIN mod_actions ON scored_posts.id = mod_actions.thing_id
+            WHERE mod_actions.field = '${C.FIELDS.LABELS.TECHNICAL}' and
+                mod_actions.value
+            ORDER BY hot DESC
+            LIMIT ${C.POSTS_PER_PAGE + 1}
+            OFFSET $1`, [offset])
+            .then(selectAttr("id")) as Promise<QPostId[]>;
+    }
+
     getPosts(offset=0): Promise<QPost[]> {
         return this.db.pool.query(
             `SELECT qposts.id as id, created, title, url, content, hackernews_id, qposts.user_id as user_id,

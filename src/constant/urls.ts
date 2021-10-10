@@ -3,6 +3,7 @@
 export const QPOSTS = "/hot-qposts";
 export const NEW_QPOSTS = "/new-qposts";
 export const DEEPLY_IMPORTANT_QPOSTS = "/deeply-important-qposts";
+export const TECHNICAL_QPOSTS = "/technical-and-hot";
 export const FROZEN_QPOSTS = "/frozen-qposts/";
 export const QPOSTS_VIEW = "/qposts/view/";
 export const SUBMIT_QPOST_VOTE = "/submit/qpost-vote/";

@@ -109,6 +109,8 @@ function setup(db) {
   router.getAsync(C.URLS.QPOSTS + "/:page?", Routes.QPost.list);
   router.getAsync(C.URLS.NEW_QPOSTS + "/:page?", Routes.QPost.listNew);
   router.getAsync(C.URLS.DEEPLY_IMPORTANT_QPOSTS + "/:page?", Routes.QPost.listDeeplyImportant);
+  router.getAsync(C.URLS.TECHNICAL_QPOSTS + "/:page?", Routes.QPost.listTechnical);
+
   router.getAsync(C.URLS.FROZEN_QPOSTS + ":key/:page?", Routes.QPost.listFrozen);
 
   router.getAsync(C.URLS.QPOSTS_VIEW + ":id", Routes.QPost.viewPost);

@@ -20,6 +20,7 @@ export type Field = {
 export const LABELS = {
     CENSOR: "censor",
     DEEPLY_IMPORTANT: "deeply_important",
+    TECHNICAL: "technical",
 }
 
 // TODO this needs to be the same order all the time or it's useless for making lists
@@ -55,5 +56,20 @@ export const PROPS: { [key: string]: Field; } = {
         VIEW_SAMPLE_RESULT: {
             VOTE_CANVAS_TITLE: "Votes for should the post be marked deeply important"
         },
-    }
+    },
+    [LABELS.TECHNICAL]: {
+        GOODNESS: true,
+        PRETTY_PRINT: { 1: "technical", 0: "not technical" },
+        PRETTY_LABEL: "technical",
+        SAMPLE_CARD: {
+            TITLE: "You have been selected to judge whether this post should be marked technical.",
+            VALUE_LABEL: "Mark as technical:",
+            STRIKE: {
+                POST_VISIBILITY: false,
+            }
+        },
+        VIEW_SAMPLE_RESULT: {
+            VOTE_CANVAS_TITLE: "Votes for should the post be marked technical"
+        },
+    },
 }

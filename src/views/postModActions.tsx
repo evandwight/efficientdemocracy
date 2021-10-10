@@ -42,4 +42,15 @@ export const PostModActions = ({ post, modActions, csrfToken }) =>
         <input type="submit" value="Submit" />
       </div>
     </form>
+
+    <h4>Technical</h4>
+
+    <form action={C.URLS.SUBMIT_QPOST_MOD_ACTION + `${C.FIELDS.LABELS.TECHNICAL}/${post.id}`} method="POST">
+      <input type="hidden" name="_csrf" value={csrfToken} />
+      <VersionInput field={C.FIELDS.LABELS.TECHNICAL} modActions={modActions} />
+      <Checkbox name="value" label="Set technical:" checked={post.technical}/>
+      <div>
+        <input type="submit" value="Submit" />
+      </div>
+    </form>
   </div>;

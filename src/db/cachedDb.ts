@@ -12,6 +12,10 @@ export class CachedDB {
         const key = "getDeeplyImportantPosts-"+offset;
         return CachedDB.getFromCache(key, () => db.qPosts.getDeeplyImportantPosts(offset));
     }
+    static getTechnical(offset) {
+        const key = "getTechnical-"+offset;
+        return CachedDB.getFromCache(key, () => db.qPosts.getTechnical(offset));
+    }
     static async getFromCache(key: string, dbFunc: () => any, depth?: number) {
         depth = depth || 0;
 

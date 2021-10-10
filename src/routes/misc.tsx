@@ -13,5 +13,8 @@ export const Sort = (req, res) => {
         <div>
             <a href={C.URLS.DEEPLY_IMPORTANT_QPOSTS}>Deeply important</a> - recent deeply important posts
         </div>
+        <div>
+            <a href={C.URLS.TECHNICAL_QPOSTS}>Technical and hot</a> - hot technical posts
+        </div>
     </div>, {title:"Sort posts"});
 }
