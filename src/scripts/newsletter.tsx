@@ -11,7 +11,6 @@ type propsType = {
 const BASE_URL = "https://efficientdemocracy.com";
 
 export function dateToStr(date) {
-    const dom = date.getDate();
     return `${date.toLocaleDateString('en-US',{weekday: 'short'})} ${dateOrdinal(date.getDate())}`;
 }
 
