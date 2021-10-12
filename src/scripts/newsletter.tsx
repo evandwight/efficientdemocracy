@@ -11,7 +11,12 @@ type propsType = {
 const BASE_URL = "https://efficientdemocracy.com";
 
 export function dateToStr(date) {
-    return `${date.toLocaleDateString('en-US',{weekday: 'short'})} ${date.getDate()}`
+    const dom = date.getDate();
+    return `${date.toLocaleDateString('en-US',{weekday: 'short'})} ${dateOrdinal(date.getDate())}`;
+}
+
+function dateOrdinal(d) {
+    return d+(31==d||21==d||1==d?"st":22==d||2==d?"nd":23==d||3==d?"rd":"th");
 }
 export function Newsletter({posts, postsLink, unsubscribeLink}: propsType) {
     return <div style={{backgroundColor: "#F3F4F6", color: "#111827"}}>
