@@ -38,7 +38,7 @@ export default class QPosts {
             .then(result => result.rows as QPost[]);
     }
 
-    getHackerNewsPosts(offset=0): Promise<{id: QPostId, hot: number}[]> {
+    getHackerNewsPosts(): Promise<{id: QPostId, hot: number}[]> {
         return this.db.pool.query(
             `WITH scored_posts as (
                 SELECT qposts.id as id, qposts.created,
@@ -50,8 +50,7 @@ export default class QPosts {
                 ((extract(epoch from created) - 1134028003)/45000 + log(GREATEST(abs(score)*2, 1))*sign(score)) as hot
             FROM scored_posts
             ORDER BY hot DESC
-            LIMIT ${C.POSTS_PER_PAGE + 1}
-            OFFSET $1`, [offset])
+            LIMIT 1000`)
             .then(result => result.rows) as Promise<{id: QPostId, hot: number}[]>;
     }
 
@@ -65,21 +64,20 @@ export default class QPosts {
             .then(selectAttr("id")) as Promise<QPostId[]>;
     }
 
-    getDeeplyImportantPosts(offset=0): Promise<QPostId[]> {
+    getDeeplyImportantPosts(): Promise<QPostId[]> {
         return this.db.pool.query(
             `SELECT qposts.id as id
             FROM qposts 
                 INNER JOIN mod_actions ON qposts.id = mod_actions.thing_id
             WHERE mod_actions.field = '${C.FIELDS.LABELS.DEEPLY_IMPORTANT}' and
                 mod_actions.value and
-                qposts.created >= $2 
+                qposts.created >= $1
             ORDER BY created DESC
-            LIMIT ${C.POSTS_PER_PAGE + 1}
-            OFFSET $1`, [offset, lastSaturday()])
+            LIMIT 1000`, [lastSaturday()])
             .then(selectAttr("id")) as Promise<QPostId[]>;
     }
 
-    getTechnical(offset=0): Promise<QPostId[]> {
+    getTechnical(): Promise<QPostId[]> {
         return this.db.pool.query(
             `WITH scored_posts as (
                 SELECT qposts.id as id, qposts.created,
@@ -94,8 +92,7 @@ export default class QPosts {
             WHERE mod_actions.field = '${C.FIELDS.LABELS.TECHNICAL}' and
                 mod_actions.value
             ORDER BY hot DESC
-            LIMIT ${C.POSTS_PER_PAGE + 1}
-            OFFSET $1`, [offset])
+            LIMIT 1000`)
             .then(selectAttr("id")) as Promise<QPostId[]>;
     }
 

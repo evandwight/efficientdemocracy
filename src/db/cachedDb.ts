@@ -1,20 +1,29 @@
 import { CacheEntry } from "./types";
 import db from './databaseApi';
+import * as C from '../constant';
 
 export let cache: {[key: string]: CacheEntry} = {};
 
+export function getByOffset(offset) {
+    offset = offset || 0;
+    return l => l.slice(offset, offset + C.POSTS_PER_PAGE + 1);
+}
+
 export class CachedDB {
     static getHackerNewsPosts(offset) {
-        const key = "getHackerNewsPosts-"+offset;
-        return CachedDB.getFromCache(key, () => db.qPosts.getHackerNewsPosts(offset));
+        const key = "getHackerNewsPosts";
+        return CachedDB.getFromCache(key, () => db.qPosts.getHackerNewsPosts())
+            .then(getByOffset(offset));
     }
     static getDeeplyImportantPosts(offset) {
-        const key = "getDeeplyImportantPosts-"+offset;
-        return CachedDB.getFromCache(key, () => db.qPosts.getDeeplyImportantPosts(offset));
+        const key = "getDeeplyImportantPosts";
+        return CachedDB.getFromCache(key, () => db.qPosts.getDeeplyImportantPosts())
+            .then(getByOffset(offset));
     }
     static getTechnical(offset) {
-        const key = "getTechnical-"+offset;
-        return CachedDB.getFromCache(key, () => db.qPosts.getTechnical(offset));
+        const key = "getTechnical";
+        return CachedDB.getFromCache(key, () => db.qPosts.getTechnical())
+            .then(getByOffset(offset));
     }
     static async getFromCache(key: string, dbFunc: () => any, depth?: number) {
         depth = depth || 0;
