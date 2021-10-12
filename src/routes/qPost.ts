@@ -74,10 +74,11 @@ export function trimPosts({posts, moreLinkBase, page}) {
     return {posts, moreLink};
 }
 
-export function renderPosts({res, title, moreLinkBase, showCensored, page, offset, posts, user}) {
+export function renderPosts({res, title, moreLinkBase, showCensored, page, offset, posts, user, ignoreFields} : {res: any, title: string, moreLinkBase: string, showCensored: boolean, page: number, offset: number, posts: QPost[], user: any, ignoreFields?: string[]}) {
     let moreLink = null;
+    ignoreFields = ignoreFields || [];
     ({posts, moreLink} = trimPosts({moreLinkBase, posts, page}));
-    reactRender(res, Posts({ posts, user, showCensored, moreLink, offset, sortType:title}), {title, includeVotesJs: true});
+    reactRender(res, Posts({ posts, user, showCensored, moreLink, offset, sortType:title, ignoreFields}), {title, includeVotesJs: true});
 }
 
 export async function list(req, res) {
@@ -105,8 +106,8 @@ export async function listTechnical(req, res) {
 
     const postIds = await CachedDB.getTechnical(offset);
     const posts = await addAllExtrasToPost({postIds, user});
-
-    renderPosts({res, page, offset, user, posts, title: `Technically hot`, showCensored: false, moreLinkBase: C.URLS.TECHNICAL_QPOSTS});
+    
+    renderPosts({res, page, offset, user, posts, title: `Technically hot`, showCensored: false, moreLinkBase: C.URLS.TECHNICAL_QPOSTS, ignoreFields: [C.FIELDS.LABELS.TECHNICAL]});
 }
 
 export async function listDeeplyImportant(req, res) {
@@ -116,7 +117,7 @@ export async function listDeeplyImportant(req, res) {
     const posts = await addAllExtrasToPost({postIds, user});
 
     const sinceStr = lastSaturday().toLocaleDateString("EN-US", {month:"short", day:"numeric"});
-    renderPosts({res, page, offset, user, posts, title: `Deeply important posts since ${sinceStr}`, showCensored: true, moreLinkBase: C.URLS.DEEPLY_IMPORTANT_QPOSTS});
+    renderPosts({res, page, offset, user, posts, title: `Deeply important posts since ${sinceStr}`, showCensored: true, moreLinkBase: C.URLS.DEEPLY_IMPORTANT_QPOSTS, ignoreFields: [C.FIELDS.LABELS.DEEPLY_IMPORTANT]});
 }
 
 export async function listFrozen(req, res) {

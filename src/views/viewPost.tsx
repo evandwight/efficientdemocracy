@@ -52,7 +52,7 @@ export const ViewPost = ({ post, user }) => {
             {post.has_samples > 0 && <span> | <a href={C.URLS.VIEW_SAMPLES + post.id}>view samples</a></span>}
           </div>
           <div>
-              <Fields post={post} showDisputes={true} showAllFields={true}/>
+              <Fields post={post} showDisputes={true} showAllFields={true} ignoreFields={[]}/>
           </div>
         </td>
       </tr>
@@ -60,10 +60,10 @@ export const ViewPost = ({ post, user }) => {
   </div>
 }
 
-export const Fields = ({post, showDisputes, showAllFields}) =>
+export const Fields = ({post, showDisputes, showAllFields, ignoreFields}) =>
   <span>
     {C.FIELDS.LIST
-      .filter(field => !!showAllFields || post[field])
+      .filter(field => !!showAllFields || (post[field] && ignoreFields.indexOf(field) === -1))
       .reduce((acc, field, i) => [... acc, 
         <span key={i}>
           {i > 0 && <span>, </span>}

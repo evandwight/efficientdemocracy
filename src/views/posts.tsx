@@ -8,7 +8,7 @@ const SortHeader = ({sortType}) =>
     <div>
         <b>{sortType}</b> | <a href={C.URLS.SORT}>change sort</a>
     </div>;
-export const Posts = ({ posts, user, showCensored, moreLink, offset, sortType }: { posts: QPost[], user: User, showCensored: boolean, moreLink: string, offset: number, sortType: string }) => {
+export const Posts = ({ posts, user, showCensored, moreLink, offset, sortType, ignoreFields}: { posts: QPost[], user: User, showCensored: boolean, moreLink: string, offset: number, sortType: string, ignoreFields: string[] }) => {
     if (posts.length === 0) {
         return <div>
             <SortHeader sortType={sortType}/>
@@ -18,7 +18,7 @@ export const Posts = ({ posts, user, showCensored, moreLink, offset, sortType }:
     return <div>
         <SortHeader sortType={sortType}/>
         <table id="posts">
-            {posts.filter(post => showCensored || !post.censor).map((post, i) => <Post key={i} i={i + offset} {... { post, user }} />)}
+            {posts.filter(post => showCensored || !post.censor).map((post, i) => <Post key={i} i={i + offset} {... { post, user, ignoreFields }} />)}
         </table>
         {!!moreLink &&
             <div>
@@ -27,7 +27,7 @@ export const Posts = ({ posts, user, showCensored, moreLink, offset, sortType }:
     </div>
 }
 
-export const Post = ({ post, i, user }: { post: QPost, i: number, user: User }) => {
+export const Post = ({ post, i, user, ignoreFields}: { post: QPost, i: number, user: User, ignoreFields: string[] }) => {
     return <tr className={i % 2 === 1 ? "bg-gray-200" : ""}>
         <td className="rank-col">
             {i + 1}
@@ -51,12 +51,14 @@ export const Post = ({ post, i, user }: { post: QPost, i: number, user: User }) 
                 <span> | <a href={C.URLS.QPOSTS_VIEW + post.id}>more info</a></span>
                 {!!user && user.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod actions</a></span>}
             </div>
-            {hasInterestingFields(post) &&
+            {hasInterestingFields(post, ignoreFields) &&
                 <div className="gray-500">
-                    <Fields post={post} showAllFields={false} showDisputes={false} />
+                    <Fields post={post} showAllFields={false} showDisputes={false} ignoreFields={ignoreFields}/>
                 </div>}
         </td>
     </tr>
 }
 
-export const hasInterestingFields = (post) => C.FIELDS.LIST.filter(field => post[field]).length > 0;
+export const hasInterestingFields = (post, ignoreFields) => 
+    C.FIELDS.LIST.filter(field => post[field] && ignoreFields.indexOf(field) === -1).length > 0
+    
