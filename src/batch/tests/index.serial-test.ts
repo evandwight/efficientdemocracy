@@ -2,7 +2,7 @@ import db from '../../db/databaseApi';
 import { testApi } from '../../testUtils';
 import axios from "axios";
 import * as C from '../../constant';
-import { maybeSetDeeplyImportant } from '..';
+import { maybeSetField, areTitlesTechnical } from '..';
 import DemocraticModerationService from '../../services/democraticModerationService';
 
 beforeAll(() => {
@@ -26,15 +26,32 @@ describe("Batch", () => {
             expect(typeof item.data.url).toEqual('string');
         });
     });
-    describe("maybeSetDeeplyImportant", () => {
+    describe("maybeSetField", () => {
         it("works", async () => {
             const postId = await testApi.createPost({});
             const params = {thingId: postId, field: C.FIELDS.LABELS.DEEPLY_IMPORTANT};
-            await maybeSetDeeplyImportant(postId, true);
+            await maybeSetField({thingId: postId, shouldBe: true, field: C.FIELDS.LABELS.DEEPLY_IMPORTANT});
             expect((await DemocraticModerationService.getModAction(params)).value).toBe(true);
             
-            await maybeSetDeeplyImportant(postId, false);
+            await maybeSetField({thingId: postId, shouldBe: false, field: C.FIELDS.LABELS.DEEPLY_IMPORTANT});
             expect((await DemocraticModerationService.getModAction(params)).value).toBe(false);
+        });
+    });
+    describe("areTitlesTechnical", () => {
+        it("works", async () => {
+            const titles = [
+                'Show HN:',
+                'Children Exposed To Religion Have Difficulty Distinguishing Fact From Fiction'
+            ]
+
+            expect(await areTitlesTechnical(titles)).toEqual([true, false]);
+        });
+        it("handles giant titles", async () => {
+            const title =  new Array(1000).fill("A").join("");
+            const titles = new Array(30).fill(title);
+
+            const res = await areTitlesTechnical(titles);
+            expect(res.length).toBe(30);
         });
     });
 });

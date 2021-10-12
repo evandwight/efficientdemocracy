@@ -2,6 +2,7 @@ import { DatabaseApi } from "./databaseApi";
 import {QPost, QPostId, UserId} from "./types";
 import { internalAssertOne, lastSaturday, selectAttr, selectOne, selectOneAttr } from "./utils";
 import * as C from '../constant';
+import { HnPost } from "../batch/types";
 
 export default class QPosts {
     db: DatabaseApi;
@@ -121,7 +122,7 @@ export default class QPosts {
         return thingId as QPostId;
     }
 
-    async upsertHackerNewsPost(v: {id: number, title: string, score:number, url?: string}): Promise<QPostId> {
+    async upsertHackerNewsPost(v: HnPost): Promise<QPostId> {
         // TODO what if this query fails, modactions could not be set! Maybe retry?
         let postId = await this.getPostIdByHackerId(v.id);
 
@@ -131,7 +132,7 @@ export default class QPosts {
                 `INSERT INTO qposts  
                 (id, user_id, title, url, content, created, hackernews_id, hackernews_points) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-                [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", new Date(), v.id, v.score])
+                [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", new Date(v.time * 1000), v.id, v.score])
                 .then(internalAssertOne);
         } else {
             await this.db.pool.query(
