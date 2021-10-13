@@ -70,7 +70,7 @@ async function sendNewsletter({email, postsLink, unsubscribeLink, posts}) {
     });
 }
 
-function sendEmail(json) {
+export function sendEmail(json) {
     return lambda.send(new InvokeCommand({
         FunctionName: "sendEmail",
         InvocationType: "RequestResponse",

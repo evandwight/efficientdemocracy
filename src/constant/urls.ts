@@ -58,4 +58,5 @@ export const BLOG_CSP_INLINE_SCRIPT = "/blog/post/csp-inline-script";
 export const BLOG_SAMPLING_IS_MAGIC = "/blog/post/sampling-is-magic";
 export const BLOG_CACHING = "/blog/post/caching";
 export const BLOG_MICROSERVICE_OR_MONOLITH = "/blog/post/microservice-or-monolith";
+export const BLOG_CATEGORIZING_TITLES = "/blog/post/categorizing-titles";
 
