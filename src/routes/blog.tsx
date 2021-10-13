@@ -25,6 +25,7 @@ export const index = (req, res) => {
 }
 
 export const BLOG_ENTRIES = [
+    Blogs.CategorizingTitles,
     Blogs.MicroserviceOrMonolith,
     Blogs.Caching,
     Blogs.SamplingIsMagic,
