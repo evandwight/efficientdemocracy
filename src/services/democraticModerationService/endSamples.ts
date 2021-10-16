@@ -19,7 +19,7 @@ export function calculateStrikeProperties(count) {
 }
 
 export function interpretResults(count) {
-    // C.SAMPLE_SIZE
+    // TODO rewrite with proper matrix library.
     
 
     const didntVote = sum(normalize(count).filter(v => v.vote === null));

@@ -36,5 +36,14 @@ describe("endSamples", () => {
             const res = interpretResults(count);
             expect(res).toEqual({"strike_disputers": true, "strike_downs": true, "strike_poster": false, "strike_ups": false, "vote": true});
         });
+        it('considers voting against as a vote not to strike', async () => {
+            const count = [
+                {"count": 5, "strike_disputers": true, "strike_downs": false, "strike_poster": false, "strike_ups": false, "vote": true},
+                {"count": 3, "strike_disputers": false, "strike_downs": false, "strike_poster": false, "strike_ups": false, "vote": true},
+                {"count": 5, "strike_disputers": true, "strike_downs": false, "strike_poster": false, "strike_ups": false, "vote": false},
+            ]
+            const res = interpretResults(count);
+            expect(res).toEqual({"strike_disputers": false, "strike_downs": false, "strike_poster": false, "strike_ups": false, "vote": true});
+        });
     });
 });
