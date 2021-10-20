@@ -175,6 +175,7 @@ function setup(db) {
         console.log(err);
       }
       if (err instanceof ValidationError) {
+        logger.warn({ req, err }, "Requestion validation error");
         res.status(err.code).send(`Error: ${err.message}`);
       } else {
         logger.error({ req, err }, "Error handling request");
