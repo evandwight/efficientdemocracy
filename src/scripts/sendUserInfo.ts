@@ -22,4 +22,5 @@ ${users.map(e => e.email).join("\n")}
     });
 }
 
-run().then(()=> console.log("success"));
+db.initialize();
+run().then(() => db.end());
