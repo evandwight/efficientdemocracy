@@ -1,0 +1,1 @@
+tail -n 30 /var/log/effdem/error.log | /home/servy/www/effdem/server/node_modules/bunyan/bin/bunyan -o short -l warn
