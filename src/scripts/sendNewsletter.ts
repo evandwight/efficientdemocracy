@@ -4,6 +4,7 @@ import db from "../db/databaseApi";
 import * as C from "../constant";
 import ReactDOMServer from 'react-dom/server';
 import { Newsletter } from "./newsletter";
+import { logger } from "../logger";
 
 
 const lambda = new LambdaClient({
@@ -23,12 +24,16 @@ export async function run(key) {
 
     console.log(postsToText({posts, postsLink:"asdf", unsubscribeLink: "adsf"}));
 
-    await Promise.all(users.map(user => sendNewsletter({
-        email: user.email,
-        postsLink: `https://efficientdemocracy.com${C.URLS.FROZEN_QPOSTS}${key}`,
-        unsubscribeLink: `https://efficientdemocracy.com${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`,
-        posts
-    }).then(() => console.log(`sent email to ${user.email}`))));
+    await Promise.all(
+        users.map(user => sendNewsletter({
+                email: user.email,
+                postsLink: `https://efficientdemocracy.com${C.URLS.FROZEN_QPOSTS}${key}`,
+                unsubscribeLink: `https://efficientdemocracy.com${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`,
+                posts
+            }).then(() => logger.info({severity:"info", info: `sent email key to ${user.email}`, time: Date.now(), prettyTime: Date.now().toLocaleString()  }))
+            .catch((error) => logger.error(({ severity: "error", message: error.message, stack: error.stack, time: Date.now(), prettyTime: Date.now().toLocaleString()})))
+        )
+    );
     
 }
 
