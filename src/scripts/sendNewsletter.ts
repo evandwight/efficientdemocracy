@@ -30,8 +30,8 @@ export async function run(key) {
                 postsLink: `https://efficientdemocracy.com${C.URLS.FROZEN_QPOSTS}${key}`,
                 unsubscribeLink: `https://efficientdemocracy.com${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`,
                 posts
-            }).then(() => logger.info({severity:"info", info: `sent email key to ${user.email}`, time: Date.now(), prettyTime: Date.now().toLocaleString()  }))
-            .catch((error) => logger.error(({ severity: "error", message: error.message, stack: error.stack, time: Date.now(), prettyTime: Date.now().toLocaleString()})))
+            }).then(() => logger.info(`sent email ${key} to ${user.email}`))
+            .catch((err) => logger.error({ err }, `failed to send email ${key} to ${user.email}`))
         )
     );
     

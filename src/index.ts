@@ -163,6 +163,11 @@ function setup(db) {
   // Unsecure - get changes database state so it should be post, however it needs to be embedded in links in emails
   router.getAsync(C.URLS.EMAIL_UNSUBSCRIBE + ':userId/:keyId', Routes.Account.unsubscribe);
 
+  // Custom 404 page not found
+  app.use(function () {
+    throw new ValidationError("Page not found", 404);
+  })
+
   // Custom error handler
   router.use(function (err, req, res, next) {
     if (err) {
@@ -172,7 +177,7 @@ function setup(db) {
       if (err instanceof ValidationError) {
         res.status(err.code).send(`Error: ${err.message}`);
       } else {
-        logger.error({ severity: "error", url: req.originalUrl, method: req.method, ip: req.ips[1], message: err.message, stack: err.stack, time: Date.now(), prettyTime: Date.now().toLocaleString() });
+        logger.error({ req, err }, "Error handling request");
         res.sendStatus(500);
       }
     } else {
@@ -196,13 +201,13 @@ if (require.main === module) {
     try {
       await runTasks()
     } catch(err) {
-      logger.error({ severity: "error", message: err.message, stack: err.stack, time: Date.now(), prettyTime: Date.now().toLocaleString()  });
+      logger.error({ err }, "Failed running tasks");
     }
   }, 5 * 60 * 1000);
 
 
   process.on("uncaughtException", function (err) {
-    logger.error({ severity: "error", message: err.message, stack: err.stack, time: Date.now(), prettyTime: Date.now().toLocaleString() });
+    logger.fatal({ err }, "Uncaught exception");
     process.exit(); // exit the process to avoid unknown state
   });
 }
