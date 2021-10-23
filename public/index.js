@@ -34,7 +34,7 @@ function vote(event) {
 function post(event) {
   event.preventDefault();
   var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  var element = this.event.currentTarget;
+  var element = event.currentTarget;
   var url = element.href;
 
 
