@@ -46,7 +46,7 @@ describe("qPost", () => {
             let res = await request.get(C.URLS.QPOSTS_VIEW + thingId)
                 .send()
                 .expect(200);
-            expect(res.text.includes("view samples")).toBeTruthy();
+            expect(res.text.includes("view-samples")).toBeTruthy();
         });
     });
 

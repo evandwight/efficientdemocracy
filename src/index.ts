@@ -156,9 +156,12 @@ function setup(db) {
   router.getAsync(C.URLS.EMAIL_UNSUBSCRIBE + ':userId/:keyId', Routes.Account.unsubscribe);
 
   // Custom 404 page not found
-  app.use(function () {
-    throw new ValidationError("Page not found", 404);
-  })
+  // Disable on test to allow login
+  if (process.env.NODE_ENV !== "test") {
+    app.use(function () {
+      throw new ValidationError("Page not found", 404);
+    })
+  }
 
   // Custom error handler
   router.use(function (err, req, res, next) {
