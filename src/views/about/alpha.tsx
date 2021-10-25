@@ -1,6 +1,9 @@
 import React from 'react';
+import * as C from '../../constant';
 
-export const Page = () =>
+const title = "Status"
+
+const element = () =>
     <div>
         <h2>Status: Alpha</h2>
         <h4>Incompleted features:</h4>
@@ -15,7 +18,10 @@ export const Page = () =>
         </ul>
         <h4>Security</h4>
         <p>Though I have attempted to secure this site, it is likely vulnerable. Your email may be leaked if we are hacked.</p>
-        
+
         <p>For more information about site security see our <a href="https://github.com/evandwight/efficientdemocracy/blob/main/security.md">github</a>.</p>
     </div>
 
+
+
+export const Status = { title, element, url: C.URLS.ABOUT_STATUS };

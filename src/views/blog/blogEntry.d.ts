@@ -1,0 +1,1 @@
+export type BlogEntry = {element: () => JSX.Element, title: string, url: string, includeScript?: string, created: Date};

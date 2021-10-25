@@ -1,14 +1,11 @@
 import React from 'react';
 import * as C from '../../constant';
-export {Page as ReactStaticRender} from './react-static-render';
-export {Page as JestSerialCodeCoverage} from './jest-serial-code-coverage';
-export {Page as CspInlineScript} from './csp-inline-script';
-export {Page as SamplingIsMagic} from './sampling-is-magic';
-export {Page as Caching} from './caching';
-export {Page as MicroserviceOrMonolith} from './microservice-or-monolith';
-export {Page as CategorizingTitles} from './categorizing-titles';
+export * as BlogEntries from './blogEntries';
+// import { BlogEntry } from './blogEntry';
 
-export const Blogs = ({ entries, page, showNext }) =>
+// export const BlogEntries: {[key: string]: BlogEntry; } = Blogs;
+
+export const BlogPage = ({ entries, page, showNext }) =>
     <div>
         <h2>Blog</h2>
         <ul>

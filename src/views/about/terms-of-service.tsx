@@ -1,9 +1,10 @@
 import React from 'react';
 import * as C from '../../constant';
 
-export const Page = () =>
+const title = "Terms and conditions";
+const element = () =>
     <div>
-        <h1>Terms and Conditions</h1>
+        <h1>{title}</h1>
         <p>Last updated: September 03, 2021</p>
         <p>Please read these terms and conditions carefully before using Our Service.</p>
         <h1>Interpretation and Definitions</h1>
@@ -90,3 +91,5 @@ export const Page = () =>
             <li>By email: info@[site name]</li>
         </ul>
     </div>
+
+export const TermsOfService = { title, element, url: C.URLS.ABOUT_TERMS_OF_SERVICE };

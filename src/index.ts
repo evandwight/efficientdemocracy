@@ -9,9 +9,10 @@ import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod
 import { addCustomLocals } from './utils';
 import * as C from "./constant";
 import { runTasks } from "./batch";
-import * as About from './views/about';
 import { renderAbout } from './routes/about';
-import { BLOG_ENTRIES, renderBlog } from './routes/blog';
+import * as About from './views/about';
+import { BlogEntries } from './views/blog';
+import { renderBlog } from './routes/blog';
 import helmet from 'helmet';
 import { logger } from './logger';
 import hpp from 'hpp';
@@ -140,20 +141,11 @@ function setup(db) {
   router.postAsync(C.URLS.SUBMIT_USER_SETTINGS, assertAuthenticated, Routes.Account.submitUserSettings)
 
   // About
-  router.get(C.URLS.ABOUT_LEGAL, renderAbout(About.Legal, "Legal"));
-  router.get(C.URLS.ABOUT_PRIVACY, renderAbout(About.Privacy, "Privacy"));
-  router.get(C.URLS.ABOUT_TERMS_OF_SERVICE, renderAbout(About.TermsOfService, "Terms of service"));
-  router.get(C.URLS.ABOUT_WHAT_IS_THIS, renderAbout(About.WhatIsThis, "What is this?"));
-  router.get(C.URLS.ABOUT_FAQ, renderAbout(About.Faq, "Faq"));
-  router.get(C.URLS.ABOUT_DEMOCRATIC_MODERATION, renderAbout(About.DemocraticModeration, "Democratic moderation"));
-  router.get(C.URLS.ABOUT_MODERATE_VISIBILITY, renderAbout(About.ModerateVisibilty, "Moderate visibility"));
-  router.get(C.URLS.ABOUT_STATUS, renderAbout(About.Alpha, "Alpha"));
-  router.get(C.URLS.ABOUT_COSTS, renderAbout(About.Costs, "Costs"));
-  router.get(C.URLS.ABOUT_HOW_WE_ARE_DIFFERENT, renderAbout(About.HowWeAreDifferent, "How we're different"));
+  Object.values(About).forEach(e => router.get(e.url, renderAbout(e.element, e.title)));
 
   // Blog
   router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
-  BLOG_ENTRIES.forEach(entry => router.get(entry.url, renderBlog(entry)));
+  Object.values(BlogEntries).forEach(entry => router.get(entry.url, renderBlog(entry)));
 
   // Google
   router.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', "https://www.googleapis.com/auth/userinfo.email"] }));

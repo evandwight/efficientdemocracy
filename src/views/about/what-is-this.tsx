@@ -2,10 +2,11 @@ import React from 'react';
 import * as C from "../../constant";
 
 const SIGNUP = C.URLS.USER_LOGIN;
+const title = "What is this?";
 
-export const Page = () =>
+const element = () =>
     <div>
-        <h2>What is this?</h2>
+        <h2>{title}</h2>
         <p>
             Community curated news: keep up to date with hacker news in less time.
         </p>
@@ -74,3 +75,5 @@ export const Page = () =>
             <li>[33]- Learn more about <a href={C.URLS.ABOUT_HOW_WE_ARE_DIFFERENT}>how we're different</a>!</li>
         </ul>
     </div>
+
+export const WhatIsThis = { title, element, url: C.URLS.ABOUT_WHAT_IS_THIS };

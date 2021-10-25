@@ -1,9 +1,11 @@
 import React from 'react';
-import * as C from "../../constant";
+import * as C from '../../constant';
 
-export const Page = () =>
+const title = "How we are different";
+
+const element = () =>
     <div>
-        <h2>How we are different:</h2>
+        <h2>{title}</h2>
         <p>
             We aim to reimagine Reddit so the discussion reflects the desires of all users and not just the most active and passionate. The following tools differentiate us:
         </p>
@@ -22,3 +24,5 @@ export const Page = () =>
             Currently not all <a href={C.URLS.ABOUT_STATUS}>features</a> are implemented or activated.
         </p>
     </div>
+
+export const HowWereDifferent = { title, element, url: C.URLS.ABOUT_HOW_WE_ARE_DIFFERENT };

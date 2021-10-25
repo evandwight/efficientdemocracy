@@ -1,9 +1,11 @@
 import React from 'react';
-import * as C from "../../constant";
+import * as C from '../../constant';
 
-export const Page = () =>
+const title = "Legal";
+
+const element = () =>
     <div>
-        <h2>Legal</h2>
+        <h2>{title}</h2>
         <ul>
             <li>
                 <a href={C.URLS.ABOUT_PRIVACY}>Privacy policy</a>
@@ -13,3 +15,6 @@ export const Page = () =>
             </li>
         </ul>
     </div>
+
+
+export const Legal = { title, element, url: C.URLS.ABOUT_LEGAL };
