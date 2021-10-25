@@ -6,7 +6,7 @@ import csrf from 'csurf';
 import { addAsync } from '@awaitjs/express';
 import * as Routes from './routes';
 import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403, ValidationError } from './routes/utils';
-import { addCustomLocals } from './utils';
+import { addCustomLocals } from './utils/middleware';
 import * as C from "./constant";
 import { runTasks } from "./batch";
 import { renderAbout } from './routes/about';

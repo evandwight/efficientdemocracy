@@ -1,14 +1,8 @@
-import * as C from '../../constant';
-import Samples from './db/samples';
+import * as C from '../../../constant';
+import { normalize, sum } from '../../../utils/counts';
+import Samples from '../db/samples';
 
-export function normalize(l) {
-    const n = sum(l);
-    return l.map(v => ({...v, count:v.count/n}));
-}
 
-export function sum(l) {
-    return l.reduce((cv, v) => cv + v.count, 0);
-}
 
 export function calculateStrikeProperties(count) {
     return ["strike_ups", "strike_downs", "strike_poster", "strike_disputers"].reduce((obj, prop) => {

@@ -1,8 +1,8 @@
-import db from '../../../db/databaseApi';
-import { testApi } from '../../../testUtils';
-import * as C from '../../../constant';
+import db from '../../../../db/databaseApi';
+import { testApi } from '../../../../testUtils';
+import * as C from '../../../../constant';
 import { createSamples, hasSample } from '../createSamples';
-import Samples from '../db/samples';
+import Samples from '../../db/samples';
 
 beforeAll(() => {
     return db.initialize();

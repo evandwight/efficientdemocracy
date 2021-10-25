@@ -1,6 +1,6 @@
-import * as C from '../../constant';
-import db from '../../db/databaseApi';
-import Samples from './db/samples';
+import * as C from '../../../constant';
+import db from '../../../db/databaseApi';
+import Samples from '../db/samples';
 
 export function hasSample(samples, type) {
     return samples.reduce((acc, cv) => acc || cv.type === type, false)
