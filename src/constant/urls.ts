@@ -49,7 +49,7 @@ export const ABOUT_MODERATE_VISIBILITY = ABOUT + "moderate-visibility";
 export const ABOUT_FAQ = ABOUT + "faq";
 export const ABOUT_STATUS = ABOUT + "alpha";
 export const ABOUT_COSTS = ABOUT + "costs";
-export const ABOUT_HOW_IT_WORKS = ABOUT + "how-it-works";
+export const ABOUT_HOW_WE_ARE_DIFFERENT = ABOUT + "how-we-are-works";
 
 export const BLOG = "/blog";
 export const BLOG_REACT_STATIC_RENDER = "/blog/post/react-static-render";

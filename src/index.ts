@@ -149,7 +149,7 @@ function setup(db) {
   router.get(C.URLS.ABOUT_MODERATE_VISIBILITY, renderAbout(About.ModerateVisibilty, "Moderate visibility"));
   router.get(C.URLS.ABOUT_STATUS, renderAbout(About.Alpha, "Alpha"));
   router.get(C.URLS.ABOUT_COSTS, renderAbout(About.Costs, "Costs"));
-  router.get(C.URLS.ABOUT_HOW_IT_WORKS, renderAbout(About.HowItWorks, "How it works"));
+  router.get(C.URLS.ABOUT_HOW_WE_ARE_DIFFERENT, renderAbout(About.HowWeAreDifferent, "How we're different"));
 
   // Blog
   router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
@@ -175,7 +175,7 @@ function setup(db) {
         console.log(err);
       }
       if (err instanceof ValidationError) {
-        logger.warn({ req, err }, "Requestion validation error");
+        logger.warn({ req, err }, "Request validation error");
         res.status(err.code).send(`Error: ${err.message}`);
       } else {
         logger.error({ req, err }, "Error handling request");

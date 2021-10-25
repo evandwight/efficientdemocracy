@@ -71,6 +71,6 @@ export const Page = () =>
         <ul>
             <li>[11]- Publicly users will not be identified by their real identity but by a changeable pseudonym</li>
             <li>[22]- We moderate illegal content separately</li>
-            <li>[33]- Learn more about <a href={C.URLS.ABOUT_HOW_IT_WORKS}>how it works</a>!</li>
+            <li>[33]- Learn more about <a href={C.URLS.ABOUT_HOW_WE_ARE_DIFFERENT}>how we're different</a>!</li>
         </ul>
     </div>

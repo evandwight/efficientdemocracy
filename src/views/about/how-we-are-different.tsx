@@ -3,9 +3,9 @@ import * as C from "../../constant";
 
 export const Page = () =>
     <div>
-        <h2>How it works:</h2>
+        <h2>How we are different:</h2>
         <p>
-            This site is a work in progress. The following are the tools we use to reimagine Reddit so the discussion reflects the desires of all users and not just the most active and passionate.
+            We aim to reimagine Reddit so the discussion reflects the desires of all users and not just the most active and passionate. The following tools differentiate us:
         </p>
         <ul>
             <li>
