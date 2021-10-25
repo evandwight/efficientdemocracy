@@ -11,7 +11,7 @@ const element = () =>
         </p>
         <ul>
             <li>Referendums - the gold standard, deployed to definitively resolve a highly disputed decision.</li>
-            <li>Statistical sampling - vastly more efficient than a referendum, as the opinion of millions can be estimated by asking as few as 50 people.</li>
+            <li>Statistical sampling - vastly more efficient than a referendum, as the opinion of millions can be estimated by asking as few as 50 people. Every decision can be disputed to trigger a referendum.</li>
             <li><a href={C.URLS.ABOUT_ELECTED_MODERATORS}>Elected moderators</a> - first line of defense that allows for timely action and prevents a flood of requests on the community's time. Every decision can be disputed to trigger a sample or even a referendum.</li>
         </ul>
         <p>
