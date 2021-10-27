@@ -7,7 +7,7 @@ const element = () =>
     <div>
         <h2>{title}</h2>
         <p>
-            Ideally, we would make every decision based on what the community wants - a referendum on each issue[1]. Practically, we cannot but we can estimate the result of a referendum. We use the following tools to do exactly that:
+            Ideally, we would make every decision based on what the community wants - a referendum on each issue. Practically, we cannot but we can estimate the result of a referendum. We use the following tools to do exactly that:
         </p>
         <ul>
             <li>Referendums - the gold standard, deployed to definitively resolve a highly disputed decision.</li>
@@ -17,10 +17,6 @@ const element = () =>
         <p>
             To remove the bias towards active users - those willing to answer a few questions a week - we allow a <a href={C.URLS.ABOUT_DESIGNATED_PROXY}>designated proxy</a> to particpate on your behalf.
         </p>
-        <h4>Notes</h4>
-        <ol>
-            <li>As the site grows, we will need to verify new accounts belong to real people</li>
-        </ol>
     </div>
 
 export const DemocraticModeration = {title, element, url: C.URLS.ABOUT_DEMOCRATIC_MODERATION};
