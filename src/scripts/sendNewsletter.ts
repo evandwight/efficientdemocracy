@@ -89,7 +89,7 @@ export function sendEmail(json) {
         } else {
             return payload;
         }
-    }).catch(err => console.log(err));
+    }).catch(err => console.log(`to: ${json.to}`,err));
 }
 
 if (require.main === module) {
