@@ -3,10 +3,16 @@ import { sendMonitorEmail } from './emailUtils';
 
 
 const ERROR_FILE = "/var/log/effdem/error.log"
+const ERROR1_FILE = "/var/log/effdem/error.log.1"
 const ERROR_LEVEL = 50;
+
+function readErrorFile(name) {
+    return fs.readFileSync(name).toString().split("\n");
+}
 function getErrors() {
-    const msgs = fs.readFileSync(ERROR_FILE).toString().split("\n");
-    const errors = msgs.map(s => {
+    const msgs = readErrorFile(ERROR_FILE);
+    const msgs1 = readErrorFile(ERROR1_FILE);
+    const errors = msgs.concat(msgs1).map(s => {
         try { 
             return JSON.parse(s)
         } catch (error) {
