@@ -7,7 +7,11 @@ const ERROR1_FILE = "/var/log/effdem/error.log.1"
 const ERROR_LEVEL = 50;
 
 function readErrorFile(name) {
-    return fs.readFileSync(name).toString().split("\n");
+    try {
+        return fs.readFileSync(name).toString().split("\n");
+    } catch (err) {
+        return [];
+    }
 }
 function getErrors() {
     const msgs = readErrorFile(ERROR_FILE);
