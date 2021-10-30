@@ -1,6 +1,8 @@
 import { fromIni } from "@aws-sdk/credential-providers";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 
+require("dotenv").config();
+
 const lambda = new LambdaClient({
     region: "us-east-1",
     credentials: fromIni(),
