@@ -1,40 +1,28 @@
-import { fromIni } from "@aws-sdk/credential-providers";
-import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import db from "../db/databaseApi";
 import * as C from "../constant";
 import ReactDOMServer from 'react-dom/server';
 import { Newsletter } from "./newsletter";
-import { logger } from "../logger";
+import { QPost } from "../db/types";
+import { sendEmails, sendMonitorEmail } from "./emailUtils";
 
-
-const lambda = new LambdaClient({
-    region: "us-east-1",
-    credentials: fromIni(),
-});
 
 export async function run(key) {
     const users = (await db.users.getUsers())
         .filter(user => !!user.send_emails);
-    // const users = [{id: "asdf", unsubscribe_key: "TESTKEY", email: "TESTEMAIL"}];
+    // const users = [{id: "asdf", unsubscribe_key: "TESTKEY", email: "TESTEMAIl"}];
     console.log(users);
 
     const postIds = await db.kv.get(key);
-    const posts = await Promise.all(postIds.map(id => db.qPosts.getPost(id)));
+    const posts = await Promise.all<QPost>(postIds.map(id => db.qPosts.getPost(id)));
     console.log(posts);
+    console.log(newsletterJson({user: {email:"EMAIL", unsubscribe_key:"UNSUB", id: "ID"}, key, posts}));
 
-    console.log(postsToText({posts, postsLink:"asdf", unsubscribeLink: "adsf"}));
 
-    await Promise.all(
-        users.map(user => sendNewsletter({
-                email: user.email,
-                postsLink: `https://efficientdemocracy.com${C.URLS.FROZEN_QPOSTS}${key}`,
-                unsubscribeLink: `https://efficientdemocracy.com${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`,
-                posts
-            }).then(() => logger.info(`sent email ${key} to ${user.email}`))
-            .catch((err) => logger.error({ err }, `failed to send email ${key} to ${user.email}`))
-        )
-    );
-    
+    const newsletters = users.map(user => newsletterJson({user, key, posts}));
+    const result = await sendEmails(newsletters);
+    result.forEach(r => console.log(`${r.success ? "sent" : "failed to send"} email to ${r.to} err: ${r.err}`));
+    const failures = result.filter(r => !r.success);
+    sendMonitorEmail({subject:`newsletter errors: ${failures.length}`, text: failures.map(r => r.to).join('\n')});
 }
 
 function postsToText({posts, postsLink, unsubscribeLink}) {
@@ -65,31 +53,16 @@ function html(element) {
 }
 
 
+function newsletterJson({user, key, posts}) {
+    const postsLink = `https://efficientdemocracy.com${C.URLS.FROZEN_QPOSTS}${key}`;
+    const unsubscribeLink = `https://efficientdemocracy.com${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`;
 
-async function sendNewsletter({email, postsLink, unsubscribeLink, posts}) {
-    return sendEmail({
-        to: email,
+    return {
+        to: user.email,
         html: html(Newsletter({posts, postsLink, unsubscribeLink})),
         text: postsToText({posts, postsLink, unsubscribeLink}),
         subject: "Efficient democracy - newsletter",
-    });
-}
-
-export function sendEmail(json) {
-    return lambda.send(new InvokeCommand({
-        FunctionName: "sendEmail",
-        InvocationType: "RequestResponse",
-        LogType: "None",
-        Payload: new TextEncoder().encode(JSON.stringify(json)),
-    })).then(data => {
-        const payload = JSON.parse(new TextDecoder("utf-8").decode(data.Payload));
-        // TODO I don't know the correct way to catch errors
-        if (data.FunctionError !== undefined) {
-            throw new Error(JSON.stringify(payload));
-        } else {
-            return payload;
-        }
-    }).catch(err => console.log(`to: ${json.to}`,err));
+    }
 }
 
 if (require.main === module) {
