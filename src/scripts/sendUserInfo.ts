@@ -14,7 +14,7 @@ async function run() {
 ${users.map(e => e.email).join("\n")}
 `
 
-    sendEmail({
+    return sendEmail({
         to,
         from,
         text,
