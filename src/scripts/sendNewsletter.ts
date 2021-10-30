@@ -4,6 +4,7 @@ import ReactDOMServer from 'react-dom/server';
 import { Newsletter } from "./newsletter";
 import { QPost } from "../db/types";
 import { sendEmails, sendMonitorEmail } from "./emailUtils";
+import { logger } from "../logger";
 
 
 export async function run(key) {
@@ -20,9 +21,9 @@ export async function run(key) {
 
     const newsletters = users.map(user => newsletterJson({user, key, posts}));
     const result = await sendEmails(newsletters);
-    result.forEach(r => console.log(`${r.success ? "sent" : "failed to send"} email to ${r.to} err: ${r.err}`));
     const failures = result.filter(r => !r.success);
-    sendMonitorEmail({subject:`newsletter errors: ${failures.length}`, text: failures.map(r => r.to).join('\n')});
+    result.forEach(r => console.log(`${r.success ? "sent" : "failed to send"} email to ${r.to} err: ${r.err}`));
+    failures.forEach(r => logger.error({ err: r.err }, `Error sending newsletter ${key} to ${r.to}`));
 }
 
 function postsToText({posts, postsLink, unsubscribeLink}) {
