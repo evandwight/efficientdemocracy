@@ -3,7 +3,7 @@ import * as C from "../constant";
 import ReactDOMServer from 'react-dom/server';
 import { Newsletter } from "./newsletter";
 import { QPost } from "../db/types";
-import { sendEmails, sendMonitorEmail } from "./emailUtils";
+import { sendEmails } from "./emailUtils";
 import { logger } from "../logger";
 
 
