@@ -3,6 +3,7 @@ import * as C from '../constant';
 import { internalAssertOne, retryOnceOnUniqueError, selectOne, selectOneAttr, selectRows, WithTransaction } from '../db/utils';
 import { User, UserId } from './types';
 import { generateSlug } from "random-word-slugs";
+import { internalAssert } from "../routes/utils";
 
 export default class Users {
     db: DatabaseApi;
@@ -83,25 +84,27 @@ export default class Users {
             .then(selectOne);
     }
 
-    setFirstRunComplete(id) {
-        return this.db.pool.query(
-            `UPDATE users
-            SET first_run = false
-            WHERE id = $1`,
-            [id]);
-    }
-
-    setSendEmails({userId, sendEmails}) {
-        return this.db.pool.query(
-            `UPDATE users
-            SET send_emails = $2
-            WHERE id = $1`,
-            [userId, sendEmails]);
-    }
-
     getUserIdByUnsubscribeKey(unsubscribeKey): Promise<User> {
         return this.db.pool.query(`
             SELECT id FROM users WHERE unsubscribe_key = $1`, [unsubscribeKey])
             .then(selectOneAttr('id'));
+    }
+
+    setSetting(userId: UserId, propName: C.USER.COLUMNS, propValue: string|number|boolean) {
+        internalAssert(Object.values(C.USER.COLUMNS).includes(propName), "Invalid property");
+        const columnName = C.USER.COLUMNS[propName]; 
+        return this.db.pool.query(
+            `UPDATE users
+            SET "${columnName}" = $2
+            WHERE id = $1`,
+            [userId, propValue]).then(internalAssertOne);
+    }
+
+    getEligibleMods(): Promise<User[]> {
+        return this.db.pool.query(`SELECT * FROM users WHERE wants_mod = true`).then(selectRows);
+    }
+
+    getMod(): Promise<UserId> {
+        return this.db.pool.query(`SELECT id FROM users WHERE is_mod = true`).then(selectOneAttr('id'));
     }
 }

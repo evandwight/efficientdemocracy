@@ -212,4 +212,3 @@ if (require.main === module) {
 }
 
 export { setup };
-

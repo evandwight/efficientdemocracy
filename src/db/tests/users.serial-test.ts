@@ -1,5 +1,6 @@
 import db from '../../db/databaseApi';
 const {testApi} = require('../../testUtils');
+import * as C from '../../constant';
 
 beforeAll(() => {
     return db.initialize();
@@ -62,6 +63,16 @@ describe("Users", () => {
             const user = await db.users.getUser(id);
             const userId = await db.users.getUserIdByUnsubscribeKey(user.unsubscribe_key);
             expect(userId).toEqual(id);
+        });
+    });
+
+    describe('setSetting', () => {
+        it('works', async () => {
+            console.log(expect.getState());
+            const id = await testApi.createUser();
+            await db.users.setSetting(id, C.USER.COLUMNS.wants_mod, true);
+            const user = await db.users.getUser(id);
+            expect(user.wants_mod).toEqual(true);
         });
     });
 });

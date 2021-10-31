@@ -86,7 +86,8 @@ export const testApi = {
             "strikes",
             "disputes",
             "samples",
-            "sample_votes"].map(name => testApi.deleteFrom(name)));
+            "sample_votes",
+            "mod_votes"].map(name => testApi.deleteFrom(name)));
     },
     deleteFrom: (name) => {
         return db.pool.query(`DELETE FROM ${name}`);

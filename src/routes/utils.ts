@@ -95,5 +95,11 @@ export class ValidationError extends Error {
     }
 }
 
+export function internalAssert(value: boolean, message: string) {
+    if (!value) {
+        throw new InternalError(message);
+    }
+}
+
 export class InternalError extends Error {
 }

@@ -6,6 +6,7 @@ import {UserSettings} from '../views/userSettings';
 import validator from 'validator';
 import DemocraticModerationService from '../services/democraticModerationService';
 import { validationAssert } from './utils';
+import * as C from '../constant';
 
 export function login(req, res) {
     reactRender(res, Login(), {showLogin: false, title:"Login"});
@@ -33,10 +34,10 @@ export async function submitUserSettings(req, res) {
     const sendEmails = body.hasOwnProperty("send_emails");
     const firstRunComplete = body.hasOwnProperty("_set_first_run_complete");
     
-    await db.users.setSendEmails({userId, sendEmails});
+    await db.users.setSetting(userId, C.USER.COLUMNS.send_emails, sendEmails);
 
     if (firstRunComplete) {
-        await db.users.setFirstRunComplete(userId);
+        await db.users.setSetting(userId, C.USER.COLUMNS.first_run, false);
     }
     res.redirect(req.get("Referrer"));
 }
@@ -52,6 +53,6 @@ export async function unsubscribe(req, res) {
     const user = await db.users.getUser(userId);
     validateRequestAssert(user.unsubscribe_key === keyId);
 
-    await db.users.setSendEmails({userId, sendEmails:false});
+    await db.users.setSetting(userId, C.USER.COLUMNS.send_emails, false);
     res.send("You have successfully unsubscribed from all emails. To change your settings more go to user settings.");
 }

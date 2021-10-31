@@ -49,7 +49,7 @@ describe("account", () => {
         it('works', async () => {
             const request = await notLoggedIn();
             const userId = await testApi.createUser({});
-            await db.users.setSendEmails({userId, sendEmails: true});
+            await db.users.setSetting(userId, C.USER.COLUMNS.send_emails, true);
             let user = await db.users.getUser(userId);
             expect(user.send_emails).toBe(true);
             const res = await request.get(`${C.URLS.EMAIL_UNSUBSCRIBE}${userId}/${user.unsubscribe_key}`)
