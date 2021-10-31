@@ -172,7 +172,7 @@ function setup(db) {
       if (err instanceof ValidationError) {
         logger.warn({ req, err }, "Request validation error");
         res.status(err.code).send(`Error: ${err.message}`);
-      } else if (err.code !== 'EBADCSRFTOKEN') {
+      } else if (err.code === 'EBADCSRFTOKEN') {
         logger.warn({ req, err }, "Invalid csrf");
         res.status(400).send(`Invalid request`);
       } else {
