@@ -5,10 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "eslint src --ext .ts,.js,.jsx,.tsx",
-    "build": "tsc",
+    "build": "npm run justbuild",
     "prestart": "npm run build",
     "start": "npm run juststart",
     "juststart": "node --enable-source-maps dist/index.js",
+    "justbuild": "tsc",
+    "prodinstall": "npm install --production",
     "test": "node --async-stack-traces node_modules/.bin/jest"
   },
   "keywords": [],
