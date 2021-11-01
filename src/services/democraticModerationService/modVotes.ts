@@ -1,6 +1,5 @@
 import db from '../../db/databaseApi';
 import ModVotes from './db/modVotes';
-import * as C from '../../constant';
 import { UserId } from '../../db/types';
 import DataFrame from 'dataframe-js';
 import { InternalError } from '../../routes/utils';
