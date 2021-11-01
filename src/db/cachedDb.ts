@@ -1,6 +1,7 @@
 import { CacheEntry } from "./types";
 import db from './databaseApi';
 import * as C from '../constant';
+import DemocraticModerationService from "../services/democraticModerationService";
 
 export let cache: {[key: string]: CacheEntry} = {};
 
@@ -24,6 +25,10 @@ export class CachedDB {
         const key = "getTechnical";
         return CachedDB.getFromCache(key, () => db.qPosts.getTechnical())
             .then(getByOffset(offset));
+    }
+    static countModVotes() {
+        const key = "countModVotes";
+        return CachedDB.getFromCache(key, () => DemocraticModerationService.countModVotes());
     }
     static async getFromCache(key: string, dbFunc: () => any, depth?: number) {
         depth = depth || 0;

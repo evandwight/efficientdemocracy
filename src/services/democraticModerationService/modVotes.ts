@@ -3,6 +3,7 @@ import ModVotes from './db/modVotes';
 import * as C from '../../constant';
 import { UserId } from '../../db/types';
 import DataFrame from 'dataframe-js';
+import { InternalError } from '../../routes/utils';
 
 export function countsToWinner(counts): UserId {
     if (counts.length === 0) {
@@ -13,20 +14,21 @@ export function countsToWinner(counts): UserId {
     return df.getRow(0).get("vote");
 }
 
+export async function getMod() {
+    return db.users.getMod();
+}
+
 export async function updateMod() {
     // find current mod
-    const currentMod = await db.users.getMod();
+    const currentMod = await getMod();
     // find new mod
     const counts = await ModVotes.countVotes();
     const newMod = countsToWinner(counts);
 
     if (newMod !== null && newMod !== currentMod) {
         // swappers
-        await db.users.setSetting(newMod, C.USER.COLUMNS.is_mod, true);
-        await db.users.setSetting(currentMod, C.USER.COLUMNS.is_mod, false);
+        throw new InternalError("New mod requested!");
+        // await db.users.setSetting(newMod, C.USER.COLUMNS.is_mod, true);
+        // await db.users.setSetting(currentMod, C.USER.COLUMNS.is_mod, false);
     }
-}
-
-export async function getEligibleMods() {
-    return db.users.getEligibleMods();
 }

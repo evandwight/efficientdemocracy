@@ -99,11 +99,7 @@ export default class Users {
             WHERE id = $1`,
             [userId, propValue]).then(internalAssertOne);
     }
-
-    getEligibleMods(): Promise<User[]> {
-        return this.db.pool.query(`SELECT * FROM users WHERE wants_mod = true`).then(selectRows);
-    }
-
+    
     getMod(): Promise<UserId> {
         return this.db.pool.query(`SELECT id FROM users WHERE is_mod = true`).then(selectOneAttr('id'));
     }

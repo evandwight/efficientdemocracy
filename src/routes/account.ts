@@ -32,9 +32,12 @@ export async function submitUserSettings(req, res) {
     const userId = req.user.id;
     const body = { ...req.body };
     const sendEmails = body.hasOwnProperty("send_emails");
+    const wantsMod = body.hasOwnProperty("wants_mod");
     const firstRunComplete = body.hasOwnProperty("_set_first_run_complete");
     
     await db.users.setSetting(userId, C.USER.COLUMNS.send_emails, sendEmails);
+
+    await db.users.setSetting(userId, C.USER.COLUMNS.wants_mod, wantsMod);
 
     if (firstRunComplete) {
         await db.users.setSetting(userId, C.USER.COLUMNS.first_run, false);

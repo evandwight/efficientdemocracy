@@ -1,4 +1,4 @@
-import type { Sample, SampleId, ThingId, User, UserId } from '../../db/types';
+import type { Sample, SampleId, ThingId, UserId } from '../../db/types';
 import type { StrikesInfo } from './types';
 import * as SampleApi from './sample';
 import Samples from './db/samples';
@@ -7,7 +7,7 @@ import ModActions from './db/modActions';
 import { submitDispute } from './disputes';
 import { createModAction, getFields } from './modActions';
 import ModVotes from './db/modVotes';
-import { getEligibleMods, updateMod } from './modVotes';
+import { getMod, updateMod } from './modVotes';
 
 class DemocraticModerationService {
     // Disputes
@@ -43,9 +43,11 @@ class DemocraticModerationService {
     static updateStrikes: () => Promise<void> = Strikes.updateStrikes;
 
     // Mod vote
+    static getMod: () => Promise<UserId> = getMod;
+    static getModVote: (userId: UserId) => Promise<UserId> = ModVotes.getVote;
     static setModVote: (args: {userId: UserId, vote: UserId}) => Promise<void> = ModVotes.upsertVote;
     static updateMod: () => Promise<void> = updateMod;
-    static getEligibleMods: () => Promise<User[]> = getEligibleMods;
+    static countModVotes: () => Promise<{vote:UserId, user_name:string, count:number}[]> = ModVotes.countVotes;
 }
 
 export default DemocraticModerationService;

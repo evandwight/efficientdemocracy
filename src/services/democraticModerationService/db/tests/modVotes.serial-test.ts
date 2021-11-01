@@ -34,7 +34,7 @@ describe("ModVotesDb", () => {
             await ModVotes.upsertVote({userId: db.uuidv4(), vote:mod1});
             await ModVotes.upsertVote({userId: db.uuidv4(), vote:mod2});
             const counts = await ModVotes.countVotes();
-            expect(counts).toEqual([{vote:mod1, count: 1}]);
+            expect(counts).toEqual([{vote:mod1, user_name: "a", count: 1}]);
         });
     });
 });

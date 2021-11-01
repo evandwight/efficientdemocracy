@@ -13,8 +13,12 @@ export const SORT = "/sort";
 
 // Samples
 export const SUBMIT_SAMPLE_VOTE = "/submit/sample-vote/";
-export const VIEW_SAMPLE_RESULT = "/view_sample-result/";
+export const VIEW_SAMPLE_RESULT = "/view-sample-result/";
 export const VIEW_SAMPLES = "/samples/view/"
+
+// Mod Vote
+export const VIEW_MOD_VOTE = "/view-mod-vote";
+export const SUBMIT_MOD_VOTE = "/submit/mod-vote/";
 
 // Mods
 export const MODS_VIEW = "/mods";

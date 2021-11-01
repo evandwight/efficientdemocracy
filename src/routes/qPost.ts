@@ -129,7 +129,7 @@ export async function listFrozen(req, res) {
     const postIds = await db.kv.get(key);
     let posts = await addAllExtrasToPost({postIds, user});
     
-    renderPosts({res, page, offset, user, posts, title: "Frozen posts", showCensored: true, moreLinkBase: `${C.URLS.FROZEN_QPOSTS}${key}`});
+    renderPosts({res, page, offset, user, posts, title: `Frozen posts (${key})`, showCensored: true, moreLinkBase: `${C.URLS.FROZEN_QPOSTS}${key}`});
 }
 
 export async function viewPost(req, res) {

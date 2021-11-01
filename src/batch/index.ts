@@ -20,6 +20,8 @@ export async function runTasks() {
 
     await updateHackerNewsPosts();
 
+    await DemocraticModerationService.updateMod();
+
     console.log(`Done running tasks. Took ${(new Date().getTime() - start) / 1000} seconds`);
 }
 

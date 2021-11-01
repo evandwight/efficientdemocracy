@@ -122,12 +122,16 @@ function setup(db) {
     router.postAsync(C.URLS.SUBMIT_QPOST_DISPUTE + ":postId/:field/:should_be", [assertAuthenticated401, assertNotBanned403], Routes.QPost.submitDispute);
 
 
-    // // Samples
+    // Samples
     router.postAsync(C.URLS.SUBMIT_SAMPLE_VOTE + ":sampleId", assertAuthenticated, Routes.Sample.submitSampleVote);
     router.getAsync(C.URLS.VIEW_SAMPLES + ":thingId", Routes.Sample.viewSamples);
     router.getAsync(C.URLS.VIEW_SAMPLE_RESULT + ":sampleId", Routes.Sample.viewSampleResult);
 
-    // // Mods
+    // ModVote
+    router.getAsync(C.URLS.VIEW_MOD_VOTE, assertAuthenticated, Routes.ModVote.viewModVote);
+    router.postAsync(C.URLS.SUBMIT_MOD_VOTE + ":vote", assertAuthenticated, Routes.ModVote.submitModVote);
+
+    // Mods
     router.getAsync(C.URLS.QPOSTS_MOD_ACTIONS + ":id", assertMod, Routes.Mods.viewPostActions);
     router.postAsync(C.URLS.SUBMIT_QPOST_MOD_ACTION + ":field/:id", assertMod, Routes.Mods.submitPostAction);
 
