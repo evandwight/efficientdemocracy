@@ -65,4 +65,5 @@ export const BLOG_SAMPLING_IS_MAGIC = "/blog/post/sampling-is-magic";
 export const BLOG_CACHING = "/blog/post/caching";
 export const BLOG_MICROSERVICE_OR_MONOLITH = "/blog/post/microservice-or-monolith";
 export const BLOG_CATEGORIZING_TITLES = "/blog/post/categorizing-titles";
+export const BLOG_PARALLEL_DATABASE_TESTS = "/blog/post/parallel-database-tests";
 

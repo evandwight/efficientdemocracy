@@ -1,9 +1,6 @@
 import React from 'react';
 import * as C from '../../constant';
 export * as BlogEntries from './blogEntries';
-// import { BlogEntry } from './blogEntry';
-
-// export const BlogEntries: {[key: string]: BlogEntry; } = Blogs;
 
 export const BlogPage = ({ entries, page, showNext }) =>
     <div>
