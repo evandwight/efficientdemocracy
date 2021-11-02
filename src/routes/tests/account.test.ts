@@ -2,17 +2,14 @@ import * as C from '../../constant';
 import {testApi, login, getCsrfToken, notLoggedIn} from '../../testUtils';
 import db from '../../db/databaseApi';
 
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
-
 describe("account", () => {
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
     });
+    afterEach(async () => {
+        await db.end();
+    });
+
     describe('login', () => {
         it('works', async () => {
             const request = await login();    

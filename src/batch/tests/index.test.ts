@@ -5,16 +5,12 @@ import * as C from '../../constant';
 import { maybeSetField, areTitlesTechnical } from '..';
 import DemocraticModerationService from '../../services/democraticModerationService';
 
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
-
 describe("Batch", () => {
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
+    });
+    afterEach(async () => {
+        await db.end();
     });
 
     describe("hackernews", () => {

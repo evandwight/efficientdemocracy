@@ -1,5 +1,5 @@
 DROP TABLE users;
-DROP TABLE votes CASCADE;
+DROP TABLE votes;
 DROP TABLE mod_votes;
 DROP TABLE qposts;
 DROP TABLE mod_actions;

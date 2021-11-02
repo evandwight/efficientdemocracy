@@ -5,16 +5,12 @@ import { UserId } from '../../../../db/types';
 import ModActions from '../modActions';
 import ModVotes from '../modVotes';
 
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
-
 describe("ModVotesDb", () => {
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
+    });
+    afterEach(async () => {
+        await db.end();
     });
 
     describe('upsertVote', () => {

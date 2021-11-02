@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`countsToChartData handles null results 1`] = `
+exports[`sample countsToChartData handles null results 1`] = `
 Object {
   "voteCanvas": Object {
     "datasets": Array [
@@ -22,7 +22,7 @@ Object {
 }
 `;
 
-exports[`countsToChartData works 1`] = `
+exports[`sample countsToChartData works 1`] = `
 Object {
   "strikeCanvas": Object {
     "datasets": Array [
@@ -63,7 +63,7 @@ Object {
 }
 `;
 
-exports[`countsToDataTable works 1`] = `
+exports[`sample countsToDataTable works 1`] = `
 Array [
   Array [
     "Censor?",

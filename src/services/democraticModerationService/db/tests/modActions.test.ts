@@ -4,16 +4,12 @@ import * as C from '../../../../constant';
 import { UserId } from '../../../../db/types';
 import ModActions from '../modActions';
 
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
-
 describe("ModActions", () => {
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
+    });
+    afterEach(async () => {
+        await db.end();
     });
 
     describe('deleteModAction', () => {

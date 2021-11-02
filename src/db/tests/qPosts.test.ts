@@ -1,18 +1,14 @@
-import db from '../../db/databaseApi';
+import db from '../databaseApi';
 const {testApi} = require('../../testUtils');
 const uuid = require('uuid');
 import * as C from '../../constant';
 
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
-
 describe("QPosts", () => {
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
+    });
+    afterEach(async () => {
+        await db.end();
     });
 
     describe('getPosts', () => {

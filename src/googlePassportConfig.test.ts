@@ -1,22 +1,17 @@
 import db from './db/databaseApi';
 import { verifyGoogleLogin } from './googlePassportConfig';
-const {testApi} = require('./testUtils');
 import Util from 'util';
-
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
 
 const verifyGoogleLoginPromise = Util.promisify(verifyGoogleLogin);
 
 describe("googlePassportConifg", () => {
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
     });
-    
+    afterEach(async () => {
+        await db.end();
+    });
+
     describe('processGoogleLogin', () => {
         it('logins existing users', async () => {
             let id = await db.users.createGoogleUserWithRandomName({email: "b", googleId: "c"});

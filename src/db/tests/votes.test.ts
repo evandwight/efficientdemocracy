@@ -1,18 +1,14 @@
-import db from '../../db/databaseApi';
+import db from '../databaseApi';
 import * as C from '../../constant';
 const {testApi} = require('../../testUtils');
 const uuid = require('uuid');
 
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
-
 describe("Votes", () => {
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
+    });
+    afterEach(async () => {
+        await db.end();
     });
 
     describe('getVotes', () => {
@@ -34,7 +30,7 @@ describe("Votes", () => {
             expect(votes).toEqual([{thing_id: thingId, vote: C.VOTE.UP}]);
         });
     });
-    describe('upsertVote', () => {
+    describe('upsertVote expect-db-error', () => {
         it('works', async () => {
             const thingId = db.uuidv4();
             const userId = db.uuidv4();

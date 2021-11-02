@@ -68,7 +68,7 @@ function setup(db) {
 
     // Sessions
     let sessionOptions: any = {
-        store: new (pgSession)({ pool: db.realPool }),
+        store: new (pgSession)({ pool: db.pool.getSessionPool() }),
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,

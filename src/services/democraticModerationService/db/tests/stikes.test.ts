@@ -5,17 +5,14 @@ import { UserId } from '../../../../db/types';
 import ModActions from '../modActions';
 import Strikes from '../strikes';
 
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
-
 describe("Strikes", () => {
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
     });
+    afterEach(async () => {
+        await db.end();
+    });
+    
     describe('getStrikes', () => {
         it('works', async () => {
             const creatorId = await testApi.createUser({user_name:"a"});

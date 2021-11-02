@@ -4,18 +4,15 @@ import Samples from '../samples';
 import {testApi} from '../../../../testUtils';
 const uuid = require('uuid');
 
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
-
 describe("Samples", () => {
-    const type = C.SAMPLE.TYPE.LEVEL_1;
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
     });
+    afterEach(async () => {
+        await db.end();
+    });
+
+    const type = C.SAMPLE.TYPE.LEVEL_1;
 
     describe('createSample', () => {
         it('works', async () => {

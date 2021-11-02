@@ -1,17 +1,13 @@
-import db from '../../db/databaseApi';
+import db from '../databaseApi';
 const {testApi} = require('../../testUtils');
 import * as C from '../../constant';
 
-beforeAll(() => {
-    return db.initialize();
-});
-afterAll(() => {
-    return db.end();
-});
-
 describe("Users", () => {
-    beforeEach(() => {
-        return testApi.deleteAll();
+    beforeEach(async () => {
+        await db.initialize();
+    });
+    afterEach(async () => {
+        await db.end();
     });
     
     describe('createUser', () => {
@@ -68,7 +64,6 @@ describe("Users", () => {
 
     describe('setSetting', () => {
         it('works', async () => {
-            console.log(expect.getState());
             const id = await testApi.createUser();
             await db.users.setSetting(id, C.USER.COLUMNS.wants_mod, true);
             const user = await db.users.getUser(id);

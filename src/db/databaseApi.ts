@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import { Pool } from "pg";
 import QPosts from './qPosts';
 import Votes from "./votes";
 import { UUID } from './types';
@@ -12,7 +11,6 @@ import dbPool from "./dbPool";
 export class DatabaseApi {
     uuidv4: () => UUID;
     pool: any;
-    realPool: Pool;
     qPosts: QPosts;
     votes: Votes;
     users: Users;
@@ -42,8 +40,7 @@ export class DatabaseApi {
         }
         this.isInitialized = true;
         this.pool = dbPool;
-        dbPool.initialize();
-        this.realPool = dbPool.pool;
+        return dbPool.initialize();
     }
 }
 
