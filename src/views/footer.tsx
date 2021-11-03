@@ -11,6 +11,8 @@ export const Footer = () =>
             <a href={C.URLS.BLOG}>blog</a>
             <span> | </span>
             <a href={C.URLS.ABOUT_FAQ}>faq</a>
+            <span> | </span>
+            <a href={C.URLS.DISCORD}>discord</a>
         </div>
         <br />
     </div>
