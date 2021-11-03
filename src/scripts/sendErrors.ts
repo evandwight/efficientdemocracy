@@ -17,10 +17,14 @@ function getErrors() {
     const msgs = readErrorFile(ERROR_FILE);
     const msgs1 = readErrorFile(ERROR1_FILE);
     const errors = msgs.concat(msgs1).map(s => {
-        try { 
-            return JSON.parse(s)
+        try {
+            if (s === "") {
+                return {level: -1};
+            } else {
+                return JSON.parse(s)
+            }
         } catch (error) {
-            return {level: ERROR_LEVEL};
+            return {level: ERROR_LEVEL, msg: `Could not parse error log "${s.slice(0, 300)}"`};
         }
     }).filter(e => e.level >= ERROR_LEVEL);
     return errors;
