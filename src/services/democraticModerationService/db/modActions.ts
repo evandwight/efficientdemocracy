@@ -33,6 +33,7 @@ export default class ModActions {
     }
 
     static async upsertModAction({thingId, field, creatorId, strikeUps, strikeDowns, strikePoster, strikeDisputers, priority, banLength, version, value }, client?) {
+        // creatorId should be nullable as mini mods don't need one, nor do automods
         if (!client) {
             client = dbPool;
         }

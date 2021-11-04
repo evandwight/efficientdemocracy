@@ -5,4 +5,5 @@ export enum COLUMNS {
     wants_mod = "wants_mod",
     send_emails = "send_emails",
     first_run = "first_run",
+    is_mini_mod = "is_mini_mod",
 }

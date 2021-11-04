@@ -2,6 +2,10 @@ import * as C from '../constant'
 import { InternalError } from '../routes/utils';
 const crypto = require('crypto');
 
+export function countToNumber(result) {
+    return result.rows.map(v => ({... v, count: parseInt(v.count)}));
+}
+
 export function selectAttr(attr) {
     return (result) => {
         return result.rows.map(row => row[attr]);

@@ -5,7 +5,7 @@ import session from "express-session";
 import csrf from 'csurf';
 import { addAsync } from '@awaitjs/express';
 import * as Routes from './routes';
-import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403, ValidationError } from './routes/utils';
+import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403, ValidationError, assertMiniMod } from './routes/utils';
 import { addCustomLocals } from './utils/middleware';
 import * as C from "./constant";
 import { runTasks } from "./batch";
@@ -134,7 +134,12 @@ function setup(db) {
     // Mods
     router.getAsync(C.URLS.QPOSTS_MOD_ACTIONS + ":id", assertMod, Routes.Mods.viewPostActions);
     router.postAsync(C.URLS.SUBMIT_QPOST_MOD_ACTION + ":field/:id", assertMod, Routes.Mods.submitPostAction);
+    router.getAsync(C.URLS.MOD_VIEW_MINI_MODS, assertMod, Routes.Mods.viewSetMiniMods);
+    router.postAsync(C.URLS.MOD_SUBMIT_SET_MINI_MOD + ":userId/:value", assertMod, Routes.Mods.setMiniMod);
 
+    // Mini mods
+    router.getAsync(C.URLS.QPOSTS_MINI_MOD_ACTIONS + ":id", assertMiniMod, Routes.MiniMods.viewPostActions);
+    router.postAsync(C.URLS.SUBMIT_QPOST_MINI_MOD_ACTION + ":field/:id", assertMiniMod, Routes.MiniMods.submitPostAction);
 
     // Accounts
     router.get(C.URLS.USER_LOGIN, redirectAuthenticated, Routes.Account.login);

@@ -49,7 +49,8 @@ export const Post = ({ post, i, user, ignoreFields}: { post: QPost, i: number, u
                 {!!post.url && <span> | <a href={post.url}>link</a></span>}
                 {!!post.hackernews_id && <span> | <HackerCommentsLink id={post.hackernews_id} /></span>}
                 <span> | <a href={C.URLS.QPOSTS_VIEW + post.id}>more-info</a></span>
-                {!!user && user.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod-actions</a></span>}
+                {!!user?.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod-actions</a></span>}
+                {!!user?.is_mini_mod && <span> | <a href={C.URLS.QPOSTS_MINI_MOD_ACTIONS + post.id}>mini-mod-actions</a></span>}
             </div>
             {hasInterestingFields(post, ignoreFields) &&
                 <div className="gray-500">

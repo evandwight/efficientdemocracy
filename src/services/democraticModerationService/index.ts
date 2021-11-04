@@ -8,6 +8,7 @@ import { submitDispute } from './disputes';
 import { createModAction, getFields } from './modActions';
 import ModVotes from './db/modVotes';
 import { getMod, updateMod } from './modVotes';
+import { getMiniModVotes, miniModVote } from './miniModVotes';
 
 class DemocraticModerationService {
     // Disputes
@@ -48,6 +49,17 @@ class DemocraticModerationService {
     static setModVote: (args: {userId: UserId, vote: UserId}) => Promise<void> = ModVotes.upsertVote;
     static updateMod: () => Promise<void> = updateMod;
     static countModVotes: () => Promise<{vote:UserId, user_name:string, count:number}[]> = ModVotes.countVotes;
+
+    // Mini mods
+    static getMiniModVotes: (args: {thingId: ThingId, userId: UserId}) => Promise<{any}> = getMiniModVotes;
+    static miniModVote: (args: {
+        thingId: ThingId,
+        field: string,
+        userId: UserId,
+        vote: boolean,
+        strikeUps: boolean,
+        strikeDowns: boolean,
+        strikePoster: boolean}) => Promise<void> = miniModVote;
 }
 
 export default DemocraticModerationService;

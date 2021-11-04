@@ -26,6 +26,12 @@ export const MODS_VIEW = "/mods";
 // QPosts Mods
 export const QPOSTS_MOD_ACTIONS = "/qposts/mod-actions/";
 export const SUBMIT_QPOST_MOD_ACTION = "/submit/post_mod_action/set/";
+export const MOD_VIEW_MINI_MODS = "/mod/view/mini-mods";
+export const MOD_SUBMIT_SET_MINI_MOD = "/mod/submit/set-mini-mods/";
+
+// Mini Mods
+export const QPOSTS_MINI_MOD_ACTIONS = "/qposts/mini-mod-actions/";
+export const SUBMIT_QPOST_MINI_MOD_ACTION = "/submit/post-mini-mod-action/set/";
 
 // QComments
 // export const QCOMMENTS_VIEW = "/qcomments/view/";

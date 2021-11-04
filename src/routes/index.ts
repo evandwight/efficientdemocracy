@@ -6,3 +6,4 @@ export * as Blog from './blog';
 export * as Sample from './sample';
 export * as Misc from './misc';
 export * as ModVote from './modVote';
+export * as MiniMods from './miniMods';

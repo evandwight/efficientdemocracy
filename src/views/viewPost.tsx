@@ -48,7 +48,8 @@ export const ViewPost = ({ post, user }) => {
             by <span className="gray-900">{post.user_name}</span>,  {dateToTimeSince(post.created)}
             {!!post.url && <span> | <a href={post.url}>link</a></span>}
             {!!post.hackernews_id && <span> | <HackerCommentsLink id={post.hackernews_id}/></span>}
-            {!!user && user.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod-actions</a></span>}
+            {!!user?.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod-actions</a></span>}
+            {!!user?.is_mini_mod && <span> | <a href={C.URLS.QPOSTS_MINI_MOD_ACTIONS + post.id}>mini-mod-actions</a></span>}
             {post.has_samples > 0 && <span> | <a href={C.URLS.VIEW_SAMPLES + post.id}>view-samples</a></span>}
           </div>
           <div>

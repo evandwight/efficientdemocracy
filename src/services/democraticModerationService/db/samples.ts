@@ -1,6 +1,6 @@
 import dbPool from "../../../db/dbPool";
 import { UserId, Sample, ThingId} from '../../../db/types';
-import { selectOne, selectOneAttr, existsOne, assertOne, selectAttr, selectRows } from "../../../db/utils";
+import { selectOne, selectOneAttr, existsOne, assertOne, selectAttr, selectRows, countToNumber } from "../../../db/utils";
 import * as C from '../../../constant';
 import * as Utils from '../../../db/utils';
 import db from '../../../db/databaseApi';
@@ -83,7 +83,7 @@ export default class Samples {
     static getExpiredSamples() {
         return dbPool.query(
             `SELECT * from samples
-            WHERE is_complete = false and expires < NOW()`).then(result => result.rows);
+            WHERE is_complete = false and expires < NOW()`).then(selectRows);
     }
 
     static countVotes(sampleId) {
@@ -92,7 +92,7 @@ export default class Samples {
             FROM sample_votes INNER JOIN samples ON sample_id = id
             WHERE sample_id = $1
             GROUP BY vote, strike_ups, strike_downs, strike_poster, strike_disputers`, [sampleId])
-            .then(result => result.rows.map(v => ({... v, count: parseInt(v.count)})));
+            .then(countToNumber);
     }
 
     static setSampleIsCompleted({sampleId, result, count}, client?) {

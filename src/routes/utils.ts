@@ -52,6 +52,18 @@ export async function assertMod(req, res, next) {
     res.sendStatus(401);
 }
 
+export async function assertMiniMod(req, res, next) {
+    if (req.isAuthenticated()) {
+        const user = await db.users.getUser(req.user.id);
+
+        if (user.is_mini_mod) {
+            next();
+            return;
+        }
+    }
+    res.sendStatus(401);
+}
+
 export function redirectAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return res.redirect("/");

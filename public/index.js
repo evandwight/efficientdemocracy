@@ -35,13 +35,21 @@ function post(event) {
     event.preventDefault();
     var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var element = event.currentTarget;
-    var reload = !!element.getAttribute("data-reload")
-    var url = element.href;
+    var reload = element.hasAttribute("data-reload");
+    var url = element.href || element.getAttribute("data-href");
+    var checkable = element.hasAttribute("data-checkable");
+    
+    if (checkable) {
+        url += element.checked;
+    }
 
     axios.post(url, "_csrf=" + token)
         .then(function (response) {
             if (reload) {
                 window.location.reload(true);
+            }
+            if (checkable) {
+                element.checked = !element.checked;
             }
         })
         .catch(function (error) {
@@ -63,5 +71,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     Array.from(document.getElementsByClassName('onclick-post')).forEach(element => {
         element.addEventListener('click', post);
-    });
+    }); 
 });

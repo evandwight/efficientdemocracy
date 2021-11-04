@@ -5,6 +5,7 @@ import { PostModActions } from '../views/postModActions';
 import validator from 'validator';
 import DemocraticModerationService from '../services/democraticModerationService';
 import { formToStrikes, validationAssert, ValidationError } from './utils';
+import { ViewSetMiniMods } from '../views/viewSetMiniMods';
 
 export async function viewPostActions(req, res) {
     const { id } = req.params;
@@ -41,4 +42,21 @@ export async function submitPostAction(req, res) {
     DemocraticModerationService.createModAction({thingId, field, version, creatorId: userId, value, strikes})
 
     res.redirect(req.get("Referrer"));
+}
+
+export async function viewSetMiniMods(req, res) {
+    let users = await db.users.getUsers();
+    users.sort((a,b) => a.user_name - b.user_name);
+    console.log(users);
+    reactRender(res, ViewSetMiniMods({users, csrfToken: res.locals.csrfToken}), {title: "Set mini mods", includeVotesJs: true});
+}
+
+export async function setMiniMod(req, res) {
+    const { userId } = req.params;
+    const value = req.params.value === "true" ? true : false;
+    validationAssert(validator.isUUID(userId, 4), "Invalid user id", 400);
+
+    await db.users.setSetting(userId, C.USER.COLUMNS.is_mini_mod, value);
+
+    res.sendStatus(200);
 }
