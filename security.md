@@ -51,7 +51,7 @@ Implemented:
 ### Platform Security
 
 Implemented:
-* Keep your packages up-to-date - weekly - lasted updated Aug 29 2021 (TODO automate)
+* Keep your packages up-to-date - weekly - lasted updated Nov 5 2021 (TODO automate)
 * Do not use dangerous functions
 * Stay away from evil regexes
 * Run security linters - [eslint](https://eslint.org/)

@@ -7,6 +7,9 @@ const element = () =>
     <div>
         <h2>{title}</h2>
         <p>
+            Currently not implemented.
+        </p>
+        <p>
             Being actively involved takes time. For those who want their voice to be heard but not actively involved, they can designate a proxy to vote for them. Designated proxies are similar to an elected representative.
         </p>
         <p>
