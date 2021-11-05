@@ -29,7 +29,7 @@ export async function updateHackerNewsPosts() {
     const topList = await axios.get("https://hacker-news.firebaseio.com/v0/topstories.json");
     let items:HnPost[] = await Promise.all(topList.data.filter((v, i) => i < 30)
         .map(id => axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(v => v.data)));
-    const titles = items.map(v => v.title);
+    const titles = items.filter(v => !!v).map(v => v?.title);
     const isTechincal = await areTitlesTechnical(titles);
     items = items.map((v, i) => ({...v, isTechincal: isTechincal[i]}));
     await Promise.all(items.map(async (v: any) => {
@@ -61,9 +61,8 @@ export async function maybeSetField({thingId, shouldBe, field}: {thingId: ThingI
         strikeDisputers: false,
     }
     const modAction = await DemocraticModerationService.getModAction({ thingId, field });
-    const version = !!modAction ? modAction.version : 0;
     if ((!modAction && value) || (!!modAction && modAction.value !== value)) {
         await DemocraticModerationService.createModAction(
-            { thingId, field, version, creatorId, isAutoMod: true, value, strikes });
+            { thingId, field, creatorId, isAutoMod: true, value, strikes });
     }
 }
