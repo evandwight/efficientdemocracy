@@ -10,3 +10,5 @@ CREATE TABLE mini_mod_votes (
     strike_poster BOOLEAN not null DEFAULT FALSE,
     PRIMARY KEY (thing_id, field, user_id)
 );
+
+ALTER TABLE mod_actions DROP COLUMN version;

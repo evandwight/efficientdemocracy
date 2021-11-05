@@ -10,7 +10,7 @@ export async function getFields(thingId) {
         r.reduce((acc, val) => { acc[val.field] = val; return acc; }, {}));
 }
 
-export async function createModAction({ thingId, field, version, creatorId, isAutoMod, value, strikes }) {
+export async function createModAction({ thingId, field, creatorId, isAutoMod, value, strikes }) {
     isAutoMod = !!isAutoMod; // default to false
 
     const type = await db.things.getType(thingId);
@@ -26,7 +26,7 @@ export async function createModAction({ thingId, field, version, creatorId, isAu
 
     const { strikeUps, strikeDowns, strikePoster, strikeDisputers } = strikes;
     await ModActions.upsertModAction({
-        thingId, creatorId, priority, banLength: C.BAN_LENGTH, version, value, field,
+        thingId, creatorId, priority, banLength: C.BAN_LENGTH, value, field,
         strikeUps, strikeDowns, strikePoster, strikeDisputers
     });
 }

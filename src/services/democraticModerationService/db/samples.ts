@@ -126,8 +126,6 @@ export default class Samples {
 
     static async completeSample({sample, result, count}) {
         const {field} = sample;
-        const modAction = await ModActions.getModAction({thingId: sample.samplee_id, field});
-        const version = modAction ? modAction.version : undefined;
         const priority = sample.type === C.SAMPLE.TYPE.LEVEL_1 ? 
             C.MOD_ACTIONS.PRIORTY.SAMPLE_1 : C.MOD_ACTIONS.PRIORTY.REFERENDUM;
         if (result === null) {
@@ -146,7 +144,6 @@ export default class Samples {
                     strikeDisputers: result.strike_disputers,
                     priority,
                     banLength: C.BAN_LENGTH,
-                    version,
                     value: result.vote}, client)
                 ]);
             });

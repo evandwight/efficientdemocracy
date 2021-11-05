@@ -26,34 +26,33 @@ export default class ModActions {
             [thingIds]).then(selectRows);
     }
 
-    static deleteModAction({thingId, field, version, priority})  {
+    static deleteModAction({thingId, field, priority})  {
         return dbPool.query(
-            `DELETE FROM mod_actions WHERE thing_id = $1 and field = $4 and version = $2 and priority <= $3`,
-            [thingId, version, priority, field]).then(internalAssertOne);
+            `DELETE FROM mod_actions WHERE thing_id = $1 and field = $3 and priority <= $2`,
+            [thingId, priority, field]).then(internalAssertOne);
     }
 
-    static async upsertModAction({thingId, field, creatorId, strikeUps, strikeDowns, strikePoster, strikeDisputers, priority, banLength, version, value }, client?) {
+    static async upsertModAction({thingId, field, creatorId, strikeUps, strikeDowns, strikePoster, strikeDisputers, priority, banLength, value }, client?) {
         // creatorId should be nullable as mini mods don't need one, nor do automods
         if (!client) {
             client = dbPool;
         }
         const id = await db.things.create(C.THINGS.MOD_ACTION, client);
         const expiry = daysFromNow(banLength);
-        version = version || 0;
 
         // TODO don't error when upsert fails, just don't apply strikes
         await client.query(
             `INSERT INTO mod_actions  
-                (id, thing_id, creator_id, expiry, priority, value, version, field) 
+                (id, thing_id, creator_id, expiry, priority, value, field) 
                 VALUES 
-                ($1, $2, $3, $4, $5, $6, $7 + 1, $8)
+                ($1, $2, $3, $4, $5, $6, $7)
             ON CONFLICT (thing_id, field)
             DO UPDATE SET 
-                (id, thing_id, creator_id, expiry, priority, value, version, field) 
+                (id, thing_id, creator_id, expiry, priority, value, field) 
                 =
-                ($1, $2, $3, $4, $5, $6, $7 + 1, $8)
-            WHERE mod_actions.version = $7 and mod_actions.priority <= $5`,
-            [id, thingId, creatorId, expiry, priority, value, version, field]).then(assertOne);
+                ($1, $2, $3, $4, $5, $6, $7)
+            WHERE mod_actions.priority <= $5`,
+            [id, thingId, creatorId, expiry, priority, value, field]).then(assertOne);
 
         if (strikeUps || strikeDowns) {
             await Strikes.createStrikesForVoters(client, {strikeUps, strikeDowns, thingId, modActionId:id});

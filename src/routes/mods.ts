@@ -31,15 +31,9 @@ export async function submitPostAction(req, res) {
     const userId = req.user.id;
     const body = { ...req.body };
     const value = body.hasOwnProperty("value");
-    let version;
-    try {
-        version = parseInt(body.version);
-    } catch (error) {
-        throw new ValidationError("Invalid version. Must be an integer", 400);
-    }
     const strikes = formToStrikes(body, {disallowStrikeDisputers: true});
 
-    DemocraticModerationService.createModAction({thingId, field, version, creatorId: userId, value, strikes})
+    DemocraticModerationService.createModAction({thingId, field, creatorId: userId, value, strikes})
 
     res.redirect(req.get("Referrer"));
 }

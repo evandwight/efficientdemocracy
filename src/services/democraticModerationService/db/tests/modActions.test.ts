@@ -18,7 +18,7 @@ describe("ModActions", () => {
             const thingId = db.uuidv4();
             const field = "censor";
             const modActionId = await testApi.createModAction({thingId, creatorId, strikeDowns:false, strikePoster:false});
-            await ModActions.deleteModAction({thingId, version:1, priority:0, field});
+            await ModActions.deleteModAction({thingId, priority:0, field});
             const res = await ModActions.getModAction({thingId, field});
             expect(res).toBe(null);
         });

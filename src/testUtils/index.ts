@@ -125,7 +125,6 @@ export const testApi = {
         strikeUps:true, strikeDowns:true, strikePoster:true, 
         priority:0,
         banLength:1000,
-        version:undefined,
         value:true,
         field:"censor",
         ... args}),

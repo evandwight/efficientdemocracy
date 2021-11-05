@@ -21,7 +21,6 @@ class DemocraticModerationService {
     static createModAction: (args: {
         thingId: ThingId,
         field: string,
-        version: number,
         creatorId: ThingId,
         isAutoMod?: boolean,
         value: boolean,

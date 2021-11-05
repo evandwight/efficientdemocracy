@@ -73,7 +73,7 @@ describe("Strikes", () => {
             let user = await db.users.getUser(userId);
             expect(user.is_banned).toBe(true);
             expect(user.strike_count).toBe(3);
-            await ModActions.deleteModAction({ thingId: p1, version: 1, priority: 0, field: "censor" });
+            await ModActions.deleteModAction({ thingId: p1, priority: 0, field: "censor" });
             await Strikes.updateStrikes();
             user = await db.users.getUser(userId);
             expect(user.is_banned).toBe(false);

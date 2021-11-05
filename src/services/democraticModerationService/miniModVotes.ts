@@ -59,7 +59,6 @@ export async function maybeUpdateModActionForMiniMod({thingId, field}) {
         creatorId: C.BOT_ACCOUNT_USER_ID,
         priority: C.MOD_ACTIONS.PRIORTY.MINI_MOD,
         banLength: C.BAN_LENGTH,
-        version: modAction.version,
         value: vote,
         field,
         strikeUps: strikes.strike_ups,
