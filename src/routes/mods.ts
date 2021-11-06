@@ -4,7 +4,7 @@ import { reactRender } from '../views/utils';
 import { PostModActions } from '../views/postModActions';
 import validator from 'validator';
 import DemocraticModerationService from '../services/democraticModerationService';
-import { formToStrikes, validationAssert, ValidationError } from './utils';
+import { formToStrikes, validationAssert } from './utils';
 import { ViewSetMiniMods } from '../views/viewSetMiniMods';
 
 export async function viewPostActions(req, res) {
@@ -42,7 +42,7 @@ export async function viewSetMiniMods(req, res) {
     let users = await db.users.getUsers();
     users.sort((a,b) => a.user_name - b.user_name);
     console.log(users);
-    reactRender(res, ViewSetMiniMods({users, csrfToken: res.locals.csrfToken}), {title: "Set mini mods", includeVotesJs: true});
+    reactRender(res, ViewSetMiniMods({users}), {title: "Set mini mods", includeVotesJs: true});
 }
 
 export async function setMiniMod(req, res) {

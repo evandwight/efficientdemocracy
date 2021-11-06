@@ -4,7 +4,7 @@ import { reactRender } from '../views/utils';
 import { PostModActions } from '../views/miniMods/postModActions';
 import validator from 'validator';
 import DemocraticModerationService from '../services/democraticModerationService';
-import { formToStrikes, validationAssert, ValidationError } from './utils';
+import { formToStrikes, validationAssert } from './utils';
 
 export async function viewPostActions(req, res) {
     const { id } = req.params;

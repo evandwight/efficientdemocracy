@@ -1,8 +1,7 @@
 import React from 'react';
 import * as C from "../constant";
-import { Checkbox } from './utils';
 
-export const ViewSetMiniMods = ({users, csrfToken}) =>
+export const ViewSetMiniMods = ({users}) =>
   <div>
     <h1>Set mini mods</h1>
     <table>{users.map((user,i) => 
