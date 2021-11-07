@@ -93,13 +93,20 @@ export const testApi = {
         return db.pool.query(`DELETE FROM ${name}`);
     },
     createUser: (args?) => {
-        return db.users.createUser({userName:"a", name: "a", email: "b", hashedPassword: "c", ... args});
+        const {userName = "a", name = "a", email = "b", hashedPassword = "c"} = args || {};
+        return db.things.create(C.THINGS.USER).then(async id => {
+            await db.pool.query(
+                `INSERT INTO users (id, user_name, name, email, password, created_on, unsubscribe_key, is_mod, is_email_verified, auth_type)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, false, true, ${C.AUTH_TYPE.LOCAL})`,
+                [id, userName, name, email, hashedPassword, new Date(), db.uuidv4()]);
+            return id as UserId;
+        });
     },
     createHttpUser: async (): Promise<[UserId, any]> => {
         const password = "asdfasdf";
         const hashedPassword = await bcrypt.hash(password, 10);
         const userInfo = {userName:"httpUser", name: "huser", email: "huser@huser.com", hashedPassword};
-        return [await db.users.createUser({userName:"httpUser", name: "huser", email: "huser@huser.com", hashedPassword}),
+        return [await testApi.createUser({userName:"httpUser", name: "huser", email: "huser@huser.com", hashedPassword}),
             {...userInfo, password}];
     },
     createHackerUser: async ():Promise<UserId> => {

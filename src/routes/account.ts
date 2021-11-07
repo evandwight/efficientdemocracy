@@ -5,11 +5,13 @@ import { Strikes } from '../views/strikes';
 import {UserSettings} from '../views/userSettings';
 import validator from 'validator';
 import DemocraticModerationService from '../services/democraticModerationService';
-import { validationAssert } from './utils';
+import { validationAssert, ValidationError } from './utils';
 import * as C from '../constant';
+import bcrypt from 'bcrypt';
+import { LocalLogin } from '../views/localLogin';
 
 export function login(req, res) {
-    reactRender(res, Login(), {showLogin: false, title:"Login"});
+    reactRender(res, Login({csrfToken: res.locals.csrfToken}), {showLogin: false, title:"Login"});
 }
 
 export async function logout(req, res) {
@@ -33,17 +35,33 @@ export async function submitUserSettings(req, res) {
     const body = { ...req.body };
     const sendEmails = body.hasOwnProperty("send_emails");
     const wantsMod = body.hasOwnProperty("wants_mod");
-    const firstRunComplete = body.hasOwnProperty("_set_first_run_complete");
+
+    if (!res.locals.user.is_email_verified && sendEmails) {
+        throw new ValidationError("Your email address must be verified to enable send-emails", 400);
+    }
     
     await db.users.setSetting(userId, C.USER.COLUMNS.send_emails, sendEmails);
-
     await db.users.setSetting(userId, C.USER.COLUMNS.wants_mod, wantsMod);
+    await db.users.setSetting(userId, C.USER.COLUMNS.first_run, false);
 
-    if (firstRunComplete) {
-        await db.users.setSetting(userId, C.USER.COLUMNS.first_run, false);
-    }
     res.redirect(req.get("Referrer"));
 }
+
+export async function submitFirstRun(req, res) {
+    const userId = req.user.id;
+    const body = { ...req.body };
+    const sendEmails = body.hasOwnProperty("send_emails");
+
+    if (!res.locals.user.is_email_verified && sendEmails) {
+        throw new ValidationError("Your email address must be verified to enable send-emails", 400);
+    }
+    
+    await db.users.setSetting(userId, C.USER.COLUMNS.send_emails, sendEmails);
+    await db.users.setSetting(userId, C.USER.COLUMNS.first_run, false);
+
+    res.sendStatus(200);
+}
+
 
 export async function unsubscribe(req, res) {
     const { keyId, userId } = req.params;
@@ -58,4 +76,34 @@ export async function unsubscribe(req, res) {
 
     await db.users.setSetting(userId, C.USER.COLUMNS.send_emails, false);
     res.send("You have successfully unsubscribed from all emails. To change your settings more go to user settings.");
+}
+
+export function viewLocalLogin(req, res) {
+    let message = req.flash('error');
+    let {csrfToken} = res.locals;
+    reactRender(res, LocalLogin({message, csrfToken}), {showLogin: false, title:"Login"});
+}
+
+export async function submitUserRegister(req, res) {
+    let { email, password } = req.body;
+
+    if (password.length < 6) {
+        throw new ValidationError("Password must be at least 6 characters", 400);
+    }
+
+    if (!validator.isEmail(email)) {
+        throw new ValidationError("Invalid email", 400);
+    }
+
+    const user = await  db.users.getUserByEmail(email)
+    if (user !== null) {
+        // TODO this leaks the registered email addresses
+        throw new ValidationError("Email already registered", 400);
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // Validation passed
+    await db.users.createLocalUserWithRandomName({email, hashedPassword});
+
+
+    res.redirect(C.URLS.USER_LOCAL_LOGIN)
 }

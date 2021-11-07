@@ -40,11 +40,13 @@ export const SUBMIT_QCOMMENT = "/submit/qcomment";
 
 // Accounts
 export const USER_LOGIN = "/users/login";
-export const USER_REGISTER = "/users/register";
+export const USER_LOCAL_LOGIN = "/users/local-login";
+export const USER_LOCAL_REGISTER = "/users/local-register";
 export const USER_LOGOUT = "/users/logout";
 export const USER_STRIKES = "/user/strikes";
 export const USER_SETTINGS = "/user/settings";
 export const SUBMIT_USER_SETTINGS = "/submit/user/settings";
+export const SUBMIT_USER_FIRST_RUN = "/submit/user/first-run";
 export const EMAIL_UNSUBSCRIBE = "/email/unsubscribe/";
 
 
@@ -74,3 +76,8 @@ export const BLOG_CATEGORIZING_TITLES = "/blog/post/categorizing-titles";
 export const BLOG_PARALLEL_DATABASE_TESTS = "/blog/post/parallel-database-tests";
 
 export const DISCORD = "https://discord.gg/7dSc2AA3C4";
+
+// Auth
+export const AUTH_LOCAL = "/auth/local";
+export const AUTH_GOOGLE = "/auth/google";
+export const AUTH_GOOGLE_CALLBACK = "/auth/google/callback";

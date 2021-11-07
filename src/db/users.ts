@@ -10,15 +10,7 @@ export default class Users {
     constructor(db: DatabaseApi) {
         this.db = db;
     }
-    createUser({ userName, name, email, hashedPassword }): Promise<UserId> {
-        return this.db.things.create(C.THINGS.USER).then(async id => {
-            await this.db.pool.query(
-                `INSERT INTO users (id, user_name, name, email, password, created_on, unsubscribe_key, is_mod)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, false)`,
-                [id, userName, name, email, hashedPassword, new Date(), this.db.uuidv4()]);
-            return id as UserId;
-        });
-    }
+
     getUser(userId: UserId): Promise<User> {
         return this.db.pool.query(`
             SELECT * FROM users WHERE id = $1`, [userId])
@@ -52,6 +44,21 @@ export default class Users {
         return this.db.pool.query(`SELECT * FROM users`).then(selectRows);
     }
 
+    async createLocalUserWithRandomName({email, hashedPassword}) {
+        return WithTransaction(this.db, async client => {
+            const id = await this.db.things.create(C.THINGS.USER, client);
+
+            await retryOnceOnUniqueError(async () => {
+                const userName = await this.generateUserName();
+                return client.query(
+                    `INSERT INTO users (id, user_name, email, password, created_on, is_mod, auth_type, unsubscribe_key, is_email_verified)
+                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.LOCAL}, $6, false)`,
+                    [id, userName, email, hashedPassword, new Date(), this.db.uuidv4()]);
+            }).then(internalAssertOne);
+            return id;
+        });
+    }
+
     async createGoogleUserWithRandomName({email, googleId}) {
         return WithTransaction(this.db, async client => {
             const id = await this.db.things.create(C.THINGS.USER, client);
@@ -59,8 +66,8 @@ export default class Users {
             await retryOnceOnUniqueError(async () => {
                 const userName = await this.generateUserName();
                 return client.query(
-                    `INSERT INTO users (id, user_name, email, google_id, created_on, is_mod, auth_type, unsubscribe_key)
-                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.GOOGLE}, $6)`,
+                    `INSERT INTO users (id, user_name, email, google_id, created_on, is_mod, auth_type, unsubscribe_key, is_email_verified)
+                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.GOOGLE}, $6, true)`,
                     [id, userName, email, googleId, new Date(), this.db.uuidv4()]);
             }).then(internalAssertOne);
             return id;

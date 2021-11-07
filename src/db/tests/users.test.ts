@@ -10,16 +10,9 @@ describe("Users", () => {
         await db.end();
     });
     
-    describe('createUser', () => {
-        it('creates a user and returns an id', async () => {
-            let id = await db.users.createUser({userName:"a", name: "a", email: "b", hashedPassword: "c"});
-            expect(id).toBeTruthy();
-        });
-    });
-    
     describe('getUser', () => {
         it('creates a user and returns an id', async () => {
-            let id = await db.users.createUser({userName:"a", name: "a", email: "b", hashedPassword: "c"});
+            let id = await testApi.createUser();
             let user = await db.users.getUser(id);
             expect(user.id).toEqual(id);
             expect(user.name).toEqual("a");
@@ -28,7 +21,7 @@ describe("Users", () => {
     
     describe('getUserByEmail', () => {
         it('doesnt shit the bed', async () => {
-            let id = await db.users.createUser({userName:"a", name: "a", email: "b", hashedPassword: "c"});
+            let id = await testApi.createUser();
             let user = await db.users.getUserByEmail("b");
             expect(user.id).toEqual(id);
             expect(user.name).toEqual("a");
@@ -37,7 +30,7 @@ describe("Users", () => {
     
     describe('getUserByUserName', () => {
         it('doesnt shit the bed', async () => {
-            let id = await db.users.createUser({userName:"a", name: "d", email: "b", hashedPassword: "c"});
+            let id = await testApi.createUser({name: "d"});
             let user = await db.users.getUserByUserName("a");
             expect(user.id).toEqual(id);
             expect(user.name).toEqual("d");
@@ -46,7 +39,7 @@ describe("Users", () => {
     
     describe('getUserIds', () => {
         it('works', async () => {
-            let id = await db.users.createUser({userName:"a", name: "a", email: "b", hashedPassword: "c"});
+            let id = await testApi.createUser();
             let users = await db.users.getUserIds();
             expect(users.length).toBe(1);
             expect(users[0]).toEqual(id);

@@ -1,5 +1,5 @@
-import db from './db/databaseApi';
-import { verifyGoogleLogin } from './googlePassportConfig';
+import db from '../db/databaseApi';
+import { verifyGoogleLogin } from './google';
 import Util from 'util';
 
 const verifyGoogleLoginPromise = Util.promisify(verifyGoogleLogin);

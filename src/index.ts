@@ -18,7 +18,8 @@ import { logger } from './logger';
 import hpp from 'hpp';
 import toobusy from 'toobusy-js'
 const pgSession = require('connect-pg-simple')(session);
-import * as GooglePassport from "./googlePassportConfig";
+import { initializePassport } from './passportConfig';
+import flash from 'connect-flash';
 
 // Setup
 require("dotenv").config();
@@ -84,8 +85,10 @@ function setup(db) {
     }
     app.use(session(sessionOptions));
 
+    app.use(flash());
+
     // Authentication
-    GooglePassport.initialize(passport);
+    initializePassport(passport);
     app.use(passport.initialize());
     app.use(passport.session()); // Store our variables to be persisted across the whole session. Works with app.use(Session) above
 
@@ -147,7 +150,27 @@ function setup(db) {
 
     router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);
     router.get(C.URLS.USER_SETTINGS, assertAuthenticated, Routes.Account.userSettings);
-    router.postAsync(C.URLS.SUBMIT_USER_SETTINGS, assertAuthenticated, Routes.Account.submitUserSettings)
+    router.postAsync(C.URLS.SUBMIT_USER_SETTINGS, assertAuthenticated, Routes.Account.submitUserSettings);
+    router.postAsync(C.URLS.SUBMIT_USER_FIRST_RUN, assertAuthenticated, Routes.Account.submitFirstRun);
+
+    // Passport 
+
+    // * Local
+    router.get(C.URLS.USER_LOCAL_LOGIN, redirectAuthenticated, Routes.Account.viewLocalLogin);
+    router.postAsync(C.URLS.USER_LOCAL_REGISTER, redirectAuthenticated, Routes.Account.submitUserRegister);
+    router.post(C.URLS.AUTH_LOCAL, redirectAuthenticated,
+        passport.authenticate("local", { successRedirect: "/", failureRedirect: C.URLS.USER_LOCAL_LOGIN, failureFlash: true }));
+
+    // * Google
+    router.get(C.URLS.AUTH_GOOGLE, redirectAuthenticated,
+        passport.authenticate('google', {
+            scope: [
+                'https://www.googleapis.com/auth/plus.login'
+                , "https://www.googleapis.com/auth/userinfo.email"]
+        }));
+    router.get(C.URLS.AUTH_GOOGLE_CALLBACK, redirectAuthenticated,
+        passport.authenticate('google', { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
+
 
     // About
     Object.values(About).forEach(e => router.get(e.url, renderAbout(e.element, e.title)));
@@ -155,10 +178,6 @@ function setup(db) {
     // Blog
     router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
     Object.values(BlogEntries).forEach(entry => router.get(entry.url, renderBlog(entry)));
-
-    // Google
-    router.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', "https://www.googleapis.com/auth/userinfo.email"] }));
-    router.get('/auth/google/callback', passport.authenticate('google', { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
 
     // Email
     // Unsecure - get changes database state so it should be post, however it needs to be embedded in links in emails
