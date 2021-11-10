@@ -1,6 +1,6 @@
-import db from '../databaseApi';
 import * as C from '../../constant';
-const {withMockUuidv4, sameUuid, testApi} = require('../../testUtils');
+import { sameUuid, withMockUuidv4 } from '../../testUtils';
+import db from '../databaseApi';
 
 describe("things", () => {
     beforeEach(async () => {

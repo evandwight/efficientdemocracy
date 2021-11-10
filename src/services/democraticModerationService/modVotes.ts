@@ -2,7 +2,7 @@ import db from '../../db/databaseApi';
 import ModVotes from './db/modVotes';
 import { UserId } from '../../db/types';
 import DataFrame from 'dataframe-js';
-import { InternalError } from '../../routes/utils';
+import { UnexpectedInternalError } from '../../routes/utils';
 
 export function countsToWinner(counts): UserId {
     if (counts.length === 0) {
@@ -26,7 +26,7 @@ export async function updateMod() {
 
     if (newMod !== null && newMod !== currentMod) {
         // swappers
-        throw new InternalError("New mod requested!");
+        throw new UnexpectedInternalError("New mod requested!");
         // await db.users.setSetting(newMod, C.USER.COLUMNS.is_mod, true);
         // await db.users.setSetting(currentMod, C.USER.COLUMNS.is_mod, false);
     }

@@ -1,12 +1,4 @@
-import { fromIni } from "@aws-sdk/credential-providers";
-import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-
-require("dotenv").config();
-
-const lambda = new LambdaClient({
-    region: "us-east-1",
-    credentials: fromIni(),
-});
+import { sendEmail } from "../utils/sendAwsEmail";
 
 export function sendMonitorEmail({subject, text}) {
     const to = process.env.MONITOR_EMAIL;
@@ -23,26 +15,7 @@ export function sendMonitorEmail({subject, text}) {
     });
 }
 
-
-export function sendEmail(json) {
-    return lambda.send(new InvokeCommand({
-        FunctionName: "sendEmail",
-        InvocationType: "RequestResponse",
-        LogType: "None",
-        Payload: new TextEncoder().encode(JSON.stringify(json)),
-    })).then(data => {
-        const payload = JSON.parse(new TextDecoder("utf-8").decode(data.Payload));
-        // TODO I don't know the correct way to catch errors
-        if (data.FunctionError !== undefined) {
-            throw new Error(JSON.stringify(payload));
-        } else {
-            return payload;
-        }
-    });
-}
-
-
-export async function sendEmails(jsons: {to: string, html: string, text: string, subject:string}[]): Promise<any[]> {
+export async function sendEmails(jsons: {to: string, from: string, html: string, text: string, subject:string}[]): Promise<any[]> {
     // aws limits to 14 emails a second so only send 1 every 100ms
     if (jsons.length === 0) {
         return [];

@@ -2,10 +2,10 @@ import React from 'react';
 import * as C from '../constant';
 
 const prettyStrikesName = {
-  'strikes_up': "up voters",
-  'strikes_down': "down voters",
-  'strikes_poster': "poster",
-  'strikes_disputers': "disputers",
+  'strike_ups': "up voters",
+  'strike_downs': "down voters",
+  'strike_poster': "poster",
+  'strike_disputers': "disputers",
 }
 
 export function strikesTo(result) {

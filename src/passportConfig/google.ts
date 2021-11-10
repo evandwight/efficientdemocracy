@@ -1,7 +1,11 @@
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-import db from '../db/databaseApi';
-import { internalAssert, InternalError, validationAssert } from '../routes/utils';
 import * as C from '../constant';
+import db from '../db/databaseApi';
+import { assertEnv, unexpectedAssert, validationAssert } from '../routes/utils';
+
+assertEnv('GOOGLE_CLIENT_ID');
+assertEnv('GOOGLE_CLIENT_SECRET');
+assertEnv('GOOGLE_CALLBACK_URL');
 
 export const createGoogleStrategy = () => {
     return new GoogleStrategy({
@@ -25,13 +29,12 @@ export async function verifyGoogleLogin(accessToken, refreshToken, profile, done
     try {
         const user = await db.users.getUserByGoogleId(profile.id);
         if (user) {
-            internalAssert(user.auth_type === C.AUTH_TYPE.GOOGLE, "Unexpected auth type");
+            unexpectedAssert(user.auth_type === C.AUTH_TYPE.GOOGLE, "Unexpected auth type");
             return done(null, { id: user.id });
         }
         const verifiedEmails = profile.emails.filter(e => e.verified);
-        if (verifiedEmails.length === 0) {
-            return done(new InternalError("No verified email"));
-        }
+        unexpectedAssert(verifiedEmails.length > 0, "No verified email");
+        
         const email = verifiedEmails[0].value;
         const emailAlreadyExists = await db.users.getUserByEmail(email);
         validationAssert(!emailAlreadyExists, "Email already exists", 400);

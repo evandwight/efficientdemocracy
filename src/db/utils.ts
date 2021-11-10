@@ -1,5 +1,5 @@
 import * as C from '../constant'
-import { InternalError } from '../routes/utils';
+import { UnexpectedInternalError } from '../routes/utils';
 const crypto = require('crypto');
 
 export function countToNumber(result) {
@@ -53,7 +53,7 @@ export function assertOneCustomError(errorFunc) {
     }
 }
 
-export const internalAssertOne = assertOneCustomError(() => new InternalError("Didn't get one result"));
+export const internalAssertOne = assertOneCustomError(() => new UnexpectedInternalError("Didn't get one result"));
 
 export function existsOne(result) {
     if (result.rowCount === 1) {

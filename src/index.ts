@@ -5,7 +5,7 @@ import session from "express-session";
 import csrf from 'csurf';
 import { addAsync } from '@awaitjs/express';
 import * as Routes from './routes';
-import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403, ValidationError, assertMiniMod } from './routes/utils';
+import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403, ValidationError, assertMiniMod, ExpectedInternalError } from './routes/utils';
 import { addCustomLocals } from './utils/middleware';
 import * as C from "./constant";
 import { runTasks } from "./batch";
@@ -49,6 +49,13 @@ function setup(db) {
     );
     // needed for redirecting form submissions
     app.use(helmet.referrerPolicy({ policy: "same-origin" }));
+    // Disable csp for register page to allow for google captcha
+    const registerCSP = helmet.contentSecurityPolicy({
+        useDefaults: true,
+        directives: {
+            "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
+            "script-src": ['unsafe-inline'],
+        }});
 
     app.use(function (req, res, next) {
         if (toobusy()) {
@@ -145,13 +152,14 @@ function setup(db) {
     router.postAsync(C.URLS.SUBMIT_QPOST_MINI_MOD_ACTION + ":field/:id", assertMiniMod, Routes.MiniMods.submitPostAction);
 
     // Accounts
-    router.get(C.URLS.USER_LOGIN, redirectAuthenticated, Routes.Account.login);
+    router.get(C.URLS.USER_LOGIN, registerCSP, redirectAuthenticated, Routes.Account.login);
     router.get(C.URLS.USER_LOGOUT, Routes.Account.logout);
 
     router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);
     router.get(C.URLS.USER_SETTINGS, assertAuthenticated, Routes.Account.userSettings);
     router.postAsync(C.URLS.SUBMIT_USER_SETTINGS, assertAuthenticated, Routes.Account.submitUserSettings);
     router.postAsync(C.URLS.SUBMIT_USER_FIRST_RUN, assertAuthenticated, Routes.Account.submitFirstRun);
+    router.postAsync(C.URLS.SUBMIT_USER_REQUEST_VERIFY_EMAIL, assertAuthenticated, Routes.Account.submitFirstRun);
 
     // Passport 
 
@@ -182,6 +190,7 @@ function setup(db) {
     // Email
     // Unsecure - get changes database state so it should be post, however it needs to be embedded in links in emails
     router.getAsync(C.URLS.EMAIL_UNSUBSCRIBE + ':userId/:keyId', Routes.Account.unsubscribe);
+    router.getAsync(C.URLS.EMAIL_VERIFY_GOODNESS + ':goodness/:userId/:keyId', Routes.Account.verifyEmailGoodness);
 
     // Custom 404 page not found
     // Disable on test to allow login
@@ -200,6 +209,9 @@ function setup(db) {
             if (err instanceof ValidationError) {
                 logger.warn({ req, err }, "Request validation error");
                 res.status(err.code).send(`Error: ${err.message}`);
+            } else if (err instanceof ExpectedInternalError) {
+                logger.warn({ req, err }, "Expected internal error");
+                res.status(500).send(`Error handling request`);
             } else if (err.code === 'EBADCSRFTOKEN') {
                 logger.warn({ req, err }, "Invalid csrf");
                 res.status(400).send(`Invalid request`);

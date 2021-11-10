@@ -12,6 +12,7 @@ type reactRenderOptions = {
     dangerousChartData?: any,
     includeVotesJs?: boolean,
     includeScript?: string,
+    includeRegisterJs?: boolean,
 }
 
 export const DefaultWrapper = (props: {showLogin, user, csrfToken, children}) => 
@@ -80,10 +81,13 @@ export const dateToTimeSince = (date: Date) => {
   }
 
 export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: reactRenderOptions): string {
-    const title = options.title || "Efficient Democracy";
-    const includeChartJs = options.includeChartJs || false;
-    const includeVotesJs = options.includeVotesJs || false;
-    const includeScript = options.includeScript || false;
+    const {
+        title = "Efficient Democracy",
+        includeChartJs = false,
+        includeVotesJs = false,
+        includeScript = false,
+        includeRegisterJs = false,
+    } = options;
     // csrfToken is for client side api calls via axios
     // <script>0</script> for firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
     return `
@@ -95,17 +99,21 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-    ${includeVotesJs ? 
-        `<script src="/public/axios.min.js"></script>
+    ${includeVotesJs 
+        ? `<script src="/public/axios.min.js"></script>
         <script src="/public/index.js"></script>`
         : ""}
-    ${includeChartJs ? 
-        `<script type="application/json" id="chartData">${JSON.stringify(options.dangerousChartData)}</script>
+    ${includeChartJs
+        ? `<script type="application/json" id="chartData">${JSON.stringify(options.dangerousChartData)}</script>
         <script src="/public/sampleChart.js"></script>
         <script src="/public/chart.min.js"></script>`
         : ""}
-    ${includeScript ? 
-        `<script src="${includeScript}"></script>`
+    ${includeRegisterJs
+        ? `<script src="https://www.google.com/recaptcha/api.js?render=${process.env.GOOGLE_CAPTCHA_SITE_KEY}"></script>
+        <script src="/public/register.js"></script>`
+        : ""}
+    ${includeScript 
+        ? `<script src="${includeScript}"></script>`
         : ""}
     <link rel="stylesheet" href="/public/styles.css" />
     <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png" />

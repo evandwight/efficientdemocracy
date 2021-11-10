@@ -93,6 +93,12 @@ export function formToStrikes(body, options: {disallowStrikeDisputers?: boolean}
     return strikes;
 }
 
+export function assertEnv(name) {
+    if (!process.env[name]) {
+        throw new Error(`Undefined environment varible ${name}`);
+    }
+}
+
 export function validationAssert(value: boolean, message: string, code: number) {
     if (!value) {
         throw new ValidationError(message, code);
@@ -107,11 +113,19 @@ export class ValidationError extends Error {
     }
 }
 
-export function internalAssert(value: boolean, message: string) {
-    if (!value) {
-        throw new InternalError(message);
+export class ExpectedInternalError extends Error {
+    err: Error;
+    constructor(err) {
+        super(err.message);
+        this.err = err;
     }
 }
 
-export class InternalError extends Error {
+export function unexpectedAssert(value: boolean, message: string) {
+    if (!value) {
+        throw new UnexpectedInternalError(message);
+    }
+}
+
+export class UnexpectedInternalError extends Error {
 }

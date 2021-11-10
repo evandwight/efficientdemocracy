@@ -9,7 +9,7 @@ import { logger } from "../logger";
 
 export async function run(key) {
     const users = (await db.users.getUsers())
-        .filter(user => !!user.send_emails);
+        .filter(user => !!user.send_emails && user.email_state === C.USER.EMAIL_STATE.VERIFIED_GOOD);
     // const users = [{id: "asdf", unsubscribe_key: "TESTKEY", email: "TESTEMAIl"}];
     console.log(users);
 
@@ -60,6 +60,7 @@ function newsletterJson({user, key, posts}) {
 
     return {
         to: user.email,
+        from: "hackernewsletter@efficientdemocracy.com",
         html: html(Newsletter({posts, postsLink, unsubscribeLink})),
         text: postsToText({posts, postsLink, unsubscribeLink}),
         subject: "Efficient democracy - newsletter",

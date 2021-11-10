@@ -3,7 +3,7 @@ import * as C from '../constant';
 import { internalAssertOne, retryOnceOnUniqueError, selectOne, selectOneAttr, selectRows, WithTransaction } from '../db/utils';
 import { User, UserId } from './types';
 import { generateSlug } from "random-word-slugs";
-import { internalAssert } from "../routes/utils";
+import { unexpectedAssert } from "../routes/utils";
 
 export default class Users {
     db: DatabaseApi;
@@ -51,11 +51,11 @@ export default class Users {
             await retryOnceOnUniqueError(async () => {
                 const userName = await this.generateUserName();
                 return client.query(
-                    `INSERT INTO users (id, user_name, email, password, created_on, is_mod, auth_type, unsubscribe_key, is_email_verified)
-                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.LOCAL}, $6, false)`,
+                    `INSERT INTO users (id, user_name, email, password, created_on, is_mod, auth_type, unsubscribe_key, email_state)
+                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.LOCAL}, $6, ${C.USER.EMAIL_STATE.UNVERIFIED_TRY_1})`,
                     [id, userName, email, hashedPassword, new Date(), this.db.uuidv4()]);
             }).then(internalAssertOne);
-            return id;
+            return id as UserId;
         });
     }
 
@@ -66,8 +66,8 @@ export default class Users {
             await retryOnceOnUniqueError(async () => {
                 const userName = await this.generateUserName();
                 return client.query(
-                    `INSERT INTO users (id, user_name, email, google_id, created_on, is_mod, auth_type, unsubscribe_key, is_email_verified)
-                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.GOOGLE}, $6, true)`,
+                    `INSERT INTO users (id, user_name, email, google_id, created_on, is_mod, auth_type, unsubscribe_key, email_state)
+                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.GOOGLE}, $6, ${C.USER.EMAIL_STATE.VERIFIED_GOOD})`,
                     [id, userName, email, googleId, new Date(), this.db.uuidv4()]);
             }).then(internalAssertOne);
             return id;
@@ -97,8 +97,8 @@ export default class Users {
             .then(selectOneAttr('id'));
     }
 
-    setSetting(userId: UserId, propName: C.USER.COLUMNS, propValue: string|number|boolean) {
-        internalAssert(Object.values(C.USER.COLUMNS).includes(propName), "Invalid property");
+    setSetting(userId: UserId, propName: C.USER.COLUMNS, propValue: string|number|boolean|Date) {
+        unexpectedAssert(Object.values(C.USER.COLUMNS).includes(propName), "Invalid property");
         const columnName = C.USER.COLUMNS[propName]; 
         return this.db.pool.query(
             `UPDATE users
