@@ -12,10 +12,10 @@ export const LocalRegisterForm = ({ csrfToken }) =>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <input id="register-form-token" type="hidden" name="_captchatoken" value="" />
         <div>
-            <input type="email" id="email" name="email" placeholder="Email" required />
+            <input type="email" id="register-email" name="email" placeholder="Email" required />
         </div>
         <div>
-            <input type="password" id="password" name="password" placeholder="Password" required />
+            <input type="password" id="register-password" name="password" placeholder="Password" required />
         </div>
         <div>
             <input type="submit" value="Register" />

@@ -11,10 +11,10 @@ export const LocalLoginForm = ({ csrfToken }) =>
     <form action={C.URLS.AUTH_LOCAL} method="POST">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div>
-            <input type="email" id="email" name="email" placeholder="Email" required />
+            <input type="email" id="login-email" name="email" placeholder="Email" required />
         </div>
         <div>
-            <input type="password" id="password" name="password" placeholder="Password" required />
+            <input type="password" id="login-password" name="password" placeholder="Password" required />
         </div>
         <div>
             <input type="submit" value="Login" />

@@ -52,9 +52,10 @@ function setup(db) {
     // Disable csp for register page to allow for google captcha
     const registerCSP = helmet.contentSecurityPolicy({
         useDefaults: true,
-        directives: {
-            "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
-            "script-src": ["'unsafe-inline'"],
+        directives:{
+            "script-src": ["*", "'unsafe-inline'"],
+            "style-src": ["*", "'unsafe-inline'"],
+            "default-src": ["*"],
         }});
 
     app.use(function (req, res, next) {
