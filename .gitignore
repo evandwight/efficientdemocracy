@@ -1,7 +1,12 @@
 .env
-x
 node_modules
 dist
 .vscode
 public/test.html
 coverage
+
+#TEMP
+TODO
+sample
+x
+src/scripts/sendEmail.ts
