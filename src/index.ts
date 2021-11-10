@@ -247,6 +247,9 @@ if (require.main === module) {
 
     process.on("uncaughtException", function (err) {
         logger.fatal({ err }, "Uncaught exception");
+        if (process.env.NODE_ENV !== 'production') {
+            console.log(err);
+        }
         process.exit(); // exit the process to avoid unknown state
     });
 }
