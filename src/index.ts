@@ -54,7 +54,7 @@ function setup(db) {
         useDefaults: true,
         directives: {
             "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
-            "script-src": ['unsafe-inline'],
+            "script-src": ["'unsafe-inline'"],
         }});
 
     app.use(function (req, res, next) {
