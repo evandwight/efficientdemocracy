@@ -20,6 +20,7 @@ import toobusy from 'toobusy-js'
 const pgSession = require('connect-pg-simple')(session);
 import { initializePassport } from './passportConfig';
 import flash from 'connect-flash';
+import crypto from 'crypto';
 
 // Setup
 require("dotenv").config();
@@ -35,6 +36,7 @@ function setup(db) {
     // security settings:
     app.use(hpp()); // HTTP Parameter Pollution(HPP)
     app.use(helmet());
+    const scriptSrc0 = "'sha256-X+zrZv/IbzjZUnhsbWlsecLbwjndTpG0ZynXOif7V+k='"; // for script "0" workaround firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
     app.use(
         helmet.contentSecurityPolicy({
             useDefaults: true,
@@ -42,21 +44,30 @@ function setup(db) {
                 "script-src-attr": null, // firefox doesn't support but uses "script-src" value 'self'
                 "script-src": [
                     "'self'",
-                    "'sha256-X+zrZv/IbzjZUnhsbWlsecLbwjndTpG0ZynXOif7V+k='" // for script "0" workaround firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
+                    scriptSrc0,
                 ],
             },
         })
     );
-    // needed for redirecting form submissions
-    app.use(helmet.referrerPolicy({ policy: "same-origin" }));
-    // Disable csp for register page to allow for google captcha
+    // Use a custom csp for register page to allow for google captcha
+    const registerCSPNonce = (req, res, next) => {
+        res.locals.cspNonce = crypto.randomBytes(16).toString("hex");
+        next();
+    };
     const registerCSP = helmet.contentSecurityPolicy({
         useDefaults: true,
         directives:{
-            "script-src": ["*", "'unsafe-inline'"],
-            "style-src": ["*", "'unsafe-inline'"],
-            "default-src": ["*"],
-        }});
+            "script-src": [
+                "'self'", 
+                scriptSrc0,
+                (req, res: any) => `'nonce-${res.locals.cspNonce}'`],
+            "img-src": ["'self'", "www.gstatic.com"],
+            "frame-src": ["www.google.com"],
+        }
+    });
+
+    // needed for redirecting form submissions
+    app.use(helmet.referrerPolicy({ policy: "same-origin" }));
 
     app.use(function (req, res, next) {
         if (toobusy()) {
@@ -153,7 +164,7 @@ function setup(db) {
     router.postAsync(C.URLS.SUBMIT_QPOST_MINI_MOD_ACTION + ":field/:id", assertMiniMod, Routes.MiniMods.submitPostAction);
 
     // Accounts
-    router.get(C.URLS.USER_LOGIN, registerCSP, redirectAuthenticated, Routes.Account.login);
+    router.get(C.URLS.USER_LOGIN, registerCSPNonce, registerCSP, redirectAuthenticated, Routes.Account.login);
     router.get(C.URLS.USER_LOGOUT, Routes.Account.logout);
 
     router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);

@@ -13,6 +13,7 @@ type reactRenderOptions = {
     includeVotesJs?: boolean,
     includeScript?: string,
     includeRegisterJs?: boolean,
+    cspNonce?: string,
 }
 
 export const DefaultWrapper = (props: {showLogin, user, csrfToken, children}) => 
@@ -32,6 +33,9 @@ export const reactRender = (res, element, options?: reactRenderOptions) => {
             {element}
         </DefaultWrapper>
         );
+    if (options.includeRegisterJs) {
+        options.cspNonce = res.locals.cspNonce;
+    }
     res.send(HtmlBoilerPlate(innerHtml, res.locals.csrfToken, options));
 }
 
@@ -87,6 +91,7 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
         includeVotesJs = false,
         includeScript = false,
         includeRegisterJs = false,
+        cspNonce = null,
     } = options;
     // csrfToken is for client side api calls via axios
     // <script>0</script> for firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
@@ -109,7 +114,7 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
         <script src="/public/chart.min.js"></script>`
         : ""}
     ${includeRegisterJs
-        ? `<script src="https://www.google.com/recaptcha/api.js?render=${process.env.GOOGLE_CAPTCHA_SITE_KEY}"></script>
+        ? `<script src="https://www.google.com/recaptcha/api.js?render=${process.env.GOOGLE_CAPTCHA_SITE_KEY}" nonce="${cspNonce}"></script>
         <script src="/public/register.js"></script>`
         : ""}
     ${includeScript 
