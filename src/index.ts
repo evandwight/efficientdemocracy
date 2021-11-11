@@ -1,26 +1,26 @@
-import express from "express";
-import db from "./db/databaseApi";
-import passport from "passport";
-import session from "express-session";
-import csrf from 'csurf';
 import { addAsync } from '@awaitjs/express';
-import * as Routes from './routes';
-import { assertAuthenticated, assertAuthenticated401, assertNotBanned, assertMod, redirectAuthenticated, assertNotBanned403, ValidationError, assertMiniMod, ExpectedInternalError } from './routes/utils';
-import { addCustomLocals } from './utils/middleware';
-import * as C from "./constant";
-import { runTasks } from "./batch";
-import { renderAbout } from './routes/about';
-import * as About from './views/about';
-import { BlogEntries } from './views/blog';
-import { renderBlog } from './routes/blog';
-import helmet from 'helmet';
-import { logger } from './logger';
-import hpp from 'hpp';
-import toobusy from 'toobusy-js'
-const pgSession = require('connect-pg-simple')(session);
-import { initializePassport } from './passportConfig';
 import flash from 'connect-flash';
 import crypto from 'crypto';
+import csrf from 'csurf';
+import express from "express";
+import session from "express-session";
+import helmet from 'helmet';
+import hpp from 'hpp';
+import passport from "passport";
+import toobusy from 'toobusy-js';
+import { runTasks } from "./batch";
+import * as C from "./constant";
+import db from "./db/databaseApi";
+import { logger } from './logger';
+import { initializePassport } from './passportConfig';
+import * as Routes from './routes';
+import { renderAbout } from './routes/about';
+import { renderBlog } from './routes/blog';
+import { assertAuthenticated, assertAuthenticated401, assertMiniMod, assertMod, assertNotBanned403, ExpectedInternalError, redirectAuthenticated, ValidationError } from './routes/utils';
+import { addCustomLocals } from './utils/middleware';
+import * as About from './views/about';
+import { BlogEntries } from './views/blog';
+const pgSession = require('connect-pg-simple')(session);
 
 // Setup
 require("dotenv").config();
@@ -69,14 +69,18 @@ function setup(db) {
     // needed for redirecting form submissions
     app.use(helmet.referrerPolicy({ policy: "same-origin" }));
 
-    app.use(function (req, res, next) {
-        if (toobusy()) {
-            // log if you see necessary
-            res.status(503).send("Server Too Busy");
-        } else {
-            next();
-        }
-    });
+    // Disable too busy for tests as tests will trigger it
+    // TODO maybe don't test http endpoints, instead test the route directly???
+    if (process.env.NODE_ENV !== "test") {
+        app.use(function (req, res, next) {
+            if (toobusy()) {
+                // log if you see necessary
+                res.status(503).send("Server Too Busy");
+            } else {
+                next();
+            }
+        });
+    };
 
     // Parses details from a form
     app.use(express.urlencoded({ extended: false }));
@@ -128,7 +132,7 @@ function setup(db) {
     // Misc
     router.get(C.URLS.SORT, Routes.Misc.Sort);
 
-    // // Qiri Posts
+    // QPosts
     router.getAsync(C.URLS.QPOSTS + "/:page?", Routes.QPost.list);
     router.getAsync(C.URLS.NEW_QPOSTS + "/:page?", Routes.QPost.listNew);
     router.getAsync(C.URLS.DEEPLY_IMPORTANT_QPOSTS + "/:page?", Routes.QPost.listDeeplyImportant);
@@ -137,8 +141,6 @@ function setup(db) {
     router.getAsync(C.URLS.FROZEN_QPOSTS + ":key/:page?", Routes.QPost.listFrozen);
 
     router.getAsync(C.URLS.QPOSTS_VIEW + ":id", Routes.QPost.viewPost);
-    router.getAsync(C.URLS.SUBMIT_QPOST, [assertAuthenticated, assertNotBanned], Routes.QPost.viewSubmitPost);
-    router.postAsync(C.URLS.SUBMIT_QPOST, [assertAuthenticated, assertNotBanned], Routes.QPost.submitPost);
     router.postAsync(C.URLS.SUBMIT_QPOST_VOTE + ":postId/:vote", [assertAuthenticated401, assertNotBanned403], Routes.QPost.submitVote);
 
     router.postAsync(C.URLS.SUBMIT_QPOST_DISPUTE + ":postId/:field/:should_be", [assertAuthenticated401, assertNotBanned403], Routes.QPost.submitDispute);
