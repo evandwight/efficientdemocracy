@@ -133,14 +133,19 @@ describe("qPost", () => {
     });
     describe('trimPosts', () => {
         it('handles less posts', () => {
-            const {posts, moreLink} = trimPosts({posts: Array(5), moreLinkBase:"a", page:0});
+            const {posts, moreLink} = trimPosts({allPosts: Array(5), moreLinkBase:"a", page:0, offset: 0});
             expect(posts.length).toBe(5);
             expect(moreLink).toEqual(null);
         });
-        it('handles more posts', () => {
-            const {posts, moreLink} = trimPosts({posts: Array(35), moreLinkBase:"a", page:0});
+        it('handles some posts', () => {
+            const {posts, moreLink} = trimPosts({allPosts: Array(65), moreLinkBase:"a", page:1, offset: 30});
             expect(posts.length).toBe(30);
-            expect(moreLink).toEqual("a/1");
+            expect(moreLink).toEqual("a/2");
+        });
+        it('handles last page with many posts', () => {
+            const {posts, moreLink} = trimPosts({allPosts: Array(65), moreLinkBase:"a", page:2, offset: 60});
+            expect(posts.length).toBe(5);
+            expect(moreLink).toEqual(null);
         });
     });
 });

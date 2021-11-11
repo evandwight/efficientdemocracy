@@ -1,4 +1,4 @@
-import { cache, CachedDB, getByOffset } from "../cachedDb";
+import { cache, CachedDB } from "../cachedDb";
 
 function createCallCounter() {
     let callNum = 0;
@@ -39,21 +39,6 @@ describe("cachedDb", () => {
             const dbFunc = createCallCounter();
             cache["teste"] = {data: undefined, expiry: new Date(1970, 1, 1), loadingExpiry:new Date(1970,1,1)}
             expect(await CachedDB.getFromCache("teste", dbFunc)).toBe(1);
-        });
-    });
-    describe('getByOffset', () => {
-        it('works', async () => {
-            let l = [];
-            for (let i = 0; i < 1000; i ++) {
-                l.push(i);
-            }
-            let res = getByOffset(0)(l);
-            expect(res.length).toBe(31);
-            expect(res[0]).toBe(0);
-
-            res = getByOffset(30)(l);
-            expect(res.length).toBe(31);
-            expect(res[29]).toBe(59);
         });
     });
 });

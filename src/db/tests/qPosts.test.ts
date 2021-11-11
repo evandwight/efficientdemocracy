@@ -1,7 +1,6 @@
 import db from '../databaseApi';
 const {testApi} = require('../../testUtils');
 const uuid = require('uuid');
-import * as C from '../../constant';
 
 describe("QPosts", () => {
     beforeEach(async () => {

@@ -54,13 +54,12 @@ export default class QPosts {
             .then(result => result.rows) as Promise<{id: QPostId, hot: number}[]>;
     }
 
-    getNewPosts(offset=0): Promise<QPostId[]> {
+    getNewPosts(): Promise<QPostId[]> {
         return this.db.pool.query(
             `SELECT id
             FROM qposts
             ORDER BY created DESC
-            LIMIT ${C.POSTS_PER_PAGE + 1}
-            OFFSET $1`, [offset])
+            LIMIT 1000`)
             .then(selectAttr("id")) as Promise<QPostId[]>;
     }
 
