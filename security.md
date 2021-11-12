@@ -10,10 +10,7 @@ Cheatsheets:
 
 ### Authentication
 
-Using google oauth2
-
-Not Implemented:
-* Require Re-authentication for Sensitive Features
+Your email/password may be leaked. Authentication requires significant work.
 
 ### Application Security
 
