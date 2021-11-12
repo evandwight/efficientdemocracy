@@ -28,6 +28,39 @@ export default class QPosts {
             .then(selectOneAttr('id'));
     }
 
+    async submitPost({title, userId, url, content}: {title: string, userId: UserId, url?: string,content?: string}): Promise<QPostId> {
+        const thingId = await this.db.things.create(C.THINGS.QPOST);
+        await this.db.pool.query(
+            `INSERT INTO qposts (id, user_id, title, url, content, created)
+            VALUES ($1, $2, $3, $4, $5, $6)`, [thingId, userId, title, url, content, new Date()]);
+        return thingId as QPostId;
+    }
+
+    async upsertHackerNewsPost(v: HnPost): Promise<QPostId> {
+        // TODO what if this query fails, modactions could not be set! Maybe retry?
+        let postId = await this.getPostIdByHackerId(v.id);
+
+        if (!postId) {
+            postId = await this.db.things.create(C.THINGS.QPOST);
+            await this.db.pool.query(
+                `INSERT INTO qposts  
+                (id, user_id, title, url, content, created, hackernews_id, hackernews_points) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+                [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", new Date(v.time * 1000), v.id, v.score])
+                .then(internalAssertOne);
+        } else {
+            await this.db.pool.query(
+                `UPDATE qposts 
+                SET hackernews_points = $2
+                WHERE id = $1`,
+                [postId, v.score]).then(internalAssertOne);
+        }
+        
+        return postId;
+    }
+
+    // Listings
+
     getPostsByIds(postIds: QPostId[]): Promise<QPost[]> {
         return this.db.pool.query(
             `SELECT qposts.id as id, created, title, url, content, hackernews_id, qposts.user_id as user_id,
@@ -93,51 +126,5 @@ export default class QPosts {
             ORDER BY hot DESC
             LIMIT 1000`)
             .then(selectAttr("id")) as Promise<QPostId[]>;
-    }
-
-    getPosts(offset=0): Promise<QPost[]> {
-        return this.db.pool.query(
-            `SELECT qposts.id as id, created, title, url, content, hackernews_id, qposts.user_id as user_id,
-                user_name,
-                COALESCE(up_votes,0) as up_votes,  COALESCE(down_votes,0) as down_votes,
-                ((extract(epoch from created) - 1134028003)/45000 + log(GREATEST(abs(COALESCE(up_votes,0) - COALESCE(down_votes,0))*2, 1))*sign(COALESCE(up_votes,0)-COALESCE(down_votes,0))) as hot
-            FROM qposts 
-                INNER JOIN users ON qposts.user_id = users.id
-                LEFT JOIN vote_count ON qposts.id = vote_count.id
-            ORDER BY hot DESC
-            LIMIT 30
-            OFFSET $1`, [offset])
-            .then(result => result.rows) as Promise<QPost[]>;
-    }
-
-    async submitPost({title, userId, url, content}: {title: string, userId: UserId, url?: string,content?: string}): Promise<QPostId> {
-        const thingId = await this.db.things.create(C.THINGS.QPOST);
-        await this.db.pool.query(
-            `INSERT INTO qposts (id, user_id, title, url, content, created)
-            VALUES ($1, $2, $3, $4, $5, $6)`, [thingId, userId, title, url, content, new Date()]);
-        return thingId as QPostId;
-    }
-
-    async upsertHackerNewsPost(v: HnPost): Promise<QPostId> {
-        // TODO what if this query fails, modactions could not be set! Maybe retry?
-        let postId = await this.getPostIdByHackerId(v.id);
-
-        if (!postId) {
-            postId = await this.db.things.create(C.THINGS.QPOST);
-            await this.db.pool.query(
-                `INSERT INTO qposts  
-                (id, user_id, title, url, content, created, hackernews_id, hackernews_points) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-                [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", new Date(v.time * 1000), v.id, v.score])
-                .then(internalAssertOne);
-        } else {
-            await this.db.pool.query(
-                `UPDATE qposts 
-                SET hackernews_points = $2
-                WHERE id = $1`,
-                [postId, v.score]).then(internalAssertOne);
-        }
-        
-        return postId;
     }
 }
