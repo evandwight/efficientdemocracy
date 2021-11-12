@@ -55,26 +55,6 @@ export async function login() {
     }
 }
 
-export async function withMockUuidv4(db, newUuidv4, func) {
-    let old = db.uuidv4;
-    db.uuidv4 = newUuidv4;
-    await func(db);
-    db.uuidv4 = old;
-}
-
-export function sameUuid(times, uuid) {
-    let calls = 0;
-    return () => {
-        calls += 1;
-        if (calls > times) {
-            return uuidv4();
-        }
-        else {
-            return uuid;
-        }
-    }
-}
-
 export const testApi = {
     deleteAll: () => {
         return Promise.all([
