@@ -41,12 +41,13 @@ export default class QPosts {
         let postId = await this.getPostIdByHackerId(v.id);
 
         if (!postId) {
+            const time = v.time ? new Date(v.time * 1000) : new Date();
             postId = await this.db.things.create(C.THINGS.QPOST);
             await this.db.pool.query(
                 `INSERT INTO qposts  
                 (id, user_id, title, url, content, created, hackernews_id, hackernews_points) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-                [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", new Date(v.time * 1000), v.id, v.score])
+                [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", time, v.id, v.score])
                 .then(internalAssertOne);
         } else {
             await this.db.pool.query(

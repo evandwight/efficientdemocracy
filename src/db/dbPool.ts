@@ -1,5 +1,6 @@
 import { getPool } from "./dbConfig";
 import { TestPool } from '../testUtils/testDbPool';
+import { logger } from "../logger";
 
 class CommonPool {
     pool: any;
@@ -20,12 +21,12 @@ class CommonPool {
         return this.pool;
     }
     query(query, parameters?) {
-        return this.get().query(query, parameters).catch((e) => {
+        return this.get().query(query, parameters).catch((err) => {
             if (process.env.NODE_ENV === "dev") {
-                console.log("Error:", e)
-                console.log("Query args:", query, parameters);
+                console.log({err, query, parameters});
             }
-            throw e;
+            logger.error({err}, JSON.stringify({query, parameters}));
+            throw err;
         });
     }
     connect = () => this.pool.connect();
