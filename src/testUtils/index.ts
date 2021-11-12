@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 import bcrypt from "bcrypt";
 import supertest from 'supertest';
 import * as C from '../constant';

@@ -1,8 +1,8 @@
-import { DatabaseApi } from "./databaseApi";
-import {QPost, QPostId, UserId} from "./types";
-import { internalAssertOne, lastSaturday, selectAttr, selectOne, selectOneAttr } from "./utils";
-import * as C from '../constant';
 import { HnPost } from "../batch/types";
+import * as C from '../constant';
+import { DatabaseApi } from "./databaseApi";
+import { QPost, QPostId, UserId } from "./types";
+import { daysFromNow, internalAssertOne, lastSaturday, selectAttr, selectOne, selectOneAttr } from "./utils";
 
 export default class QPosts {
     db: DatabaseApi;
@@ -125,6 +125,33 @@ export default class QPosts {
                 mod_actions.value
             ORDER BY hot DESC
             LIMIT 1000`)
+            .then(selectAttr("id")) as Promise<QPostId[]>;
+    }
+
+
+    getHighlyDisputedPosts(): Promise<QPostId[]> {
+        const since = daysFromNow(-14);
+        return this.db.pool.query(
+            `SELECT qposts.id
+            FROM qposts
+                INNER JOIN disputes ON qposts.id = disputes.thing_id
+            WHERE qposts.created > $1
+            GROUP BY qposts.id
+            ORDER BY qposts.created DESC
+            LIMIT 1000`, [since])
+            .then(selectAttr("id")) as Promise<QPostId[]>;
+    }
+
+    getMiniModPosts(): Promise<QPostId[]> {
+        const since = daysFromNow(-14);
+        return this.db.pool.query(
+            `SELECT qposts.id
+            FROM qposts
+                INNER JOIN mini_mod_votes as mmv ON qposts.id = mmv.thing_id
+            WHERE qposts.created > $1
+            GROUP BY qposts.id
+            ORDER BY qposts.created DESC
+            LIMIT 1000`, [since])
             .then(selectAttr("id")) as Promise<QPostId[]>;
     }
 }

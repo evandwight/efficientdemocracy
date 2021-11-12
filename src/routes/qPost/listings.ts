@@ -97,3 +97,15 @@ export async function listFrozen(req, res) {
     const element = Posts({ posts, user, moreLink, offset, sortType: title, showCensored: true, ignoreFields: [] });
     reactRender(res, element, { title, includeVotesJs: true });
 }
+
+// Mod helpers
+
+export const listHighlyDisputed = renderList('routes-qpost-getHighlyDisputedPosts', async () => {
+    const postIds = await db.qPosts.getHighlyDisputedPosts();
+    return await addCommonExtrasToPost(postIds);
+}, { titleFunc: () => "Highly disputed posts", moreLinkBase: C.URLS.DISPUTED_QPOSTS, showCensored: true });
+
+export const listMiniMod = renderList('routes-qpost-getMiniModPosts', async () => {
+    const postIds = await db.qPosts.getMiniModPosts();
+    return await addCommonExtrasToPost(postIds);
+}, { titleFunc: () => "Mini mod posts", moreLinkBase: C.URLS.MINI_MOD_QPOSTS, showCensored: true });

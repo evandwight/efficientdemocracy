@@ -1,6 +1,6 @@
+import { selectOne, selectOneAttr } from '../db/utils';
 import { DatabaseApi } from "./databaseApi";
 import { ThingId, ThingType } from './types';
-import { retryOnceOnUniqueError, selectOne, selectOneAttr } from '../db/utils';
 
 export default class Things {
     db: DatabaseApi;

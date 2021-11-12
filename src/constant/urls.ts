@@ -1,16 +1,20 @@
 
 // QPosts
+export const QPOSTS_VIEW = "/qposts/view/";
+export const SUBMIT_QPOST_VOTE = "/submit/qpost-vote/";
+export const SUBMIT_QPOST = "/submit/qpost";
+export const SUBMIT_QPOST_DISPUTE = "/submit/qpost-dispute/";
+
+export const SORT = "/qposts/sort";
+export const PAST_NEWSLETTERS = "/qposts/past-newsletters";
+
 export const QPOSTS = "/hot-qposts";
 export const NEW_QPOSTS = "/new-qposts";
 export const DEEPLY_IMPORTANT_QPOSTS = "/deeply-important-qposts";
 export const TECHNICAL_QPOSTS = "/technical-and-hot";
 export const FROZEN_QPOSTS = "/frozen-qposts/";
-export const QPOSTS_VIEW = "/qposts/view/";
-export const SUBMIT_QPOST_VOTE = "/submit/qpost-vote/";
-export const SUBMIT_QPOST = "/submit/qpost";
-export const SUBMIT_QPOST_DISPUTE = "/submit/qpost-dispute/";
-export const SORT = "/qposts/sort";
-export const PAST_NEWSLETTERS = "/qposts/past-newsletters";
+export const DISPUTED_QPOSTS = "/highly-disputed-qposts";
+export const MINI_MOD_QPOSTS = "/mini-mod-qposts";
 
 // Samples
 export const SUBMIT_SAMPLE_VOTE = "/submit/sample-vote/";
