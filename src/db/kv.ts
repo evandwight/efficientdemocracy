@@ -1,5 +1,5 @@
 import { DatabaseApi} from "./databaseApi";
-import { existsOne, selectOneAttr } from "./utils";
+import { existsOne, selectAttr, selectOneAttr } from "./utils";
 
 export default class Kv {
     db: DatabaseApi;
@@ -21,5 +21,14 @@ export default class Kv {
             [key])
             .then(selectOneAttr('value'))
             .then(v => v.data);
+    }
+
+    selectPrefix(prefix) {
+        return this.db.pool.query(
+            `SELECT key FROM kv 
+            WHERE key LIKE $1
+            ORDER BY key DESC`,
+            [`${prefix}%`])
+            .then(selectAttr('key'));
     }
 }

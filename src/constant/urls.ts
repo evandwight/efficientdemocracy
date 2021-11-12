@@ -9,7 +9,8 @@ export const QPOSTS_VIEW = "/qposts/view/";
 export const SUBMIT_QPOST_VOTE = "/submit/qpost-vote/";
 export const SUBMIT_QPOST = "/submit/qpost";
 export const SUBMIT_QPOST_DISPUTE = "/submit/qpost-dispute/";
-export const SORT = "/sort";
+export const SORT = "/qposts/sort";
+export const PAST_NEWSLETTERS = "/qposts/past-newsletters";
 
 // Samples
 export const SUBMIT_SAMPLE_VOTE = "/submit/sample-vote/";

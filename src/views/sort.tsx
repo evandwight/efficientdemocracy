@@ -1,9 +1,7 @@
-import { reactRender } from '../views/utils';
-import React from 'react';
 import * as C from '../constant';
+import React from 'react';
 
-export const Sort = (req, res) => {
-    reactRender(res, <div className="highlight-links">
+export const Sort = () => <div className="highlight-links">
         <div>
             <a href={C.URLS.QPOSTS}>Hot</a> - newish, popular posts
         </div>
@@ -16,5 +14,7 @@ export const Sort = (req, res) => {
         <div>
             <a href={C.URLS.TECHNICAL_QPOSTS}>Technical and hot</a> - hot technical posts
         </div>
-    </div>, {title:"Sort posts"});
-}
+        <div>
+            <a href={C.URLS.PAST_NEWSLETTERS}>Past newsletters</a> - previous deeply important post newsletters
+        </div>
+    </div>

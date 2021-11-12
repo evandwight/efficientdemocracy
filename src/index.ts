@@ -80,7 +80,7 @@ function setup(db) {
                 next();
             }
         });
-    };
+    }
 
     // Parses details from a form
     app.use(express.urlencoded({ extended: false }));
@@ -130,7 +130,8 @@ function setup(db) {
 
 
     // Misc
-    router.get(C.URLS.SORT, Routes.Misc.Sort);
+    router.get(C.URLS.SORT, Routes.Misc.viewSorts);
+    router.get(C.URLS.PAST_NEWSLETTERS, Routes.Misc.viewPastNewsletters);
 
     // QPosts
     router.getAsync(C.URLS.QPOSTS + "/:page?", Routes.QPost.list);
