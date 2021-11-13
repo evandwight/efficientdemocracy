@@ -1,5 +1,5 @@
-import * as C from '../../constant';
 import React from 'react';
+import * as C from '../../constant';
 import { dateToTimeSince } from '../utils';
 
 

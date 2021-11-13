@@ -10,10 +10,13 @@ const element = () =>
             Currently not implemented.
         </p>
         <p>
-            Being actively involved takes time. For those who want their voice to be heard but not actively involved, they can designate a proxy to vote for them. Designated proxies are similar to an elected representative.
+            Being actively involved takes time. For those who want their voice to be heard but not actively involved, they can designate a proxy to vote for them. Proxies give the silent majority a voice.
         </p>
         <p>
-            To keep proxies voting aligned to the users who designated them we regularly sample the opinion of the designators and compare it to the voting record of their proxies. When the difference becomes too large, we ask our users to designate new proxies. Ideally, we'd only need to bother a small fraction of designators every quarter.
+            To keep proxies voting aligned to the users who designated them we regularly sample the opinion of the designators and compare it to the voting record of their proxies. When the difference becomes too large, we ask our users to designate new proxies. Ideally, we'd only need to bother a small fraction of designators every quarter.  It scales - the more users, the less work.
+        </p>
+        <p>
+            Proxies have an all-or-nothing problem. However, without them, your only choice is nothing.
         </p>
     </div>
 

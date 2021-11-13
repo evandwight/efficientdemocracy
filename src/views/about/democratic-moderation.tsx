@@ -15,7 +15,7 @@ const element = () =>
             <li><a href={C.URLS.ABOUT_ELECTED_MODERATORS}>Elected moderators</a> - first line of defense that allows for timely action and prevents a flood of requests on the community's time. Every decision can be disputed to trigger a sample or even a referendum.</li>
         </ul>
         <p>
-            To remove the bias towards active users - those willing to answer a few questions a week - we allow a <a href={C.URLS.ABOUT_DESIGNATED_PROXY}>designated proxy</a> to particpate on your behalf.
+            To remove the bias towards active users we allow a <a href={C.URLS.ABOUT_DESIGNATED_PROXY}>designated proxy</a> to particpate on your behalf.
         </p>
     </div>
 
