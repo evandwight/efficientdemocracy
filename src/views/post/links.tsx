@@ -36,7 +36,7 @@ export const MiniModActions = ({isMiniMod, id}) =>
     <MaybeLink maybe={isMiniMod} href={C.URLS.QPOSTS_MINI_MOD_ACTIONS + id}>mini mod actions</MaybeLink>
 
 export const MaybeLink = ({maybe, href, children}: {maybe: boolean, href: string, children: string}) => 
-    maybe && <span> | <a className="whitespace-nowrap" href={href}>{children}</a></span>
+    maybe ? <span> | <a className="whitespace-nowrap" href={href}>{children}</a></span> : <></>;
 
 export const DisputeLink = ({ post, field }) =>
     <a className="onclick-post" href={`${C.URLS.SUBMIT_QPOST_DISPUTE}${post.id}/${field}/${!post.censor}`}>
