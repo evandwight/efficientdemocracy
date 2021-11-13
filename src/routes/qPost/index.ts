@@ -3,7 +3,7 @@ import * as C from '../../constant';
 import db from '../../db/databaseApi';
 import DemocraticModerationService from '../../services/democraticModerationService';
 import { reactRender } from '../../views/utils';
-import { ViewPost } from '../../views/viewPost';
+import { ViewPost } from '../../views/post/viewPost';
 import { validationAssert } from '../utils';
 import { addCommonExtrasToPost, addVotes } from "./utils";
 export * from './listings';

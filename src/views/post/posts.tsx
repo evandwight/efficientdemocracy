@@ -1,8 +1,7 @@
-import * as C from "../constant";
 import React from "react";
-import { DownVoteButton, Fields, HackerCommentsLink, UpVoteButton } from "./viewPost";
-import { QPost, User } from "../db/types";
-import { dateToTimeSince } from "./utils";
+import * as C from "../../constant";
+import { QPost, User } from "../../db/types";
+import { DownVoteButton, Fields, HnComments, MaybeLink, MiniModActions, ModActions, PostUrl, TimeSince, UpVoteButton, UserName } from "./links";
 
 const SortHeader = ({sortType}) =>
     <div>
@@ -45,12 +44,13 @@ export const Post = ({ post, i, user, ignoreFields}: { post: QPost, i: number, u
                 {post.censor ? "[Censored]" : post.title}
             </div>
             <div className="gray-500">
-                by {post.user_name}, {dateToTimeSince(post.created)}
-                {!!post.url && <span> | <a href={post.url}>link</a></span>}
-                {!!post.hackernews_id && <span> | <HackerCommentsLink id={post.hackernews_id} /></span>}
-                <span> | <a href={C.URLS.QPOSTS_VIEW + post.id}>more-info</a></span>
-                {!!user?.is_mod && <span> | <a href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>mod-actions</a></span>}
-                {!!user?.is_mini_mod && <span> | <a href={C.URLS.QPOSTS_MINI_MOD_ACTIONS + post.id}>mini-mod-actions</a></span>}
+                <UserName name={post.user_name}/>
+                <TimeSince created={post.created}/>
+                <PostUrl url={post.url}/>
+                <HnComments hnId={post.hackernews_id}/>
+                <MaybeLink maybe={true} href={C.URLS.QPOSTS_VIEW + post.id}>more info</MaybeLink>
+                <ModActions isMod={user?.is_mod} id={post.id}/>
+                <MiniModActions isMiniMod={user?.is_mini_mod} id={post.id}/>
             </div>
             {hasInterestingFields(post, ignoreFields) &&
                 <div className="gray-500">

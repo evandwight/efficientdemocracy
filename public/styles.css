@@ -10,6 +10,10 @@
     -webkit-mask: url(/public/icons/caret-down.svg) no-repeat top center / contain;
 }
 
+.whitespace-nowrap {
+    white-space: nowrap;
+}
+
 .vote-inactive {
     background-color: #6B7280;
 }

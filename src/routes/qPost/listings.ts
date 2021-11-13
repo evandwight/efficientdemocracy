@@ -4,7 +4,7 @@ import * as C from '../../constant';
 import { CachedDB } from '../../db/cachedDb';
 import db from '../../db/databaseApi';
 import { lastSaturday } from '../../db/utils';
-import { Posts } from '../../views/posts';
+import { Posts } from '../../views/post/posts';
 import { reactRender } from '../../views/utils';
 import { validationAssert } from '../utils';
 import { addCommonExtrasToPost, addVotes } from './utils';

@@ -1,5 +1,5 @@
 import React from 'react';
-import * as C from '../constant';
+import * as C from '../../constant';
 
 const prettyStrikesName = {
   'strike_ups': "up voters",

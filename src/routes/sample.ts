@@ -1,7 +1,7 @@
 import { reactRender } from '../views/utils';
 import validator from 'validator';
-import { ViewSampleResult } from '../views/viewSampleResult';
-import { ViewSamples } from '../views/viewSamples';
+import { ViewSampleResult } from '../views/post/viewSampleResult';
+import { ViewSamples } from '../views/post/viewSamples';
 import DemocraticModerationService from '../services/democraticModerationService';
 import { formToStrikes, validationAssert } from './utils';
 import { sum } from '../utils/counts';

@@ -84,6 +84,8 @@ export const BLOG_PARALLEL_DATABASE_TESTS = "/blog/post/parallel-database-tests"
 
 export const DISCORD = "https://discord.gg/7dSc2AA3C4";
 
+export const HN_COMMENT = "https://news.ycombinator.com/item?id=";
+
 // Auth
 export const AUTH_LOCAL = "/auth/local";
 export const AUTH_GOOGLE = "/auth/google";

@@ -1,7 +1,6 @@
 import React from "react";
 import * as C from "../constant";
 import { QPost } from "../db/types";
-import { HackerCommentsLink } from "../views/viewPost";
 
 type propsType = {
     posts: QPost[],
@@ -31,7 +30,9 @@ export function Newsletter({posts, postsLink, unsubscribeLink}: propsType) {
                             <li>
                                 by {post.user_name}, {dateToStr(post.created)}
                                 {!!post.url && <span> | <a href={post.url}>link</a></span>}
-                                {!!post.hackernews_id && <span> | <HackerCommentsLink id={post.hackernews_id}/></span>}
+                                {!!post.hackernews_id && <span> | <a href={C.URLS.HN_COMMENT + post.hackernews_id}>
+                                        hn comments
+                                    </a></span>}
                                 <span> | <a href={BASE_URL + C.URLS.QPOSTS_VIEW + post.id}>more info</a></span>
                             </li>
                         </ul>

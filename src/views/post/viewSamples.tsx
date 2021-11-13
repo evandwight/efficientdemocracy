@@ -1,6 +1,6 @@
 
 import React from 'react';
-import * as C from '../constant';
+import * as C from '../../constant';
 import { stringifyResult } from './viewSampleResult';
 
 // TODO separate each field into it's own section, currently they are just grouped by sql sorting field, type.
