@@ -20,7 +20,7 @@ const Element = () =>
             Efficient Democracy converts endless scrolling to a weekly newsletter of just the important stories. No more addiction. Only the news you need.
         </p>
         <p>
-            Instead of using your similarity to others to maximize engagement, we use it to curate your news. If your peers mark it as important, so do we. We crowdsource curation, so you do not have to do it alone.
+            Instead of using your similarity to others to find what engages you. We use it to curate your news. If your peers mark it as important, so do we. We crowdsource curation; you do not have to do it alone.
         </p>
         <p>
             Scroll less; feel better.
@@ -28,14 +28,11 @@ const Element = () =>
         <p>
             Are you interested in trying it out? <a href={SIGNUP}>Sign up</a>!
         </p>
-        <h3>How do we decide what is important?</h3>
+        <h3>How do you decide what is important?</h3>
         <p>
             To decide the importance of a post, we estimate the result of a referendum on “is this post important?”
         </p>
-        <p>
-            To categorize the tsunami of posts we made estimating a referendum efficient and accurate.
-        </p>
-        <h3>But how?</h3>
+        <h3>But do you estimate a referendum efficiently enough to handle the tsunami of posts?</h3>
         <p>
             We use elected moderators to efficiently categorize posts.
         </p>

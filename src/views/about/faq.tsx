@@ -28,6 +28,10 @@ const element = () =>
         <p>
             We will not show real identities publicly. Publicly there is only a changeable pseudonym.
         </p>
+        <p><b>Why a centralized service?</b></p>
+        <p>
+            Centralized services are easier to write. Even federated services have a problem with centralization - I have to pay amazon to send an email! In the future, I hope to decentralize certain aspects.
+        </p>
     </div>
 
 export const Faq = { title, element, url: C.URLS.ABOUT_FAQ };
