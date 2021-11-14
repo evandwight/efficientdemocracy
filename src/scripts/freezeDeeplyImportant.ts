@@ -5,7 +5,7 @@ import { assert } from "console";
 
 
 export async function run(start, end) {
-    const key = `deeply-important-${dateToStr(start)}-to-${dateToStr(end)}`;
+    const key = `deeply-important-${dateToSortableStr(start)}-to-${dateToSortableStr(end)}`;
     console.log(`Saving posts to ${key}`);
     const posts = await getPosts(start, end);
     const success = await db.kv.set(key, posts);   
@@ -24,8 +24,10 @@ async function getPosts(start, end) {
         ORDER BY created DESC`,[start, end]).then(selectAttr("id"));
 }
 
-function dateToStr(date) {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+export function dateToSortableStr(date) {
+    const monthStr = String(date.getMonth() + 1).padStart(2, '0');
+    const dayStr = String(date.getDate()).padStart(2, '0');
+    return `${date.getFullYear()}-${monthStr}-${dayStr}`;
 }
 
 if (require.main === module) {
