@@ -11,16 +11,16 @@ const Element = () =>
             Community curated news: keep up to date with hacker news in less time.
         </p>
         <p>
-            Times have changed. What was once scarce is now abundant. A flood of information warps our perspective. Hacker News rewards our curiousity but addicts us to it's infinite feed.
+            Times have changed. What was once scarce is now abundant. A flood of information warps our perspective. Hacker News rewards our curiosity but addicts us to its infinite feed.
         </p>
-        <p>
+        <p style={{ color: "lightgrey" }}>
             TODO: gif of person at slot machine. lever is labled scroll. poop poop poop diamond!
         </p>
-        <p> 
+        <p>
             Efficient Democracy converts endless scrolling to a weekly newsletter of just the important stories. No more addiction. Only the news you need.
         </p>
         <p>
-            Instead of using your similarity to others to find what engages you. We use it to curate your news. If your peers mark it as important, so do we. We crowdsource curation; you do not have to do it alone.
+            They use your similarity to others to find what engages you. Instead, we use it to curate your news. If your peers mark it as important, so do we. We crowdsource curation; you do not have to do it alone.
         </p>
         <p>
             Scroll less; feel better.
@@ -36,25 +36,25 @@ const Element = () =>
         <p>
             We use elected moderators to efficiently categorize posts.
         </p>
-        <p>
+        <p style={{ color: "lightgrey" }}>
             TODO: cartoon of mods sorting through the poop/diamonds the active horde has brought them
         </p>
         <p>
             Then we correct mistakes by using a statistical sample or referendum on highly disputed categorizations. The efficient corrected by the accurate.
         </p>
-        <p>
+        <p style={{ color: "lightgrey" }}>
             TODO: cartoon of horde saying this ones are wrong standing around a poop labeled diamon. Below a big jury (statistical sample) switches it's label.
         </p>
         <p>
             Keep your information diet healthy without the work. <a href={SIGNUP}>Sign up</a>!
         </p>
-        <p>
+        <p style={{ color: "lightgrey" }}>
             TODO: picture of list of posts thats mostly diamonds and ends. Diamonds and done!
         </p>
-        <h3>Don't have time to particpate?</h3>
+        <h3>Do you not have time to participate?</h3>
         <p>
-            Designate a proxy to particpate for you! We remove the bias towards those with excess time and interest by allowing you to designate a proxy.
-        </p> 
+            Designate a proxy to participate for you! We remove the bias favoring those with excess time or interest by allowing you to designate a proxy.
+        </p>
         <p>
             Take back the power! <a href={SIGNUP}>Sign up</a> and have your voice heard!
         </p>
@@ -86,17 +86,17 @@ const Element = () =>
             </li>
         </ul>
         <p>
-            We don't need big tech monoplies to control speech. We can build communities that moderate themselves. Communities where the loudest do not control the conversation[22].
+            We do not need big tech monopolies to control speech. We can build communities that moderate themselves. We can build communities where the loudest do not control the conversation[22].
         </p>
         <p>
-            To learn more read how it works [55] or <a href={SIGNUP}>sign up</a> and try it out!
+            To learn more, read how it works [55] or <a href={SIGNUP}>sign up</a> and try it out!
         </p>
         <h3>Limited sign ups</h3>
         <p>
-            <a href={SIGNUP}>Sign ups</a> have been limited to prevent unexpected performance degredation. If you’ve already signed up, then don’t <a href={SIGNUP}>sign up</a>!
+            <a href={SIGNUP}>Sign ups</a> are limited to prevent unexpected performance degradation. If you have already signed up, then do not <a href={SIGNUP}>sign up</a>!
         </p>
         <code>
-{`const users = await CachedDB.getUsers();
+            {`const users = await CachedDB.getUsers();
 const enableRegister = users.length < 1000;
 ...`}
         </code>
@@ -107,4 +107,4 @@ const enableRegister = users.length < 1000;
         </ul>
     </div>
 
-export const WhatIsThis = { title, element:Element, url: C.URLS.ABOUT_WHAT_IS_THIS };
+export const WhatIsThis = { title, element: Element, url: C.URLS.ABOUT_WHAT_IS_THIS };
