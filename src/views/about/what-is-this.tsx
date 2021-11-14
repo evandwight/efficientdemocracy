@@ -11,7 +11,7 @@ const Element = () =>
             Community curated news: keep up to date with hacker news in less time.
         </p>
         <p>
-            Times have changed. What was once scarce is now abundant. A flood of information warps our perspective. Hacker News rewards our curiosity but addicts us to its infinite feed.
+            Times have changed. The scarce has become abundant. Hacker News provides all the interesting information you could hope for. However, it addicts you to the search.
         </p>
         <p style={{ color: "lightgrey" }}>
             TODO: gif of person at slot machine. lever is labled scroll. poop poop poop diamond!
@@ -20,7 +20,7 @@ const Element = () =>
             Efficient Democracy converts endless scrolling to a weekly newsletter of just the important stories. No more addiction. Only the news you need.
         </p>
         <p>
-            They use your similarity to others to find what engages you. Instead, we use it to curate your news. If your peers mark it as important, so do we. We crowdsource curation; you do not have to do it alone.
+            They use your similarity to others to find what engages you. Instead, we use it to curate your news. If your peers marks it as important, so do we. We crowdsource curation; you do not have to do it alone.
         </p>
         <p>
             Scroll less; feel better.
@@ -28,13 +28,13 @@ const Element = () =>
         <p>
             Are you interested in trying it out? <a href={SIGNUP}>Sign up</a>!
         </p>
-        <h3>How do you decide what is important?</h3>
+        <h3>How do we decide importance?</h3>
         <p>
             To decide the importance of a post, we estimate the result of a referendum on “is this post important?”
         </p>
-        <h3>But do you estimate a referendum efficiently enough to handle the tsunami of posts?</h3>
+        <h3>But referendums can't handle the tsunami of posts!</h3>
         <p>
-            We use elected moderators to efficiently categorize posts.
+            We make estimating a referendum efficient. First, we use elected moderators to quickly categorize posts.
         </p>
         <p style={{ color: "lightgrey" }}>
             TODO: cartoon of mods sorting through the poop/diamonds the active horde has brought them
@@ -51,9 +51,9 @@ const Element = () =>
         <p style={{ color: "lightgrey" }}>
             TODO: picture of list of posts thats mostly diamonds and ends. Diamonds and done!
         </p>
-        <h3>Do you not have time to participate?</h3>
+        <h3>No time to participate?</h3>
         <p>
-            Designate a proxy to participate for you! We remove the bias favoring those with excess time or interest by allowing you to designate a proxy.
+            You can designate a proxy to participate for you! Proxies improve communities by not favoring those with more time or more interest.
         </p>
         <p>
             Take back the power! <a href={SIGNUP}>Sign up</a> and have your voice heard!
@@ -86,7 +86,7 @@ const Element = () =>
             </li>
         </ul>
         <p>
-            We do not need big tech monopolies to control speech. We can build communities that moderate themselves. We can build communities where the loudest do not control the conversation[22].
+            We do not need big tech monopolies to control speech. We can build communities that moderate themselves, communities where the loudest do not control the conversation[22].
         </p>
         <p>
             To learn more, read how it works [55] or <a href={SIGNUP}>sign up</a> and try it out!
