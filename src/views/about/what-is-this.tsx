@@ -8,13 +8,13 @@ const Element = () =>
     <div>
         <h2>{title}</h2>
         <p>
-            Community curated news: keep up to date with hacker news in less time.
+            Community curated news: keep up to date with hacker news without going down the rabbit hole.
         </p>
         <p>
-            Times have changed. The scarce has become abundant. Hacker News provides all the interesting information you could hope for. However, it addicts you to the search.
+            Hacker news brings you the most engaging stories on the internet and then keeps going. It doesn't know when to stop. You keep reading hoping the next comment will answer all your questions, but usually it just makes you angry.
         </p>
         <p style={{ color: "lightgrey" }}>
-            TODO: gif of person at slot machine. lever is labled scroll. poop poop poop diamond!
+            TODO: gif of person at slot machine. lever is labeled scroll. Wins: poop, then angry-poop, then poop, finally diamond!
         </p>
         <p>
             Efficient Democracy converts endless scrolling to a weekly newsletter of just the important stories. No more addiction. Only the news you need.
