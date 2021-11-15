@@ -11,16 +11,13 @@ const Element = () =>
             Community curated news: keep up to date with hacker news without going down the rabbit hole.
         </p>
         <p>
-            Hacker news brings you the most engaging stories on the internet and then keeps going. It doesn't know when to stop. You keep reading hoping the next comment will answer all your questions, but usually it just makes you angry.
-        </p>
-        <p style={{ color: "lightgrey" }}>
-            TODO: gif of person at slot machine. lever is labeled scroll. Wins: poop, then angry-poop, then poop, finally diamond!
+            Hacker news brings you the most engaging stories on the internet, but it doesn't know when to stop. You keep reading hoping the next comment will answer all your questions. Usually, it just makes you angry.
         </p>
         <p>
             Efficient Democracy converts endless scrolling to a weekly newsletter of just the important stories. No more addiction. Only the news you need.
         </p>
         <p>
-            They use your similarity to others to find what engages you. Instead, we use it to curate your news. If your peers marks it as important, so do we. We crowdsource curation; you do not have to do it alone.
+            They use your similarity to others to find what engages you. Instead, we use it to curate your news. If your peers marks it as important, so do we. We crowdsource curation, so you do not have to do it alone.
         </p>
         <p>
             Scroll less; feel better.
@@ -32,24 +29,18 @@ const Element = () =>
         <p>
             To decide the importance of a post, we estimate the result of a referendum on “is this post important?”
         </p>
+        <p>
+            It's that simple!
+        </p>
         <h3>But referendums can't handle the tsunami of posts!</h3>
         <p>
             We make estimating a referendum efficient. First, we use elected moderators to quickly categorize posts.
         </p>
-        <p style={{ color: "lightgrey" }}>
-            TODO: cartoon of mods sorting through the poop/diamonds the active horde has brought them
+        <p>
+            Then we correct mistakes by using a statistical sample or referendum on highly disputed categorizations. The efficient corrected by the accurate. [55]
         </p>
         <p>
-            Then we correct mistakes by using a statistical sample or referendum on highly disputed categorizations. The efficient corrected by the accurate.
-        </p>
-        <p style={{ color: "lightgrey" }}>
-            TODO: cartoon of horde saying this ones are wrong standing around a poop labeled diamon. Below a big jury (statistical sample) switches it's label.
-        </p>
-        <p>
-            Keep your information diet healthy without the work. <a href={SIGNUP}>Sign up</a>!
-        </p>
-        <p style={{ color: "lightgrey" }}>
-            TODO: picture of list of posts thats mostly diamonds and ends. Diamonds and done!
+            Want a community run by the community? Then <a href={SIGNUP}>sign up</a>!
         </p>
         <h3>No time to participate?</h3>
         <p>
@@ -63,7 +54,7 @@ const Element = () =>
             With the power to estimate referendums, we can make decisions based on how groups think. For example:
         </p>
         <ul>
-            <li>How people feel about posts:
+            <li>How do people feel about posts:
                 <ul>
                     <li>Is this post important? </li>
                     <li>Is it misleading?</li>
@@ -71,14 +62,14 @@ const Element = () =>
                     <li>Retrospectively, was this post important?</li>
                 </ul>
             </li>
-            <li>How people feel about anything:
+            <li>How do people feel about anything:
                 <ul>
                     <li>Is this person an expert in physics?</li>
                     <li>Should this rule exist? </li>
                     <li>Should we quarantine that community?</li>
                 </ul>
             </li>
-            <li>How experts feel about anything:
+            <li>How do experts feel about anything:
                 <ul>
                     <li>Will this study reproduce? </li>
                     <li>Is this accurate?</li>
@@ -89,7 +80,7 @@ const Element = () =>
             We do not need big tech monopolies to control speech. We can build communities that moderate themselves, communities where the loudest do not control the conversation[22].
         </p>
         <p>
-            To learn more, read how it works [55] or <a href={SIGNUP}>sign up</a> and try it out!
+            To learn more, read how it works [55] or <a href={SIGNUP}>try it out</a>!
         </p>
         <h3>Limited sign ups</h3>
         <p>
