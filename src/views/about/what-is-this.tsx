@@ -22,9 +22,6 @@ const Element = () =>
         <p>
             Scroll less; feel better.
         </p>
-        <p>
-            Are you interested in trying it out? <a href={SIGNUP}>Sign up</a>!
-        </p>
         <h3>How do we decide importance?</h3>
         <p>
             To decide the importance of a post, we estimate the result of a referendum on “is this post important?”
@@ -40,14 +37,14 @@ const Element = () =>
             Then we correct mistakes by using a statistical sample or referendum on highly disputed categorizations. The efficient corrected by the accurate. [55]
         </p>
         <p>
-            Want a community run by the community? Then <a href={SIGNUP}>sign up</a>!
+            Want a community run by the community? <a href={SIGNUP}>Sign up</a>!
         </p>
         <h3>No time to participate?</h3>
         <p>
             You can designate a proxy to participate for you! Proxies improve communities by not favoring those with more time or more interest.
         </p>
         <p>
-            Take back the power! <a href={SIGNUP}>Sign up</a> and have your voice heard!
+            Take back the power and have your voice heard!
         </p>
         <h3>What else can it do?</h3>
         <p>
@@ -80,11 +77,11 @@ const Element = () =>
             We do not need big tech monopolies to control speech. We can build communities that moderate themselves, communities where the loudest do not control the conversation[22].
         </p>
         <p>
-            To learn more, read how it works [55] or <a href={SIGNUP}>try it out</a>!
+            To learn more, read how it works [55]!
         </p>
         <h3>Limited sign ups</h3>
         <p>
-            <a href={SIGNUP}>Sign ups</a> are limited to prevent unexpected performance degradation. If you have already signed up, then do not <a href={SIGNUP}>sign up</a>!
+            Sign ups are limited to prevent unexpected performance degradation. If you have already signed up, then do not <a href={SIGNUP}>sign up</a>!
         </p>
         <code>
             {`const users = await CachedDB.getUsers();
