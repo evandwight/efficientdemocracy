@@ -36,7 +36,7 @@ const element = () =>
         <div id="fake-accounts">
             <h4>How do we stop fake accounts?</h4>
             <p>
-                Once fake accounts become a problem, we will verify identities for all new accounts[11]. Depending on the severity of the problem, we may mail one-time codes to verify addresses.
+                Once fake accounts become a problem, we will verify identities for all new accounts. Depending on the severity of the problem, we may mail one-time codes to verify addresses.
             </p>
             <p>
                 We will not show real identities publicly. Publicly there is only a changeable pseudonym.
