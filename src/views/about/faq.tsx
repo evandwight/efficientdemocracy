@@ -45,7 +45,7 @@ const element = () =>
         <div id="federation">
             <h4>Why a centralized service?</h4>
             <p>
-                Centralized services are easier to write. Even federated services have a problem with centralization - I have to pay amazon to send an email! In the future, I hope to decentralize certain aspects.
+                Centralized services are easier to write. Even federated services have a problem with centralization - we have to pay amazon to send an email! In the future, we hope to decentralize certain aspects.
             </p>
         </div>
     </div>
