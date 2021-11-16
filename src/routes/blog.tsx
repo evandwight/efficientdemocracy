@@ -31,5 +31,6 @@ export const index = (req, res) => {
 }
 
 export const getRssXml = (req, res) => {
+    res.setHeader('content-type', 'application/xml');
     res.send(cachedRssXml);
 }
