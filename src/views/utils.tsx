@@ -4,6 +4,7 @@ import ReactDOMServer from 'react-dom/server';
 import {Header} from "./header";
 import {Footer} from "./footer";
 import {Page as AboutHeader} from "./about/header";
+import * as C from '../constant';
 
 type reactRenderOptions = {
     title?: string, 
@@ -14,6 +15,7 @@ type reactRenderOptions = {
     includeScript?: string,
     includeRegisterJs?: boolean,
     cspNonce?: string,
+    includeBlogRssHint?: boolean,
 }
 
 export const DefaultWrapper = (props: {showLogin, user, csrfToken, children}) => 
@@ -40,7 +42,8 @@ export const reactRender = (res, element, options?: reactRenderOptions) => {
 }
 
 
-export const reactAboutRender = (res, element: JSX.Element, title: string, includeScript?: string) => {
+export const reactAboutRender = (res, element: JSX.Element, options?: reactRenderOptions) => {
+    options = options || {};
     const innerHtml = ReactDOMServer.renderToStaticMarkup(
         <div>
             <AboutHeader />
@@ -49,10 +52,6 @@ export const reactAboutRender = (res, element: JSX.Element, title: string, inclu
             </div>
             <Footer/>
         </div>);
-    const options = {
-        title,
-        includeScript,
-    }
     res.send(HtmlBoilerPlate(innerHtml, res.locals.csrfToken, options));
 }
 
@@ -92,6 +91,7 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
         includeScript = false,
         includeRegisterJs = false,
         cspNonce = null,
+        includeBlogRssHint = false,
     } = options;
     // csrfToken is for client side api calls via axios
     // <script>0</script> for firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
@@ -103,6 +103,9 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    ${includeBlogRssHint 
+        ? `<link rel="alternate" type="application/atom+xml" title="RSS" href="${C.URLS.BASE_URL + C.URLS.BLOG_FEED}" />`
+        : ""}
 
     ${includeVotesJs 
         ? `<script src="/public/axios.min.js"></script>

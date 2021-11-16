@@ -1,7 +1,7 @@
-import {reactAboutRender} from '../views/utils';
+import { reactAboutRender } from '../views/utils';
 
 export const renderAbout = (view, title) => {
     return (req, res) => {
-        reactAboutRender(res, view(), title);
+        reactAboutRender(res, view(), { title });
     }
-} 
+}

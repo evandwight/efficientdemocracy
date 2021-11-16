@@ -13,7 +13,7 @@ export function rssXmlBoilerPlate(entries: BlogEntry[]) {
     <lastBuildDate>${lastModified}</lastBuildDate>
     <pubDate>${new Date(2021, 10, 16).toUTCString()}</pubDate>
     <ttl>1440</ttl>
-    <atom:link href="${C.URLS.BASE_URL + C.URLS.BLOG_FEED}" rel="self" type="application/rss+xml" />
+    <atom:link href="${C.URLS.BASE_URL + C.URLS.BLOG_FEED}" rel="self" type="application/atom+xml" />
 
 ${entries.map(rssItem).join("\n")}
 
