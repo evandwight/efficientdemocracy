@@ -201,6 +201,7 @@ function setup(db) {
     Object.values(About).forEach(e => router.get(e.url, renderAbout(e.element, e.title)));
 
     // Blog
+    router.get(C.URLS.BLOG_FEED, Routes.Blog.getRssXml);
     router.get(C.URLS.BLOG + "(/:page)?", Routes.Blog.index);
     Object.values(BlogEntries).forEach(entry => router.get(entry.url, renderBlog(entry)));
 

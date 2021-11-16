@@ -7,7 +7,6 @@ type propsType = {
     postsLink: string,
     unsubscribeLink:string,
 }
-const BASE_URL = "https://efficientdemocracy.com";
 
 export function dateToStr(date) {
     return `${date.toLocaleDateString('en-US',{weekday: 'short'})} ${dateOrdinal(date.getDate())}`;
@@ -33,7 +32,7 @@ export function Newsletter({posts, postsLink, unsubscribeLink}: propsType) {
                                 {!!post.hackernews_id && <span> | <a href={C.URLS.HN_COMMENT + post.hackernews_id}>
                                         hn comments
                                     </a></span>}
-                                <span> | <a href={BASE_URL + C.URLS.QPOSTS_VIEW + post.id}>more info</a></span>
+                                <span> | <a href={C.URLS.BASE_URL + C.URLS.QPOSTS_VIEW + post.id}>more info</a></span>
                             </li>
                         </ul>
                     </li>)}

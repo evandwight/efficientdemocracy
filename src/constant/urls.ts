@@ -73,6 +73,7 @@ export const ABOUT_COSTS = ABOUT + "costs";
 export const ABOUT_HOW_WE_ARE_DIFFERENT = ABOUT + "how-we-are-different";
 
 export const BLOG = "/blog";
+export const BLOG_FEED = "/feed";
 export const BLOG_REACT_STATIC_RENDER = "/blog/post/react-static-render";
 export const BLOG_JEST_SERIAL_CODE_COVERAGE = "/blog/post/jest-serial-code-coverage";
 export const BLOG_CSP_INLINE_SCRIPT = "/blog/post/csp-inline-script";
@@ -85,6 +86,7 @@ export const BLOG_PARALLEL_DATABASE_TESTS = "/blog/post/parallel-database-tests"
 export const DISCORD = "https://discord.gg/7dSc2AA3C4";
 
 export const HN_COMMENT = "https://news.ycombinator.com/item?id=";
+export const BASE_URL = "https://efficientdemocracy.com";
 
 // Auth
 export const AUTH_LOCAL = "/auth/local";

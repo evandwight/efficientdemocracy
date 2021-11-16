@@ -55,8 +55,8 @@ function html(element) {
 
 
 function newsletterJson({user, key, posts}) {
-    const postsLink = `https://efficientdemocracy.com${C.URLS.FROZEN_QPOSTS}${key}`;
-    const unsubscribeLink = `https://efficientdemocracy.com${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`;
+    const postsLink = `${C.URLS.BASE_URL}${C.URLS.FROZEN_QPOSTS}${key}`;
+    const unsubscribeLink = `${C.URLS.BASE_URL}${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`;
 
     return {
         to: user.email,

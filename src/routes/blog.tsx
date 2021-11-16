@@ -1,6 +1,7 @@
 import {reactAboutRender} from '../views/utils';
 import {BlogPage, BlogEntries} from '../views/blog';
 import type {BlogEntry} from '../views/blog/blogEntry';
+import {rssXmlBoilerPlate} from '../views/blog/rss';
 
 // TODO https://guides.github.com/features/mastering-markdown/#what
 // https://www.npmjs.com/package/markdown-it
@@ -14,6 +15,7 @@ export const renderBlog = (page: BlogEntry) => {
 
 let blogEntries = Object.values(BlogEntries);
 blogEntries.sort((a,b) => b.created.getTime() - a.created.getTime());
+const cachedRssXml = rssXmlBoilerPlate(blogEntries);
 
 export const index = (req, res) => {
     const page = req.params.page ? parseInt(req.params.page) : 0;
@@ -26,4 +28,8 @@ export const index = (req, res) => {
     const showNext = ((page + 1) * entriesPerPage) < entries.length;
     const title = (page > 0 ? "Blog " + page : "Blog");
     reactAboutRender(res, BlogPage({entries:pageEntries, page, showNext}), title);
+}
+
+export const getRssXml = (req, res) => {
+    res.send(cachedRssXml);
 }
