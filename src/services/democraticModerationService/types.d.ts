@@ -5,3 +5,15 @@ export type StrikesInfo = {
     strikePoster: boolean,
     strikeDisputers: boolean,
 }
+
+type StrikeVoteSummary = {
+    strike_ups: number,
+    strike_downs: number,
+    strike_poster: number,
+}
+
+export type MiniModVoteSummary = {
+        vote: number,
+        true: StrikeVoteSummary,
+        false: StrikeVoteSummary,
+}

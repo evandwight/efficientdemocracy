@@ -28,7 +28,7 @@ export function countsToSummary(counts) {
     return {
         vote: df.filter({'vote': true}).stat.sum('ncount'),
         true: computeStrikes(df.filter({'vote': true}), STRIKE_COLUMNS),
-        false: computeStrikes(df.filter({'vote': true}), STRIKE_COLUMNS),
+        false: computeStrikes(df.filter({'vote': false}), STRIKE_COLUMNS),
     }
 }
 
@@ -42,11 +42,9 @@ export async function maybeUpdateModActionForMiniMod({thingId, field}) {
     if (modAction.priority > C.MOD_ACTIONS.PRIORTY.MINI_MOD) {
         return false;
     }
-
+    
     const counts = await MiniModVotes.countVotes({thingId, field});
-    console.log(counts);
-    const summary = countsToSummary(counts);
-    console.log({summary});
+    const summary =  countsToSummary(counts);
     if (summary === null) {
         return false;
     }

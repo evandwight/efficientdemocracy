@@ -145,14 +145,13 @@ function setup(db) {
 
     router.getAsync(C.URLS.QPOSTS_VIEW + ":id", Routes.QPost.viewPost);
     router.postAsync(C.URLS.SUBMIT_QPOST_VOTE + ":postId/:vote", [assertAuthenticated401, assertNotBanned403], Routes.QPost.submitVote);
+    router.getAsync(C.URLS.QPOSTS_VIEW_MOD_ACTION + ":id/:field", Routes.QPost.viewPostModAction);
 
     router.postAsync(C.URLS.SUBMIT_QPOST_DISPUTE + ":postId/:field/:should_be", [assertAuthenticated401, assertNotBanned403], Routes.QPost.submitDispute);
 
 
     // Samples
     router.postAsync(C.URLS.SUBMIT_SAMPLE_VOTE + ":sampleId", assertAuthenticated, Routes.Sample.submitSampleVote);
-    router.getAsync(C.URLS.VIEW_SAMPLES + ":thingId", Routes.Sample.viewSamples);
-    router.getAsync(C.URLS.VIEW_SAMPLE_RESULT + ":sampleId", Routes.Sample.viewSampleResult);
 
     // ModVote
     router.getAsync(C.URLS.VIEW_MOD_VOTE, assertAuthenticated, Routes.ModVote.viewModVote);

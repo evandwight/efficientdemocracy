@@ -1,14 +1,15 @@
 import type { Sample, SampleId, ThingId, UserId } from '../../db/types';
-import type { StrikesInfo } from './types';
-import * as SampleApi from './sample';
+import MiniModVotes from './db/miniModVotes';
+import ModActions from './db/modActions';
+import ModVotes from './db/modVotes';
 import Samples from './db/samples';
 import Strikes from './db/strikes';
-import ModActions from './db/modActions';
 import { submitDispute } from './disputes';
-import { createModAction, getFields } from './modActions';
-import ModVotes from './db/modVotes';
-import { getMod, updateMod } from './modVotes';
 import { getMiniModVotes, miniModVote } from './miniModVotes';
+import { createModAction, getFields } from './modActions';
+import { getMod, updateMod } from './modVotes';
+import * as SampleApi from './sample';
+import type { StrikesInfo } from './types';
 
 class DemocraticModerationService {
     // Disputes
@@ -50,7 +51,9 @@ class DemocraticModerationService {
     static countModVotes: () => Promise<{vote:UserId, user_name:string, count:number}[]> = ModVotes.countVotes;
 
     // Mini mods
-    static getMiniModVotes: (args: {thingId: ThingId, userId: UserId}) => Promise<{any}> = getMiniModVotes;
+    static getMiniModVotes: (args: {thingId: ThingId, userId: UserId}) => Promise<any> = getMiniModVotes;
+    static getMiniModVoteCount: (args: {thingId: ThingId, field: string}) => Promise<any> 
+        = MiniModVotes.countVotes;
     static miniModVote: (args: {
         thingId: ThingId,
         field: string,

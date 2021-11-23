@@ -9,7 +9,7 @@
     "prestart": "npm run build",
     "start": "npm run juststart",
     "juststart": "node --enable-source-maps dist/index.js",
-    "test": "node --async-stack-traces node_modules/.bin/jest --maxWorkers=4"
+    "test": "node --async-stack-traces node_modules/.bin/jest --maxWorkers=3"
   },
   "keywords": [],
   "author": "",

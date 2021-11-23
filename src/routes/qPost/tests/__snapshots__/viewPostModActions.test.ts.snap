@@ -1,0 +1,217 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`viewPostModActions countsToViewData excludes disputers 1`] = `
+Object {
+  "dangerousChartData": Object {
+    "strikeCanvas": Object {
+      "datasets": Array [
+        Object {
+          "data": Array [
+            1,
+            0,
+            0,
+          ],
+          "label": "# of Strike Votes",
+        },
+      ],
+      "labels": Array [
+        "Up voters",
+        "Down voters",
+        "Poster",
+      ],
+    },
+    "voteCanvas": Object {
+      "datasets": Array [
+        Object {
+          "data": Array [
+            1,
+            2,
+          ],
+          "label": "# of Votes",
+        },
+      ],
+      "labels": Array [
+        "True",
+        "False",
+      ],
+    },
+  },
+  "dataTable": Array [
+    Array [
+      "Set field to",
+      "Total",
+      "Strike up voters",
+      "Strike down voters",
+      "Strike poster",
+    ],
+    Array [
+      "True",
+      1,
+      1,
+      0,
+      0,
+    ],
+    Array [
+      "False",
+      2,
+      2,
+      2,
+      2,
+    ],
+  ],
+}
+`;
+
+exports[`viewPostModActions countsToViewData handles no counts 1`] = `
+Object {
+  "dangerousChartData": Object {
+    "strikeCanvas": Object {
+      "datasets": Array [
+        Object {
+          "data": Array [
+            0,
+            0,
+            0,
+            0,
+          ],
+          "label": "# of Strike Votes",
+        },
+      ],
+      "labels": Array [
+        "Up voters",
+        "Down voters",
+        "Poster",
+        "Disputers",
+      ],
+    },
+    "voteCanvas": Object {
+      "datasets": Array [
+        Object {
+          "data": Array [
+            0,
+            0,
+            0,
+          ],
+          "label": "# of Votes",
+        },
+      ],
+      "labels": Array [
+        "True",
+        "False",
+        "Didn't vote",
+      ],
+    },
+  },
+  "dataTable": Array [
+    Array [
+      "Set field to",
+      "Total",
+      "Strike up voters",
+      "Strike down voters",
+      "Strike poster",
+      "Strike disputers",
+    ],
+    Array [
+      "True",
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+    Array [
+      "False",
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+    Array [
+      "Didn't vote",
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+  ],
+}
+`;
+
+exports[`viewPostModActions countsToViewData includes disputers 1`] = `
+Object {
+  "dangerousChartData": Object {
+    "strikeCanvas": Object {
+      "datasets": Array [
+        Object {
+          "data": Array [
+            2,
+            0,
+            2,
+            2,
+          ],
+          "label": "# of Strike Votes",
+        },
+      ],
+      "labels": Array [
+        "Up voters",
+        "Down voters",
+        "Poster",
+        "Disputers",
+      ],
+    },
+    "voteCanvas": Object {
+      "datasets": Array [
+        Object {
+          "data": Array [
+            1,
+            2,
+            3,
+          ],
+          "label": "# of Votes",
+        },
+      ],
+      "labels": Array [
+        "True",
+        "False",
+        "Didn't vote",
+      ],
+    },
+  },
+  "dataTable": Array [
+    Array [
+      "Set field to",
+      "Total",
+      "Strike up voters",
+      "Strike down voters",
+      "Strike poster",
+      "Strike disputers",
+    ],
+    Array [
+      "True",
+      1,
+      0,
+      1,
+      0,
+      0,
+    ],
+    Array [
+      "False",
+      2,
+      2,
+      0,
+      2,
+      2,
+    ],
+    Array [
+      "Didn't vote",
+      3,
+      3,
+      3,
+      3,
+      3,
+    ],
+  ],
+}
+`;

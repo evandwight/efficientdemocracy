@@ -5,3 +5,11 @@ export const PRIORTY = {
     SAMPLE_1: 2000,
     REFERENDUM: 3000,
 };
+
+export const PRIORITY_PRETTY_PRINT = {
+    [PRIORTY.AUTO_MOD]: "auto-moderator",
+    [PRIORTY.MINI_MOD]: "mini-moderators",
+    [PRIORTY.MOD]: "moderator",
+    [PRIORTY.SAMPLE_1]: "sample",
+    [PRIORTY.REFERENDUM]: "referendum",
+}

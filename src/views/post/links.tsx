@@ -3,7 +3,7 @@ import * as C from '../../constant';
 import { dateToTimeSince } from '../utils';
 
 
-export const Links = ({ post, user, options = {}}) => {
+export const Links = ({ post, user }) => {
 
     <div>
         by <span className="gray-900">{post.user_name}</span>
@@ -23,23 +23,23 @@ export const Links = ({ post, user, options = {}}) => {
     </div>
 }
 
-export const UserName = ({name}) => <span>by <span className="gray-900">{name}</span></span>
+export const UserName = ({ name }) => <span>by <span className="gray-900">{name}</span></span>
 
-export const TimeSince = ({created}) => <span>, {dateToTimeSince(created)}</span>
-export const PostUrl = ({url}: {url?: string}) => <MaybeLink maybe={!!url} href={url}>link</MaybeLink>
-export const HnComments = ({hnId}) => <MaybeLink maybe={!!hnId} href={C.URLS.HN_COMMENT+ hnId}>hn comments</MaybeLink>
+export const TimeSince = ({ created }) => <span>, {dateToTimeSince(created)}</span>
+export const PostUrl = ({ url }: { url?: string }) => <MaybeLink maybe={!!url} href={url}>link</MaybeLink>
+export const HnComments = ({ hnId }) => <MaybeLink maybe={!!hnId} href={C.URLS.HN_COMMENT + hnId}>hn comments</MaybeLink>
 
-export const ModActions = ({isMod, id}) => 
+export const ModActions = ({ isMod, id }) =>
     <MaybeLink maybe={isMod} href={C.URLS.QPOSTS_MOD_ACTIONS + id}>mod actions</MaybeLink>
 
-export const MiniModActions = ({isMiniMod, id}) => 
+export const MiniModActions = ({ isMiniMod, id }) =>
     <MaybeLink maybe={isMiniMod} href={C.URLS.QPOSTS_MINI_MOD_ACTIONS + id}>mini mod actions</MaybeLink>
 
-export const MaybeLink = ({maybe, href, children}: {maybe: boolean, href: string, children: string}) => 
+export const MaybeLink = ({ maybe, href, children }: { maybe: boolean, href: string, children: string }) =>
     maybe ? <span> | <a className="whitespace-nowrap" href={href}>{children}</a></span> : <></>;
 
 export const DisputeLink = ({ post, field }) =>
-    <a className="onclick-post" href={`${C.URLS.SUBMIT_QPOST_DISPUTE}${post.id}/${field}/${!post.censor}`}>
+    <a className="onclick-post" href={`${C.URLS.SUBMIT_QPOST_DISPUTE}${post.id}/${field}/${!post[field]}`}>
         dispute
     </a>;
 
@@ -70,9 +70,10 @@ export const Fields = ({ post, showDisputes, showAllFields, ignoreFields }) =>
             .reduce((acc, field, i) => [...acc,
             <span key={i}>
                 {i > 0 && <span>, </span>}
-                <span className={!!post[field] ? (C.FIELDS.PROPS[field].GOODNESS ? "green-500" : "red-500") : ""}>
+                <a className={!!post[field] ? (C.FIELDS.PROPS[field].GOODNESS ? "green-500" : "red-500") : ""}
+                    href={`${C.URLS.QPOSTS_VIEW_MOD_ACTION}${post.id}/${field}`}>
                     {C.FIELDS.PROPS[field].PRETTY_PRINT[post[field] ? 1 : 0]}
-                </span>
+                </a>
                 {!!showDisputes &&
                     <span> (<DisputeLink {... { post, field }} />)</span>}
             </span>

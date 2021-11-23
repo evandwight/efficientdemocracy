@@ -1,6 +1,7 @@
 
 // QPosts
 export const QPOSTS_VIEW = "/qposts/view/";
+export const QPOSTS_VIEW_MOD_ACTION = "/qposts/view/mod-action/";
 export const SUBMIT_QPOST_VOTE = "/submit/qpost-vote/";
 export const SUBMIT_QPOST = "/submit/qpost";
 export const SUBMIT_QPOST_DISPUTE = "/submit/qpost-dispute/";
@@ -18,8 +19,6 @@ export const MINI_MOD_QPOSTS = "/mini-mod-qposts";
 
 // Samples
 export const SUBMIT_SAMPLE_VOTE = "/submit/sample-vote/";
-export const VIEW_SAMPLE_RESULT = "/view-sample-result/";
-export const VIEW_SAMPLES = "/samples/view/"
 
 // Mod Vote
 export const VIEW_MOD_VOTE = "/view-mod-vote";

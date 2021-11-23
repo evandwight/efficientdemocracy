@@ -2,21 +2,22 @@ import validator from 'validator';
 import * as C from '../../constant';
 import db from '../../db/databaseApi';
 import DemocraticModerationService from '../../services/democraticModerationService';
-import { reactRender } from '../../views/utils';
 import { ViewPost } from '../../views/post/viewPost';
+import { reactRender } from '../../views/utils';
 import { validationAssert } from '../utils';
 import { addCommonExtrasToPost, addVotes } from "./utils";
 export * from './listings';
+export { viewPostModAction } from './viewPostModActions';
 
 export async function viewPost(req, res) {
     const postId = req.params.id;
     validationAssert(validator.isUUID(postId, 4), "Invalid post id", 400);
-    const {user} = res.locals;
+    const { user } = res.locals;
 
     let post: any = await db.qPosts.getPost(postId);
     validationAssert(!!post, "Post not found", 404);
     post = (await addCommonExtrasToPost([post.id]))[0];
-    post = (await addVotes({posts: [post], user}))[0];
+    post = (await addVotes({ posts: [post], user }))[0];
     post.has_samples = (await DemocraticModerationService.getCompletedSamples(postId)).length > 0;
 
     reactRender(res, ViewPost({ post, user }), { title: post.title, includeVotesJs: true });
