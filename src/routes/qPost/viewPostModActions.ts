@@ -41,7 +41,8 @@ export async function viewPostModAction(req, res) {
         includeChartJs = true;
     }
 
-    reactRender(res, ViewPostModAction({ post, action, field, details }), { title: `Mod info - ${field}`, includeChartJs, dangerousChartData });
+    reactRender(res, ViewPostModAction({ post, action, field, details }), 
+        { title: `Mod info - ${field}`, includeVotesJs: true, includeChartJs, dangerousChartData });
 }
 
 export function countsToViewData({ counts, result, isSample }) {
