@@ -11,13 +11,13 @@ const Element = () =>
             Community curated news: keep up to date with hacker news without going down the rabbit hole.
         </p>
         <p>
-            Hacker news brings you the most engaging stories on the internet, but it doesn't know when to stop. You keep reading hoping the next comment will answer all your questions. Usually, it just makes you angry.
+            Hacker news brings you the most engaging stories on the internet, but it doesn't know when to stop. You keep reading hoping the next comment will answer all your questions. But usually it just makes you angry.
         </p>
         <p>
-            Efficient Democracy converts endless scrolling to a weekly newsletter of just the important stories. No more addiction. Only the news you need.
+            Efficient Democracy converts endless scrolling to a weekly newsletter of just important stories. No more addiction. Only the news you need.
         </p>
         <p>
-            They use your similarity to others to find what engages you. Instead, we use it to curate your news. If your peers marks it as important, so do we. We crowdsource curation, so you do not have to do it alone.
+            They weaponize your similarity to others to find what engages you. We use it to curate your news. If your peers marks it as important, so do we. We crowdsource curation, so you do not have to do it alone.
         </p>
         <p>
             Scroll less; feel better.
@@ -31,10 +31,7 @@ const Element = () =>
         </p>
         <h3>But referendums can't handle the tsunami of posts!</h3>
         <p>
-            We make estimating a referendum efficient. First, we use elected moderators to quickly categorize posts.
-        </p>
-        <p>
-            Then we correct mistakes by using a statistical sample or referendum on highly disputed categorizations. The efficient corrected by the accurate. [55]
+            You are right. Referendums themselves take too much effort. We make <b>estimating</b> a referendum efficient. First, we use elected moderators to quickly categorize posts. Then we correct mistakes by using a statistical sample or referendum on highly disputed categorizations. The efficient corrected by the accurate. For more details see the notes [55].
         </p>
         <p>
             Want a community run by the community? <a href={SIGNUP}>Sign up</a>!
