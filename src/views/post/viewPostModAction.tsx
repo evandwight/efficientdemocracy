@@ -37,7 +37,7 @@ export const VoteDetails = ({ dataTable }) => <div>
 export const DisagreeOptions = ({ post, action, field }) => {
     const { AUTO_MOD, MINI_MOD, MOD, REFERENDUM } = C.MOD_ACTIONS.PRIORTY;
     const canDispute = action?.priority !== REFERENDUM;
-    const canModVote = [AUTO_MOD, MINI_MOD, MOD].indexOf(action?.priority) !== -1;
+    const canModVote = [AUTO_MOD, MINI_MOD, MOD].indexOf(action?.priority) !== -1 || !action;
     if (!canDispute && !canModVote) {
         return <div>This decision is final. It has been made by referendum of the community.</div>
     }
