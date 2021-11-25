@@ -29,10 +29,13 @@ export async function updateHackerNewsPosts() {
     const topList = await axios.get("https://hacker-news.firebaseio.com/v0/topstories.json");
     let items:HnPost[] = await Promise.all(topList.data.filter((v, i) => i < 30)
         .map(id => axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(v => v.data)));
-    const titles = items.filter(v => !!v).map(v => v?.title);
+    const titles = items.map(v => !!v ? v?.title : "");
     const isTechincal = await areTitlesTechnical(titles);
     items = items.map((v, i) => ({...v, isTechincal: isTechincal[i]}));
     await Promise.all(items.map(async (v: any) => {
+        if (!v || !v.title) {
+            return;
+        }
         const thingId = await db.qPosts.upsertHackerNewsPost(v);
         await maybeSetField({thingId, shouldBe: v.score > 600, field: C.FIELDS.LABELS.DEEPLY_IMPORTANT});
         await maybeSetField({thingId, shouldBe: v.isTechincal, field: C.FIELDS.LABELS.TECHNICAL});

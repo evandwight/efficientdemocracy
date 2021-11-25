@@ -1,4 +1,4 @@
-import { selectOne, selectOneAttr } from '../db/utils';
+import { internalAssertOne, selectOne, selectOneAttr } from '../db/utils';
 import { DatabaseApi } from "./databaseApi";
 import { ThingId, ThingType } from './types';
 
@@ -19,6 +19,15 @@ export default class Things {
             RETURNING id`,
             [this.db.uuidv4(), type])
             .then(selectOneAttr('id'));
+    }
+
+    insert({id, type}): Promise<void> {
+
+        return this.db.pool.query(
+            `INSERT INTO things (id, type)
+            VALUES ($1, $2)`,
+            [id, type])
+            .then(internalAssertOne);
     }
 
     getType(id: ThingId): Promise<ThingType> {

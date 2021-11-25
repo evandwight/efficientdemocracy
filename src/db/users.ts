@@ -17,14 +17,6 @@ export default class Users {
             .then(selectOne);
     }
 
-    // TODO is this indexed by email????
-    // FIX - index it
-    getUserByEmail(email: string): Promise<User> {
-        return this.db.pool.query(`
-            SELECT * FROM users WHERE email = $1`, [email])
-            .then(selectOne);
-    }
-
     // TODO not indexed by user_name
     // FIX - index it
     getUserByUserName(userName): Promise<User> {
@@ -44,34 +36,16 @@ export default class Users {
         return this.db.pool.query(`SELECT * FROM users`).then(selectRows);
     }
 
-    async createLocalUserWithRandomName({email, hashedPassword}) {
-        return WithTransaction(this.db, async client => {
-            const id = await this.db.things.create(C.THINGS.USER, client);
+    async createCognitoUser({id}) {
+        await this.db.things.insert({id, type: C.THINGS.USER});
 
-            await retryOnceOnUniqueError(async () => {
-                const userName = await this.generateUserName();
-                return client.query(
-                    `INSERT INTO users (id, user_name, email, password, created_on, is_mod, auth_type, unsubscribe_key, email_state)
-                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.LOCAL}, $6, ${C.USER.EMAIL_STATE.UNVERIFIED_TRY_1})`,
-                    [id, userName, email, hashedPassword, new Date(), this.db.uuidv4()]);
-            }).then(internalAssertOne);
-            return id as UserId;
-        });
-    }
-
-    async createGoogleUserWithRandomName({email, googleId}) {
-        return WithTransaction(this.db, async client => {
-            const id = await this.db.things.create(C.THINGS.USER, client);
-
-            await retryOnceOnUniqueError(async () => {
-                const userName = await this.generateUserName();
-                return client.query(
-                    `INSERT INTO users (id, user_name, email, google_id, created_on, is_mod, auth_type, unsubscribe_key, email_state)
-                    VALUES ($1, $2, $3, $4, $5, false, ${C.AUTH_TYPE.GOOGLE}, $6, ${C.USER.EMAIL_STATE.VERIFIED_GOOD})`,
-                    [id, userName, email, googleId, new Date(), this.db.uuidv4()]);
-            }).then(internalAssertOne);
-            return id;
-        });
+        await retryOnceOnUniqueError(async () => {
+            const userName = await this.generateUserName();
+            return this.db.pool.query(
+                `INSERT INTO users (id, user_name, created_on, unsubscribe_key)
+                VALUES ($1, $2, $3, $4)`,
+                [id, userName, new Date(), this.db.uuidv4()]);
+        }).then(internalAssertOne);
     }
 
     async generateUserName(){
@@ -83,12 +57,6 @@ export default class Users {
             }
         }
         throw new Error("Unable to find unique user name")
-    }
-
-    getUserByGoogleId(googleId) {
-        return this.db.pool.query(`
-            SELECT * FROM users WHERE google_id = $1`, [googleId])
-            .then(selectOne);
     }
 
     getUserIdByUnsubscribeKey(unsubscribeKey): Promise<User> {

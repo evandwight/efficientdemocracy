@@ -15,25 +15,14 @@ describe("Users", () => {
             let id = await testApi.createUser();
             let user = await db.users.getUser(id);
             expect(user.id).toEqual(id);
-            expect(user.name).toEqual("a");
-        });
-    });
-    
-    describe('getUserByEmail', () => {
-        it('doesnt shit the bed', async () => {
-            let id = await testApi.createUser();
-            let user = await db.users.getUserByEmail("b");
-            expect(user.id).toEqual(id);
-            expect(user.name).toEqual("a");
         });
     });
     
     describe('getUserByUserName', () => {
         it('doesnt shit the bed', async () => {
-            let id = await testApi.createUser({name: "d"});
+            let id = await testApi.createUser({userName: "a"});
             let user = await db.users.getUserByUserName("a");
             expect(user.id).toEqual(id);
-            expect(user.name).toEqual("d");
         });
     });
     

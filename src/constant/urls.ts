@@ -43,7 +43,7 @@ export const QCOMMENT_VIEW = "/qcomment/view/";
 export const SUBMIT_QCOMMENT = "/submit/qcomment";
 
 // Accounts
-export const USER_LOGIN = "/users/login";
+export const USER_LOGIN = "/auth/cognito";
 export const USER_LOCAL_LOGIN = "/users/local-login";
 export const USER_LOCAL_REGISTER = "/users/local-register";
 export const USER_LOGOUT = "/users/logout";
@@ -89,6 +89,5 @@ export const HN_COMMENT = "https://news.ycombinator.com/item?id=";
 export const BASE_URL = "https://efficientdemocracy.com";
 
 // Auth
-export const AUTH_LOCAL = "/auth/local";
-export const AUTH_GOOGLE = "/auth/google";
-export const AUTH_GOOGLE_CALLBACK = "/auth/google/callback";
+export const AUTH_COGNITO_CALLBACK = "/auth/cognito/callback";
+export const AUTH_COGNITO = "/auth/cognito";
