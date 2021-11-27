@@ -44,7 +44,7 @@ export const Post = ({ post, i, user, ignoreFields}: { post: QPost, i: number, u
                 {post.censor ? "[Censored]" : post.title}
             </div>
             <div className="gray-500">
-                <UserName name={post.user_name}/>
+                <UserName name={post.hackernews_user_name || post.user_name}/>
                 <TimeSince created={post.created}/>
                 <PostUrl url={post.url}/>
                 <HnComments hnId={post.hackernews_id}/>

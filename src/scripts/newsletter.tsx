@@ -27,7 +27,7 @@ export function Newsletter({posts, postsLink, unsubscribeLink}: propsType) {
                         {post.title} 
                         <ul style={{listStyleType: "none", opacity: "50%"}}>
                             <li>
-                                by {post.user_name}, {dateToStr(post.created)}
+                                by {post.hackernews_user_name || post.user_name}, {dateToStr(post.created)}
                                 {!!post.url && <span> | <a href={post.url}>link</a></span>}
                                 {!!post.hackernews_id && <span> | <a href={C.URLS.HN_COMMENT + post.hackernews_id}>
                                         hn comments

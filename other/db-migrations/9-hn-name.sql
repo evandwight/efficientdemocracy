@@ -1,0 +1,1 @@
+ALTER TABLE qposts ADD COLUMN hackernews_user_name VARCHAR(256);

@@ -18,7 +18,7 @@ export const ViewPost = ({ post, user }) => {
         <td className="title-col">
           <div>{post.title}</div>
           <div>
-            <UserName name={post.user_name}/>
+            <UserName name={post.hackernews_user_name || post.user_name}/>
             <TimeSince created={post.created}/>
             <PostUrl url={post.url}/>
             <HnComments hnId={post.hackernews_id}/>

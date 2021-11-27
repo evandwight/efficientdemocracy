@@ -41,6 +41,7 @@ export type QPost = {
     user_name: string,
     user_id: UserId,
     hackernews_id?: string,
+    hackernews_user_name?: string,
     censor?: boolean,
     deeply_important?: boolean,
 }

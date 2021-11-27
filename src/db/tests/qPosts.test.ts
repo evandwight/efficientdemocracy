@@ -37,7 +37,7 @@ describe("QPosts", () => {
     });
     describe('upsertHackerNewsPost', () => {
         it('works', async () => {
-            let hackerPost = {id: 1234343, score: 10000, title: "a", time: 1633968360};
+            let hackerPost = {id: 1234343, score: 10000, title: "a", by:"b", time: 1633968360};
             const userId = await testApi.createHackerUser();
             const postId = await db.qPosts.upsertHackerNewsPost(hackerPost);
             const post = await db.qPosts.getPost(postId);

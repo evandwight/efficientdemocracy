@@ -45,9 +45,9 @@ export default class QPosts {
             postId = await this.db.things.create(C.THINGS.QPOST);
             await this.db.pool.query(
                 `INSERT INTO qposts  
-                (id, user_id, title, url, content, created, hackernews_id, hackernews_points) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-                [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", time, v.id, v.score])
+                (id, user_id, title, url, content, created, hackernews_id, hackernews_points, hackernews_user_name) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+                [postId, C.BOT_ACCOUNT_USER_ID, v.title, v.url, "", time, v.id, v.score, v.by])
                 .then(internalAssertOne);
         } else {
             await this.db.pool.query(
