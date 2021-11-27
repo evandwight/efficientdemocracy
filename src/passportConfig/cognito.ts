@@ -4,6 +4,7 @@ import util from 'util';
 import db from '../db/databaseApi';
 import { UserId } from '../db/types';
 import { assertEnv } from "../routes/utils";
+import * as C from '../constant';
 
 assertEnv('COGNITO_BASE_URL');
 assertEnv('COGNITO_APP_CLIENT_ID');
@@ -31,6 +32,7 @@ export function createCognitoStrategy() {
         let id;
         if (user === null) {
             id = await db.users.createCognitoUser({ cognitoId });
+            await db.users.setSetting(id, C.USER.COLUMNS.is_mini_mod, true);
         } else {
             id = user.id;
         }

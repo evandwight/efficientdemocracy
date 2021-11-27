@@ -6,7 +6,7 @@ export const UserSettings = ({user, csrfToken}) => {
   return <div className="highlight-links">
     <h1>User settings</h1>
     <div>User name: {user.user_name}</div>
-    <div>Email: to change your email, email ${C.HELP_EMAIL}</div>
+    <div>Email: to change your email send an email to {C.HELP_EMAIL}</div>
     <div><a href={C.URLS.VIEW_MOD_VOTE}>Change</a> your vote for moderator</div>
     <br/>
     <form action={C.URLS.SUBMIT_USER_SETTINGS} method="POST">
