@@ -12,7 +12,8 @@ export default class QPosts {
 
     getPost(postId): Promise<QPost> {
         return this.db.pool.query(
-            `SELECT qposts.id as id, created, title, url, content, hackernews_id, qposts.user_id as user_id,
+            `SELECT qposts.id as id, created, title, url, content, qposts.user_id as user_id,
+                hackernews_id, hackernews_user_name,
                 user_name
             FROM qposts 
                 INNER JOIN users ON qposts.user_id = users.id
@@ -64,7 +65,8 @@ export default class QPosts {
 
     getPostsByIds(postIds: QPostId[]): Promise<QPost[]> {
         return this.db.pool.query(
-            `SELECT qposts.id as id, created, title, url, content, hackernews_id, qposts.user_id as user_id,
+            `SELECT qposts.id as id, created, title, url, content, qposts.user_id as user_id,
+                hackernews_id, hackernews_user_name,
                 user_name
             FROM qposts 
                 INNER JOIN users ON qposts.user_id = users.id
