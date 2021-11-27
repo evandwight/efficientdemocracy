@@ -1,6 +1,4 @@
 import { addAsync } from '@awaitjs/express';
-import flash from 'connect-flash';
-import crypto from 'crypto';
 import csrf from 'csurf';
 import express from "express";
 import session from "express-session";
@@ -16,7 +14,7 @@ import { initializePassport } from './passportConfig';
 import * as Routes from './routes';
 import { renderAbout } from './routes/about';
 import { renderBlog } from './routes/blog';
-import { assertAuthenticated, assertAuthenticated401, assertMiniMod, assertMod, assertNotBanned403, ExpectedInternalError, redirectAuthenticated, ValidationError } from './routes/utils';
+import { assertAuthenticated, assertAuthenticated401, assertEnv, assertMiniMod, assertMod, assertNotBanned403, ExpectedInternalError, redirectAuthenticated, ValidationError } from './routes/utils';
 import { addCustomLocals } from './utils/middleware';
 import * as About from './views/about';
 import { BlogEntries } from './views/blog';
@@ -24,6 +22,9 @@ const pgSession = require('connect-pg-simple')(session);
 
 // Setup
 require("dotenv").config();
+
+assertEnv('NODE_ENV');
+assertEnv('SESSION_SECRET');
 
 function setup(db) {
     db.initialize();
@@ -49,22 +50,6 @@ function setup(db) {
             },
         })
     );
-    // Use a custom csp for register page to allow for google captcha
-    const registerCSPNonce = (req, res, next) => {
-        res.locals.cspNonce = crypto.randomBytes(16).toString("hex");
-        next();
-    };
-    const registerCSP = helmet.contentSecurityPolicy({
-        useDefaults: true,
-        directives:{
-            "script-src": [
-                "'self'", 
-                scriptSrc0,
-                (req, res: any) => `'nonce-${res.locals.cspNonce}'`],
-            "img-src": ["'self'", "www.gstatic.com"],
-            "frame-src": ["www.google.com"],
-        }
-    });
 
     // needed for redirecting form submissions
     app.use(helmet.referrerPolicy({ policy: "same-origin" }));
@@ -96,7 +81,7 @@ function setup(db) {
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
-        name: "sesId-d48s",
+        name: "sesId-d49s",
         cookie: {
             sameSite: 'lax',
             maxAge: 365 * 24 * 60 * 60 * 1000, // 365 days
@@ -107,8 +92,6 @@ function setup(db) {
         sessionOptions.cookie.secure = true // serve secure cookies
     }
     app.use(session(sessionOptions));
-
-    app.use(flash());
 
     // Authentication
     initializePassport(passport);
@@ -168,32 +151,17 @@ function setup(db) {
     router.postAsync(C.URLS.SUBMIT_QPOST_MINI_MOD_ACTION + ":field/:id", assertMiniMod, Routes.MiniMods.submitPostAction);
 
     // Accounts
-    router.get(C.URLS.USER_LOGIN, registerCSPNonce, registerCSP, redirectAuthenticated, Routes.Account.login);
     router.get(C.URLS.USER_LOGOUT, Routes.Account.logout);
 
     router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);
     router.get(C.URLS.USER_SETTINGS, assertAuthenticated, Routes.Account.userSettings);
     router.postAsync(C.URLS.SUBMIT_USER_SETTINGS, assertAuthenticated, Routes.Account.submitUserSettings);
     router.postAsync(C.URLS.SUBMIT_USER_FIRST_RUN, assertAuthenticated, Routes.Account.submitFirstRun);
-    router.postAsync(C.URLS.SUBMIT_USER_REQUEST_VERIFY_EMAIL, assertAuthenticated, Routes.Account.submitFirstRun);
 
     // Passport 
-
-    // * Local
-    router.get(C.URLS.USER_LOCAL_LOGIN, redirectAuthenticated, Routes.Account.viewLocalLogin);
-    router.postAsync(C.URLS.USER_LOCAL_REGISTER, redirectAuthenticated, Routes.Account.submitUserRegister);
-    router.post(C.URLS.AUTH_LOCAL, redirectAuthenticated,
-        passport.authenticate("local", { successRedirect: "/", failureRedirect: C.URLS.USER_LOCAL_LOGIN, failureFlash: true }));
-
-    // * Google
-    router.get(C.URLS.AUTH_GOOGLE, redirectAuthenticated,
-        passport.authenticate('google', {
-            scope: [
-                'https://www.googleapis.com/auth/plus.login'
-                , "https://www.googleapis.com/auth/userinfo.email"]
-        }));
-    router.get(C.URLS.AUTH_GOOGLE_CALLBACK, redirectAuthenticated,
-        passport.authenticate('google', { successRedirect: "/", failureRedirect: C.URLS.USER_LOGIN }));
+    router.get(C.URLS.AUTH_COGNITO, redirectAuthenticated, passport.authenticate('oauth2'));
+    router.get(C.URLS.AUTH_COGNITO_CALLBACK, redirectAuthenticated,
+        passport.authenticate('oauth2', { successRedirect: '/', failureRedirect: C.URLS.USER_LOGIN }));
 
 
     // About
@@ -207,7 +175,6 @@ function setup(db) {
     // Email
     // Unsecure - get changes database state so it should be post, however it needs to be embedded in links in emails
     router.getAsync(C.URLS.EMAIL_UNSUBSCRIBE + ':userId/:keyId', Routes.Account.unsubscribe);
-    router.getAsync(C.URLS.EMAIL_VERIFY_GOODNESS + ':goodness/:userId/:keyId', Routes.Account.verifyEmailGoodness);
 
     // Custom 404 page not found
     // Disable on test to allow login

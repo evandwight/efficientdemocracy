@@ -1,9 +1,7 @@
-import { reactRender } from '../../views/utils';
+import * as C from '../../constant';
 import db from '../../db/databaseApi';
 import { UserSettings } from '../../views/userSettings';
-import { validationAssert } from '../utils';
-import * as C from '../../constant';
-import { sendVerificationEmail } from "./sendVerificationEmail";
+import { reactRender } from '../../views/utils';
 
 export async function userSettings(req, res) {
     const { user, csrfToken } = res.locals;
@@ -34,18 +32,3 @@ export async function submitFirstRun(req, res) {
     res.sendStatus(200);
 }
 
-export async function requestVerifyEmail(req, res) {
-    const { user } = res.locals;
-    const tryStates = [
-        C.USER.EMAIL_STATE.UNVERIFIED_TRY_1,
-        C.USER.EMAIL_STATE.UNVERIFIED_TRY_2,
-        C.USER.EMAIL_STATE.UNVERIFIED_TRY_3,
-    ];
-    const tryIndex = tryStates.indexOf(user.email_state);
-    validationAssert(tryIndex >= 0 && tryIndex < tryStates.length - 1, `Too many attempts. Please request help from ${C.HELP_EMAIL}`, 400);
-
-    await db.users.setSetting(user.id, C.USER.COLUMNS.email_state, tryStates[tryIndex + 1]);
-    await sendVerificationEmail(user);
-
-    res.sendStatus(200).send("Email sent. Check your email.");
-}

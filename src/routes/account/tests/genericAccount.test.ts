@@ -10,11 +10,6 @@ describe("genericAccount", () => {
         await db.end();
     });
 
-    describe('login', () => {
-        it('works', async () => {
-            const request = await login();    
-        });
-    });
     describe('logout', () => {
         it('works', async () => {
             const request = await login();

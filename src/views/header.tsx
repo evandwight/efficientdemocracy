@@ -35,6 +35,6 @@ export const LoginInfo = ({ user }) => {
         </span>
     }
     else {
-        return <a href={C.URLS.USER_LOGIN}>Login</a>
+        return <a href={C.URLS.AUTH_COGNITO}>Login</a>
     }
 }

@@ -13,8 +13,6 @@ type reactRenderOptions = {
     dangerousChartData?: any,
     includeVotesJs?: boolean,
     includeScript?: string,
-    includeRegisterJs?: boolean,
-    cspNonce?: string,
     includeBlogRssHint?: boolean,
 }
 
@@ -35,9 +33,6 @@ export const reactRender = (res, element, options?: reactRenderOptions) => {
             {element}
         </DefaultWrapper>
         );
-    if (options.includeRegisterJs) {
-        options.cspNonce = res.locals.cspNonce;
-    }
     res.send(HtmlBoilerPlate(innerHtml, res.locals.csrfToken, options));
 }
 
@@ -89,8 +84,6 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
         includeChartJs = false,
         includeVotesJs = false,
         includeScript = false,
-        includeRegisterJs = false,
-        cspNonce = null,
         includeBlogRssHint = false,
     } = options;
     // csrfToken is for client side api calls via axios
@@ -115,10 +108,6 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
         ? `<script type="application/json" id="chartData">${JSON.stringify(options.dangerousChartData)}</script>
         <script src="/public/sampleChart.js"></script>
         <script src="/public/chart.min.js"></script>`
-        : ""}
-    ${includeRegisterJs
-        ? `<script src="https://www.google.com/recaptcha/api.js?render=${process.env.GOOGLE_CAPTCHA_SITE_KEY}" nonce="${cspNonce}"></script>
-        <script src="/public/register.js"></script>`
         : ""}
     ${includeScript 
         ? `<script src="${includeScript}"></script>`

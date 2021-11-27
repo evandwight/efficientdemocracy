@@ -9,7 +9,7 @@ import { logger } from "../logger";
 
 export async function run(key) {
     const users = (await db.users.getUsers())
-        .filter(user => !!user.send_emails && user.email_state === C.USER.EMAIL_STATE.VERIFIED_GOOD);
+        .filter(user => !!user.send_emails);
     // const users = [{id: "asdf", unsubscribe_key: "TESTKEY", email: "TESTEMAIl"}];
     console.log(users);
 
@@ -22,8 +22,8 @@ export async function run(key) {
     const newsletters = users.map(user => newsletterJson({user, key, posts}));
     const result = await sendEmails(newsletters);
     const failures = result.filter(r => !r.success);
-    result.forEach(r => console.log(`${r.success ? "sent" : "failed to send"} email to ${r.to} err: ${r.err}`));
-    failures.forEach(r => logger.error({ err: r.err }, `Error sending newsletter ${key} to ${r.to}`));
+    result.forEach(r => console.log(`${r.success ? "sent" : "failed to send"} cognitoId to ${r.toCognitoId} err: ${r.err}`));
+    failures.forEach(r => logger.error({ err: r.err }, `Error sending newsletter ${key} to ${r.toCognitoId}`));
 }
 
 function postsToText({posts, postsLink, unsubscribeLink}) {
@@ -59,7 +59,7 @@ function newsletterJson({user, key, posts}) {
     const unsubscribeLink = `${C.URLS.BASE_URL}${C.URLS.EMAIL_UNSUBSCRIBE}${user.id}/${user.unsubscribe_key}`;
 
     return {
-        to: user.email,
+        toCognitoId: user.cognito_id,
         from: "hackernewsletter@efficientdemocracy.com",
         html: html(Newsletter({posts, postsLink, unsubscribeLink})),
         text: postsToText({posts, postsLink, unsubscribeLink}),

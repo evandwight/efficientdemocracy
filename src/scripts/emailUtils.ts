@@ -1,4 +1,4 @@
-import { sendEmail } from "../utils/sendAwsEmail";
+import { sendEmail, sendEmailToCognitoId } from "../utils/sendAwsEmail";
 
 export function sendMonitorEmail({subject, text}) {
     const to = process.env.MONITOR_EMAIL;
@@ -15,18 +15,18 @@ export function sendMonitorEmail({subject, text}) {
     });
 }
 
-export async function sendEmails(jsons: {to: string, from: string, html: string, text: string, subject:string}[]): Promise<any[]> {
+export async function sendEmails(jsons: {toCognitoId: string, from: string, html: string, text: string, subject:string}[]): Promise<any[]> {
     // aws limits to 14 emails a second so only send 1 every 100ms
     if (jsons.length === 0) {
         return [];
     }
 
-    const to = jsons[0].to;
+    const toCognitoId = jsons[0].toCognitoId;
     
-    const result = await sendEmail(jsons[0])
+    const result = await sendEmailToCognitoId(jsons[0])
         .then(() => ({success: true}))
         .catch((err) => ({success: false, err}));
     await new Promise(r => setTimeout(r, 100));
     const rest = await sendEmails(jsons.slice(1));
-    return [ {... result, to}, ... rest];
+    return [ {... result, toCognitoId}, ... rest];
 }

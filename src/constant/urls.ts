@@ -51,9 +51,7 @@ export const USER_STRIKES = "/user/strikes";
 export const USER_SETTINGS = "/user/settings";
 export const SUBMIT_USER_SETTINGS = "/submit/user/settings";
 export const SUBMIT_USER_FIRST_RUN = "/submit/user/first-run";
-export const SUBMIT_USER_REQUEST_VERIFY_EMAIL = "submit/user/request-verify-email";
 export const EMAIL_UNSUBSCRIBE = "/email/unsubscribe/";
-export const EMAIL_VERIFY_GOODNESS = "/email/verify-goodness/";
 
 
 // Misc

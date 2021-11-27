@@ -1,9 +1,9 @@
-import { DatabaseApi } from "./databaseApi";
-import * as C from '../constant';
-import { internalAssertOne, retryOnceOnUniqueError, selectOne, selectOneAttr, selectRows, WithTransaction } from '../db/utils';
-import { User, UserId } from './types';
 import { generateSlug } from "random-word-slugs";
+import * as C from '../constant';
+import { internalAssertOne, retryOnceOnUniqueError, selectOne, selectOneAttr, selectRows } from '../db/utils';
 import { unexpectedAssert } from "../routes/utils";
+import { DatabaseApi } from "./databaseApi";
+import { User, UserId } from './types';
 
 export default class Users {
     db: DatabaseApi;
@@ -14,6 +14,12 @@ export default class Users {
     getUser(userId: UserId): Promise<User> {
         return this.db.pool.query(`
             SELECT * FROM users WHERE id = $1`, [userId])
+            .then(selectOne);
+    }
+
+    getUserByCognitoId(cognitoId): Promise<User> {
+        return this.db.pool.query(`
+            SELECT * FROM users WHERE cognito_id = $1`, [cognitoId])
             .then(selectOne);
     }
 
@@ -36,16 +42,18 @@ export default class Users {
         return this.db.pool.query(`SELECT * FROM users`).then(selectRows);
     }
 
-    async createCognitoUser({id}) {
-        await this.db.things.insert({id, type: C.THINGS.USER});
+    async createCognitoUser({cognitoId}) {
+        const id = await this.db.things.create(C.THINGS.USER);
 
         await retryOnceOnUniqueError(async () => {
             const userName = await this.generateUserName();
             return this.db.pool.query(
-                `INSERT INTO users (id, user_name, created_on, unsubscribe_key)
-                VALUES ($1, $2, $3, $4)`,
-                [id, userName, new Date(), this.db.uuidv4()]);
+                `INSERT INTO users (id, cognito_id, user_name, created_on, unsubscribe_key)
+                VALUES ($1, $2, $3, $4, $5)`,
+                [id, cognitoId, userName, new Date(), this.db.uuidv4()]);
         }).then(internalAssertOne);
+
+        return id;
     }
 
     async generateUserName(){

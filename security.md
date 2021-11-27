@@ -10,7 +10,9 @@ Cheatsheets:
 
 ### Authentication
 
-Your email/password may be leaked. Authentication requires significant work.
+All sensitive user data (email, password, etc) are stored in aws cognito and are protected with a minimal api.
+
+I'm assuming the cognito service defaults are secure. However no captcha protects it and I haven't enabled advanced security.
 
 ### Application Security
 
