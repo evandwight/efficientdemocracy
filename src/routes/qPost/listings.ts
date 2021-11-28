@@ -44,7 +44,7 @@ export function renderList(cacheKey, loadFunc, options: OptionsType) {
 
         const title = titleFunc();
         const element = Posts({ posts, user, moreLink, offset, sortType: title, showCensored, ignoreFields });
-        reactRender(res, element, { title, includeVotesJs: true });
+        reactRender(res, element, { title, includeVotesJs: true, metaDescription: title});
     };
 }
 

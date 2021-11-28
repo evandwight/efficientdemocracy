@@ -108,7 +108,8 @@ function setup(db) {
     const router = addAsync(app);
 
     // Routes
-    router.get("/favicon.ico", (req, res) => res.sendFile('favicon.ico', { root: __dirname + '/../public' }))
+    router.get("/favicon.ico", (req, res) => res.sendFile('favicon.ico', { root: __dirname + '/../public' }));
+    router.get("/robots.txt", (req, res) => res.sendFile('robots.txt', { root: __dirname + '/../public' }));
     router.get("/", (req, res) => res.redirect(C.URLS.DEEPLY_IMPORTANT_QPOSTS));
 
 
@@ -188,7 +189,7 @@ function setup(db) {
     router.use(function (err, req, res, next) {
         if (err) {
             if (process.env.NODE_ENV !== "production") {
-                console.log(err);
+                console.log({err, url: req.url});
             }
             if (err instanceof ValidationError) {
                 logger.warn({ req, err }, "Request validation error");

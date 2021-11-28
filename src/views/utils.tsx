@@ -14,6 +14,7 @@ type reactRenderOptions = {
     includeVotesJs?: boolean,
     includeScript?: string,
     includeBlogRssHint?: boolean,
+    metaDescription?: string,
 }
 
 export const DefaultWrapper = (props: {showLogin, user, csrfToken, children}) => 
@@ -85,6 +86,7 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
         includeVotesJs = false,
         includeScript = false,
         includeBlogRssHint = false,
+        metaDescription = null,
     } = options;
     // csrfToken is for client side api calls via axios
     // <script>0</script> for firefox fouc bug https://bugzilla.mozilla.org/show_bug.cgi?id=1404468
@@ -96,6 +98,9 @@ export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    ${metaDescription 
+        ? `<meta name="description" content="${metaDescription}">`
+        : ""}
     ${includeBlogRssHint 
         ? `<link rel="alternate" type="application/atom+xml" title="RSS" href="${C.URLS.BASE_URL + C.URLS.BLOG_FEED}" />`
         : ""}

@@ -21,7 +21,7 @@ export const Posts = ({ posts, user, showCensored, moreLink, offset, sortType, i
         </table>
         {!!moreLink &&
             <div>
-                <a href={moreLink}>More</a>
+                <a href={moreLink}>Next page</a>
             </div>}
     </div>
 }
@@ -48,7 +48,7 @@ export const Post = ({ post, i, user, ignoreFields}: { post: QPost, i: number, u
                 <TimeSince created={post.created}/>
                 <PostUrl url={post.url}/>
                 <HnComments hnId={post.hackernews_id}/>
-                <MaybeLink maybe={true} href={C.URLS.QPOSTS_VIEW + post.id}>more info</MaybeLink>
+                <MaybeLink maybe={true} href={C.URLS.QPOSTS_VIEW + post.id}>details</MaybeLink>
                 <ModActions isMod={user?.is_mod} id={post.id}/>
                 <MiniModActions isMiniMod={user?.is_mini_mod} id={post.id}/>
             </div>

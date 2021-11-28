@@ -49,17 +49,21 @@ export const UpVoteButton = ({ post, i }: { post: any; i?: number; }) => {
     return <a className="center-h icon onclick-vote"
         title="Up vote" id={`up-${i}`} data-other={`down-${i}`}
         href={`${C.URLS.SUBMIT_QPOST_VOTE}${post.id}/${active ? C.VOTE.NONE : C.VOTE.UP}`}>
-        <img style={{ width: "1em" }} src={`/public/icons/caret-up-${active ? "active" : "inactive"}.svg`} />
+        <img className="icon"
+            alt="Up vote" 
+            src={`/public/icons/caret-up-${active ? "active" : "inactive"}.svg`} />
     </a>;
 };
 
 export const DownVoteButton = ({ post, i }: { post: any; i?: number; }) => {
     const active = post.hasOwnProperty('vote') ? post.vote === C.VOTE.DOWN : false;
     i = i || 0;
-    return <a className="rotate-180 center-h icon onclick-vote"
+    return <a className="rotate-180 icon center-h onclick-vote"
         title="Down vote" id={`down-${i}`} data-other={`up-${i}`}
         href={`${C.URLS.SUBMIT_QPOST_VOTE}${post.id}/${active ? C.VOTE.NONE : C.VOTE.DOWN}`}>
-        <img style={{ width: "1em" }} src={`/public/icons/caret-up-${active ? "active" : "inactive"}.svg`} />
+        <img className="icon"
+            alt="Down vote" 
+            src={`/public/icons/caret-up-${active ? "active" : "inactive"}.svg`} />
     </a>;
 };
 
