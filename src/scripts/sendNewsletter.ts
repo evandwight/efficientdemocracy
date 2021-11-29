@@ -60,7 +60,7 @@ function newsletterJson({user, key, posts}) {
 
     return {
         toCognitoId: user.cognito_id,
-        from: "hackernewsletter@efficientdemocracy.com",
+        from: "letter@efficientdemocracy.com",
         html: html(Newsletter({posts, postsLink, unsubscribeLink})),
         text: postsToText({posts, postsLink, unsubscribeLink}),
         subject: "Efficient democracy - newsletter",
