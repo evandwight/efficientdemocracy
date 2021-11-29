@@ -6,7 +6,7 @@ async function run() {
     const subject = `User count: ${users.length}`;
     const text = 
 `Users:
-${users.map(e => e.email).join("\n")}
+${users.map(e => `${e.user_name} ${e.send_emails}`).join("\n")}
 `
     return sendMonitorEmail({subject, text});
 }
