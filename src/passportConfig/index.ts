@@ -1,4 +1,5 @@
 import db from '../db/databaseApi';
+import { unexpectedAssert } from '../routes/utils';
 import DemocraticModerationService from '../services/democraticModerationService';
 import { createCognitoStrategy } from './cognito';
 
@@ -16,6 +17,7 @@ export function initializePassport(passport) {
     passport.deserializeUser(async (id, done) => {
         try {
             let user = await db.users.getUser(id);
+            unexpectedAssert(!!user, "Session user id not found")
             user.sample = await DemocraticModerationService.getOldestSample(id);
             return done(null, user);
         } catch (err) {
