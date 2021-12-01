@@ -16,7 +16,7 @@ describe("Samples", () => {
 
     describe('createSample', () => {
         it('works', async () => {
-            let id = await testApi.createSample({thingId:db.uuidv4(),userIds: [db.uuidv4()]});
+            let id = await testApi.createSample({thingId:db.uuidv4(),userIdsInSample: [db.uuidv4()]});
             expect(id).toBeTruthy();
         });
     });
@@ -36,7 +36,7 @@ describe("Samples", () => {
     describe('sampleVote', () => {
         it('works', async () => {
             const userId = db.uuidv4();
-            let sampleId = await testApi.createSample({thingId:db.uuidv4(),userIds: [userId]});
+            let sampleId = await testApi.createSample({thingId:db.uuidv4(),userIdsInSample: [userId]});
             await Samples.vote({sampleId, userId, vote:true, strikeUps: false, strikeDowns: false, strikePoster: false, strikeDisputers: false});
             expect(true).toBeTruthy();
         });

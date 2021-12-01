@@ -1,3 +1,5 @@
-0 7 * * 7 cd /home/servy/www/effdem/server && node dist/scripts/sendWeeklyEmail.js > /var/log/effdem/cron-sendWeeklyEmail.log 2>&1
-0 12 * * * cd /home/servy/www/effdem/server && node dist/scripts/sendUserInfo.js > /var/log/effdem/cron-sendUserInfo.log 2>&1
-0 12 * * * cd /home/servy/www/effdem/server && node dist/scripts/sendErrors.js > /var/log/effdem/cron-sendErrors.log 2>&1
+0 7 * * 7 cd /home/servy/www/effdem/server && node dist/scripts/newsletter/sendWeeklyEmail.js
+0 12 * * * cd /home/servy/www/effdem/server && node dist/scripts/monitor/sendUserInfo.js
+0 12 * * * cd /home/servy/www/effdem/server && node dist/scripts/monitor/sendErrors.js
+0 7 * * * cd /home/servy/www/effdem/server && node dist/scripts/samples/createSamples.js
+0 8 * * * cd /home/servy/www/effdem/server && node dist/scripts/samples/endSamples.js

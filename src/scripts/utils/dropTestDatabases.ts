@@ -1,5 +1,5 @@
-import dbPool from "../db/dbPool";
-import { selectRows } from "../db/utils";
+import dbPool from "../../db/dbPool";
+import { selectRows } from "../../db/utils";
 import readline from 'readline';
 const util = require('util');
 import { stdin as input, stdout as output } from 'process';

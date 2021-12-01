@@ -1,9 +1,9 @@
-import db from '../db/databaseApi';
-import * as C from '../constant';
 import axios from 'axios';
+import { execFile } from 'child_process';
+import * as C from '../constant';
+import db from '../db/databaseApi';
 import { ThingId } from '../db/types';
 import DemocraticModerationService from '../services/democraticModerationService';
-import { execFile } from 'child_process';
 import { HnPost } from './types';
 
 export async function runTasks() {
@@ -13,10 +13,6 @@ export async function runTasks() {
     await DemocraticModerationService.updateStrikes();
 
     await db.pool.query(`REFRESH MATERIALIZED VIEW vote_count`);
-
-    // await DemocraticModerationService.createAllSamples();
-
-    await DemocraticModerationService.endAllSamples();
 
     await updateHackerNewsPosts();
 

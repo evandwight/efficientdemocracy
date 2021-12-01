@@ -92,7 +92,6 @@ export const testApi = {
     createSample: (args) => Samples.createSample({
         type: C.SAMPLE.TYPE.LEVEL_1,
         field: "censor",
-        sampleSize: 1,
         ... args
     }),
     createDispute: (args) => db.votes.submitDispute({
@@ -110,7 +109,7 @@ export const testApi = {
     createPostSample: async (type?) => {
         type = type || C.SAMPLE.TYPE.LEVEL_1;
         const {userId, thingId} = await testApi.createPostDispute();
-        const sampleId = await Samples.createSample({thingId,userIds:[userId], type, field:"censor", sampleSize:1});
+        const sampleId = await Samples.createSample({thingId,userIdsInSample:[userId], type, field:"censor"});
         return {userId, thingId, sampleId};
     },
     createPostDispute: async () => {

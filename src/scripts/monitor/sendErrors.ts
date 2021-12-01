@@ -1,5 +1,6 @@
 import fs from 'fs';
-import { sendMonitorEmail } from './emailUtils';
+import { scriptLogger } from '../../logger';
+import { sendMonitorEmail } from '../emailUtils';
 
 
 const ERROR_FILE = "/var/log/effdem/error.log"
@@ -41,4 +42,5 @@ ${errors.filter((e, i) => i < 10).map((e, i) => `${i}. ${e.msg} ${e.err?.message
     return sendMonitorEmail({text,subject});
 }
 
-run();
+run()
+    .catch(err => scriptLogger.error({err}));

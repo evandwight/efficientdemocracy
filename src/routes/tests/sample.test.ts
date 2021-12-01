@@ -18,7 +18,7 @@ describe('sample', () => {
                 const request = await login();
                 const {userId} = request;
                 const thingId = await testApi.createPost({userId});
-                const sampleId = await testApi.createSample({thingId, userIds:[userId]});
+                const sampleId = await testApi.createSample({thingId, userIdsInSample:[userId]});
                 let res = await request.get(C.URLS.QPOSTS)
                     .send()
                     .expect(200);

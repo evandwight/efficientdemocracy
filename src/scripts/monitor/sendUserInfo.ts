@@ -1,5 +1,6 @@
-import db from "../db/databaseApi";
-import { sendMonitorEmail } from './emailUtils';
+import db from "../../db/databaseApi";
+import { scriptLogger } from "../../logger";
+import { sendMonitorEmail } from '../emailUtils';
 
 async function run() {
     const users = await db.users.getUsers();
@@ -11,5 +12,7 @@ ${users.map(e => `${e.user_name} ${e.send_emails}`).join("\n")}
     return sendMonitorEmail({subject, text});
 }
 
-db.initialize();
-run().then(() => db.end());
+db.initialize()
+    .then(run)
+    .catch(err => scriptLogger.error({err}))
+    .finally(() => db.end());

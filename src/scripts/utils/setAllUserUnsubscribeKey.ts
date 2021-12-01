@@ -1,4 +1,4 @@
-import db from "../db/databaseApi";
+import db from "../../db/databaseApi";
 
 async function run() {
     const users = await db.users.getUsers();

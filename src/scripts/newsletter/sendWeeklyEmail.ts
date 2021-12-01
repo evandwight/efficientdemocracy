@@ -1,5 +1,6 @@
-import db from "../db/databaseApi";
-import { lastWeekday } from "../db/utils";
+import db from "../../db/databaseApi";
+import { lastWeekday } from "../../db/utils";
+import { scriptLogger } from "../../logger";
 import { run as freezeDeeplyImportant} from './freezeDeeplyImportant';
 import { run as sendNewsletter} from './sendNewsletter';
 
@@ -11,7 +12,8 @@ async function run() {
 }
 
 if (require.main === module) {
-    console.log("Main mode");
-    db.initialize();
-    run().then(() => db.end());
+    db.initialize()
+        .then(run)
+        .catch(err => scriptLogger.error({err}))
+        .finally(() => db.end());
 }

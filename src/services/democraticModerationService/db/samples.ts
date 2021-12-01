@@ -1,6 +1,6 @@
 import dbPool from "../../../db/dbPool";
 import { UserId, Sample, ThingId} from '../../../db/types';
-import { selectOne, selectOneAttr, existsOne, assertOne, selectAttr, selectRows, countToNumber } from "../../../db/utils";
+import { selectOne, selectOneAttr, existsOne, assertOne, selectAttr, selectRows, countToNumber, internalAssertOne } from "../../../db/utils";
 import * as C from '../../../constant';
 import * as Utils from '../../../db/utils';
 import db from '../../../db/databaseApi';
@@ -44,26 +44,20 @@ export default class Samples {
         return sample;
     }
 
-    static async createSample({thingId, userIds, type, field, sampleSize}) {
-        // select users
-        let usersInSample;
-        if (!!sampleSize) {
-            usersInSample = Utils.generateUniqueRandom(userIds.length - 1, sampleSize).map(v => userIds[v]);
-        } else {
-            usersInSample = userIds;
-        }
+    static async createSample({thingId, userIdsInSample, type, field}) {
         const expiry = Utils.daysFromNow(1);
-        // create samples and sample votes
-        let id = await db.things.create(C.THINGS.SAMPLE);
         return Utils.WithTransaction(db, async (client) => {
-            const sampleId = await client.query(
+            const sampleId = await db.things.create(C.THINGS.SAMPLE, client);
+            await client.query(
                 `INSERT INTO samples (id, samplee_id, type, expires, field, is_complete)
-                VALUES ($1, $2, $3, $4, $5, false)
-                RETURNING id`,
-                [id, thingId, type, expiry, field])
-                .then(selectOneAttr('id'));
-            await Promise.all(usersInSample.map(userId => client.query(
-                `INSERT INTO sample_votes (sample_id, user_id, has_voted) VALUES ($1, $2, false)`, [sampleId, userId])));
+                VALUES ($1, $2, $3, $4, $5, false)`,
+                [sampleId, thingId, type, expiry, field])
+                .then(internalAssertOne);
+            await Promise.all(userIdsInSample.map(userId => 
+                client.query(
+                    `INSERT INTO sample_votes (sample_id, user_id, has_voted) VALUES ($1, $2, false)`, 
+                    [sampleId, userId])
+                    .then(internalAssertOne)));
             return sampleId;
         });
     }

@@ -1,6 +1,6 @@
 import React from "react";
-import * as C from "../constant";
-import { QPost } from "../db/types";
+import * as C from "../../constant";
+import { QPost } from "../../db/types";
 
 type propsType = {
     posts: QPost[],

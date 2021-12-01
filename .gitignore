@@ -9,4 +9,4 @@ coverage
 TODO
 sample
 x
-src/scripts/sendEmail.ts
+src/scripts/utils/sendEmail.ts

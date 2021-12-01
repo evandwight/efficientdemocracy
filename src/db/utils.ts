@@ -1,5 +1,5 @@
 import * as C from '../constant'
-import { UnexpectedInternalError } from '../routes/utils';
+import { unexpectedAssert, UnexpectedInternalError } from '../routes/utils';
 const crypto = require('crypto');
 
 export function countToNumber(result) {
@@ -89,9 +89,7 @@ export function retryOnceOnUniqueError(func) {
 }
 
 export function generateUniqueRandom(maxValue, numValues) {
-    if (maxValue + 1 < numValues) {
-        throw new Error("Too few numValues");
-    }
+    unexpectedAssert(maxValue + 1 >= numValues, "Too few numValues")
     
     let bag = [...Array(maxValue + 1).keys()];
 

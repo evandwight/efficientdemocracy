@@ -1,12 +1,13 @@
-import db from "../db/databaseApi";
-import * as C from "../constant";
-import { selectAttr } from "../db/utils";
+import db from "../../db/databaseApi";
+import * as C from "../../constant";
+import { selectAttr } from "../../db/utils";
 import { assert } from "console";
+import { scriptLogger } from "../../logger";
 
 
 export async function run(start, end) {
     const key = `deeply-important-${dateToSortableStr(start)}-to-${dateToSortableStr(end)}`;
-    console.log(`Saving posts to ${key}`);
+    scriptLogger.debug(`Saving posts to ${key}`);
     const posts = await getPosts(start, end);
     const success = await db.kv.set(key, posts);   
     assert(success, "Failed to set kv");
@@ -31,11 +32,11 @@ export function dateToSortableStr(date) {
 }
 
 if (require.main === module) {
-    console.log("Main mode");
     const start = new Date(process.argv[2]);
     const end = new Date(process.argv[3]);
 
-
-    db.initialize();
-    run(start, end).then(() => db.end());
+    db.initialize()
+    .then(() => run(start, end))
+    .catch(err => scriptLogger.error({err}))
+    .finally(() => db.end());
 }
