@@ -47,9 +47,7 @@ export const QCOMMENT_VIEW = "/qcomment/view/";
 export const SUBMIT_QCOMMENT = "/submit/qcomment";
 
 // Accounts
-export const USER_LOGIN = "/auth/cognito";
-export const USER_LOCAL_LOGIN = "/users/local-login";
-export const USER_LOCAL_REGISTER = "/users/local-register";
+export const USER_LOGIN = "/user/login";
 export const USER_LOGOUT = "/users/logout";
 export const USER_STRIKES = "/user/strikes";
 export const USER_SETTINGS = "/user/settings";

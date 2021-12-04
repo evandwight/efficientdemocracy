@@ -156,6 +156,7 @@ function setup(db) {
     router.postAsync(C.URLS.SUBMIT_QPOST_MINI_MOD_ACTION + ":field/:id", assertMiniMod, Routes.MiniMods.submitPostAction);
 
     // Accounts
+    router.get(C.URLS.USER_LOGIN, (req, res) => res.redirect(C.URLS.AUTH_COGNITO));
     router.get(C.URLS.USER_LOGOUT, Routes.Account.logout);
 
     router.getAsync(C.URLS.USER_STRIKES, assertAuthenticated, Routes.Account.strikes);
