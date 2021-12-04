@@ -6,4 +6,13 @@ export enum COLUMNS {
     send_emails = "send_emails",
     first_run = "first_run",
     is_mini_mod = "is_mini_mod",
+    dm_participate = "dm_participate",
+    wants_proxy = "wants_proxy",
+    proxy_id = "proxy_id",
+}
+
+export enum DM_PARICIPATE {
+    no = "no",
+    proxy = "proxy",
+    direct = "direct"
 }

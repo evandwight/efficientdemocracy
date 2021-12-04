@@ -1,6 +1,7 @@
 import dbPool from "../../../db/dbPool";
 import { UserId } from '../../../db/types';
-import { internalAssertOne, selectOneAttr } from '../../../db/utils';
+import { countToNumber, internalAssertOne, selectOneAttr } from '../../../db/utils';
+import * as C from '../../../constant';
 
 export default class ModVotes {
     static getVote(userId) {
@@ -22,12 +23,25 @@ export default class ModVotes {
 
     static countVotes(): Promise<{vote: UserId, user_name: string, count: number}[]> {
         return dbPool.query(
-            `SELECT users.id as vote, users.user_name, COUNT(mv.vote) as count 
-            FROM mod_votes as mv
-            RIGHT JOIN users ON mv.vote = users.id
+            `WITH all_mod_votes as (
+                SELECT mod_votes.user_id as user_id, mod_votes.vote as vote
+                FROM mod_votes
+                    INNER JOIN users ON mod_votes.user_id = users.id
+                WHERE users.dm_participate = '${C.USER.DM_PARICIPATE.direct}'
+                UNION
+                SELECT users.id as user_id, mod_votes.vote as vote
+                FROM mod_votes
+                    INNER JOIN users ON users.proxy_id = mod_votes.user_id
+                    INNER JOIN users as p_users ON p_users.id = users.proxy_id
+                WHERE users.dm_participate = '${C.USER.DM_PARICIPATE.proxy}'
+                    AND p_users.wants_proxy = true
+            )
+            SELECT users.id as vote, users.user_name, COUNT(mv.vote) as count 
+            FROM all_mod_votes as mv
+                RIGHT JOIN users ON mv.vote = users.id
             WHERE users.wants_mod = true
             GROUP BY users.id, users.user_name
             ORDER BY count DESC`)
-            .then(result => result.rows.map(v => ({... v, count: parseInt(v.count)})));
+            .then(countToNumber);
     }
 }

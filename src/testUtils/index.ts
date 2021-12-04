@@ -88,6 +88,13 @@ export const testApi = {
     createHackerUser: async ():Promise<UserId> => {
         return testApi.createUser({userName:"hacker", id: C.BOT_ACCOUNT_USER_ID});
     },
+    createUserWithSettings: async (userName, settings):Promise<UserId> => {
+        const id = await testApi.createUser({userName});
+        for (const setting of settings) {
+            await db.users.setSetting(id, setting[0], setting[1]);
+        }
+        return id;
+    },
     createPost: (args) => db.qPosts.submitPost({title: "a", url:"b", content:"c", ...args}),
     createSample: (args) => Samples.createSample({
         type: C.SAMPLE.TYPE.LEVEL_1,

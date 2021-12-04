@@ -74,7 +74,7 @@ export default class Users {
     }
 
     setSetting(userId: UserId, propName: C.USER.COLUMNS, propValue: string|number|boolean|Date) {
-        unexpectedAssert(Object.values(C.USER.COLUMNS).includes(propName), "Invalid property");
+        unexpectedAssert(C.USER.COLUMNS.hasOwnProperty(propName), "Invalid property");
         const columnName = C.USER.COLUMNS[propName]; 
         return this.db.pool.query(
             `UPDATE users
@@ -85,5 +85,13 @@ export default class Users {
     
     getMod(): Promise<UserId> {
         return this.db.pool.query(`SELECT id FROM users WHERE is_mod = true`).then(selectOneAttr('id'));
+    }
+
+    getProxies() {
+        return this.db.pool.query(
+            `SELECT id, user_name
+            FROM users
+            WHERE wants_proxy = true`
+        ).then(selectRows);
     }
 }

@@ -141,6 +141,10 @@ function setup(db) {
     router.getAsync(C.URLS.VIEW_MOD_VOTE, assertAuthenticated, Routes.ModVote.viewModVote);
     router.postAsync(C.URLS.SUBMIT_MOD_VOTE + ":vote", assertAuthenticated, Routes.ModVote.submitModVote);
 
+    // Set Proxy
+    router.getAsync(C.URLS.VIEW_PROXY, assertAuthenticated, Routes.Account.viewProxy);
+    router.postAsync(C.URLS.SUBMIT_PROXY + ":proxyId", assertAuthenticated, Routes.Account.submitProxy);
+
     // Mods
     router.getAsync(C.URLS.QPOSTS_MOD_ACTIONS + ":id", assertMod, Routes.Mods.viewPostActions);
     router.postAsync(C.URLS.SUBMIT_QPOST_MOD_ACTION + ":field/:id", assertMod, Routes.Mods.submitPostAction);

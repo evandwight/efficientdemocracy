@@ -1,4 +1,4 @@
-import type { Sample, SampleId, ThingId, UserId } from '../../db/types';
+import type { Sample, SampleId, ThingId, User, UserId } from '../../db/types';
 import MiniModVotes from './db/miniModVotes';
 import ModActions from './db/modActions';
 import ModVotes from './db/modVotes';
@@ -8,6 +8,7 @@ import { submitDispute } from './disputes';
 import { getMiniModVotes, miniModVote } from './miniModVotes';
 import { createModAction, getFields } from './modActions';
 import { getMod, updateMod } from './modVotes';
+import { getProxies, getProxy, setProxy } from './proxy';
 import * as SampleApi from './sample';
 import type { StrikesInfo } from './types';
 
@@ -62,6 +63,11 @@ class DemocraticModerationService {
         strikeUps: boolean,
         strikeDowns: boolean,
         strikePoster: boolean}) => Promise<void> = miniModVote;
+
+    // Proxy setting
+    static getProxy: (userId: UserId) => Promise<User> = getProxy;
+    static setProxy: (args: {userId: UserId, proxyId: UserId}) => Promise<void> = setProxy;
+    static getProxies: () => Promise<{id: UserId, user_name: string}[]> = getProxies;
 }
 
 export default DemocraticModerationService;

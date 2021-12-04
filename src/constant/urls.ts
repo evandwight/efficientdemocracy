@@ -24,6 +24,10 @@ export const SUBMIT_SAMPLE_VOTE = "/submit/sample-vote/";
 export const VIEW_MOD_VOTE = "/view-mod-vote";
 export const SUBMIT_MOD_VOTE = "/submit/mod-vote/";
 
+// Proxy setting
+export const VIEW_PROXY = "/view-proxy";
+export const SUBMIT_PROXY = "/submit/proxy/";
+
 // Mods
 export const MODS_VIEW = "/mods";
 
