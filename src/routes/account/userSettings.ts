@@ -6,7 +6,7 @@ import { validationAssert } from '../utils';
 
 export async function userSettings(req, res) {
     const { user, csrfToken } = res.locals;
-    reactRender(res, UserSettings({ user, csrfToken }), { title: "User settings" });
+    reactRender(res, UserSettings({ user, csrfToken }), { title: "User settings", includeScript: "/public/userSettings.js"});
 }
 
 export async function submitUserSettings(req, res) {

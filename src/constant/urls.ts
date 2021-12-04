@@ -48,13 +48,13 @@ export const SUBMIT_QCOMMENT = "/submit/qcomment";
 
 // Accounts
 export const USER_LOGIN = "/user/login";
-export const USER_LOGOUT = "/users/logout";
+export const USER_LOGOUT = "/user/logout";
 export const USER_STRIKES = "/user/strikes";
 export const USER_SETTINGS = "/user/settings";
 export const SUBMIT_USER_SETTINGS = "/submit/user/settings";
 export const SUBMIT_USER_FIRST_RUN = "/submit/user/first-run";
 export const EMAIL_UNSUBSCRIBE = "/email/unsubscribe/";
-
+export const CHANGE_EMAIL = "/user/change-email"
 
 // Misc
 export const ABOUT = "/about/";
