@@ -29,10 +29,10 @@ export async function run(key) {
 function postsToText({posts, postsLink, unsubscribeLink}) {
     const postList = posts.map(post => ` * ${post.title}`).join("\n");
     const text = 
-`Deeply important posts:
+`Deeply important posts from hacker news:
 ${postList}
 
-View list: ${postsLink}
+View in your browser: ${postsLink}
 Unsubscribe: ${unsubscribeLink}`;
     return text;
 }
@@ -63,7 +63,7 @@ function newsletterJson({user, key, posts}) {
         from: "letter@efficientdemocracy.com",
         html: html(Newsletter({posts, postsLink, unsubscribeLink})),
         text: postsToText({posts, postsLink, unsubscribeLink}),
-        subject: "Efficient democracy - newsletter",
+        subject: "Hacker news weekly summary",
     }
 }
 
