@@ -13,7 +13,6 @@ export const Header = ({ options, user, csrfToken }) =>
                     <a href={C.URLS.ABOUT_STATUS}>alpha</a>
                     <span> | </span>
                     <a href={C.URLS.ABOUT_WHAT_IS_THIS}>what is this?</a>
-                    {user?.is_mod && <span> | <a href={C.URLS.MOD_VIEW_MINI_MODS}>mini-mod</a></span>}
                 </td>
                 {options.showLogin ? <td id="userInfo"> <LoginInfo user={user} /> </td> : null}
             </tr>
