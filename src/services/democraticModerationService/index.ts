@@ -34,11 +34,11 @@ class DemocraticModerationService {
     static createAllSamples: () => Promise<void> = SampleApi.createAllSamples;
     static endAllSamples: () => Promise<void> = SampleApi.endSamples;
     static getOldestSample: (userId: UserId) => Promise<Sample> = Samples.getOldestSample;
+    static getSamplesForUser: (args:{userId: UserId, isProxy:boolean}) => Promise<Sample[]> = Samples.getSamplesForUser;
     static getSampleResult: (sampleId: SampleId) => Promise<any> = Samples.getSampleResult;
     static getCompletedSamples: (thingId: ThingId) => Promise<any> = Samples.getCompletedSamples;
     static sampleVote: (args: { sampleId: SampleId, userId: UserId, vote: boolean, strikes: StrikesInfo }) => Promise<void>
         = SampleApi.sampleVote;
-    static canUserVote: ({ userId: UserId, sampleId: SampleId }) => Promise<boolean> = Samples.canUserVote;
 
     // Strikes
     static getStrikes: (userId: UserId) => Promise<any> = Strikes.getStrikes

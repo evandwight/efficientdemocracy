@@ -1,3 +1,4 @@
+import * as C from '../constant';
 import db from '../db/databaseApi';
 import { unexpectedAssert } from '../routes/utils';
 import DemocraticModerationService from '../services/democraticModerationService';
@@ -18,7 +19,9 @@ export function initializePassport(passport) {
         try {
             let user = await db.users.getUser(id);
             unexpectedAssert(!!user, "Session user id not found")
-            user.sample = await DemocraticModerationService.getOldestSample(id);
+            if (!user.wants_proxy && user.dm_participate === C.USER.DM_PARTICIPATE.direct) {
+                user.sample = await DemocraticModerationService.getOldestSample(id);
+            }
             return done(null, user);
         } catch (err) {
             return done (err);

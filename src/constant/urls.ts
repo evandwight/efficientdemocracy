@@ -18,6 +18,8 @@ export const DISPUTED_QPOSTS = "/highly-disputed-qposts";
 export const MINI_MOD_QPOSTS = "/mini-mod-qposts";
 
 // Samples
+export const VIEW_SAMPLE_REQUESTS = "/view/sample-requests";
+export const VIEW_SAMPLE_REQUEST = "/view/sample-request/";
 export const SUBMIT_SAMPLE_VOTE = "/submit/sample-vote/";
 
 // Mod Vote

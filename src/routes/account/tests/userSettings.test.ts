@@ -23,6 +23,7 @@ describe("userSettings", () => {
                     .send({
                         _csrf: csrfToken,
                         send_emails: true,
+                        dm_participate: 'no',
                     }).expect(302);
             const user = await db.users.getUser(request.userId);
             expect(user.send_emails).toBe(true);

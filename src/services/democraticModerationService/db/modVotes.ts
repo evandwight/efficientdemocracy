@@ -27,13 +27,13 @@ export default class ModVotes {
                 SELECT mod_votes.user_id as user_id, mod_votes.vote as vote
                 FROM mod_votes
                     INNER JOIN users ON mod_votes.user_id = users.id
-                WHERE users.dm_participate = '${C.USER.DM_PARICIPATE.direct}'
+                WHERE users.dm_participate = '${C.USER.DM_PARTICIPATE.direct}'
                 UNION
                 SELECT users.id as user_id, mod_votes.vote as vote
                 FROM mod_votes
                     INNER JOIN users ON users.proxy_id = mod_votes.user_id
                     INNER JOIN users as p_users ON p_users.id = users.proxy_id
-                WHERE users.dm_participate = '${C.USER.DM_PARICIPATE.proxy}'
+                WHERE users.dm_participate = '${C.USER.DM_PARTICIPATE.proxy}'
                     AND p_users.wants_proxy = true
             )
             SELECT users.id as vote, users.user_name, COUNT(mv.vote) as count 

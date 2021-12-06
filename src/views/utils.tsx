@@ -9,6 +9,7 @@ import * as C from '../constant';
 type reactRenderOptions = {
     title?: string, 
     showLogin?: boolean,
+    showCards?: boolean,
     includeChartJs?: boolean,
     dangerousChartData?: any,
     includeVotesJs?: boolean,
@@ -17,7 +18,7 @@ type reactRenderOptions = {
     metaDescription?: string,
 }
 
-export const DefaultWrapper = (props: {showLogin, user, csrfToken, children}) => 
+export const DefaultWrapper = (props: {options, user, csrfToken, children}) => 
     <div>
         <Header {... props}/>
             <div id="inner-content">
@@ -27,10 +28,9 @@ export const DefaultWrapper = (props: {showLogin, user, csrfToken, children}) =>
     </div>
 
 export const reactRender = (res, element, options?: reactRenderOptions) => {
-    options = options || {};
-    const showLogin = options.hasOwnProperty("showLogin") ? options.showLogin : true;
+    options = {showLogin: true, showCards: true, ... options};
     const innerHtml = ReactDOMServer.renderToStaticMarkup(
-        <DefaultWrapper showLogin={showLogin} user={res.locals.user} csrfToken={res.locals.csrfToken}>
+        <DefaultWrapper options={options} user={res.locals.user} csrfToken={res.locals.csrfToken}>
             {element}
         </DefaultWrapper>
         );

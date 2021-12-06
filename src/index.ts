@@ -136,6 +136,8 @@ function setup(db) {
 
     // Samples
     router.postAsync(C.URLS.SUBMIT_SAMPLE_VOTE + ":sampleId", assertAuthenticated, Routes.Sample.submitSampleVote);
+    router.getAsync(C.URLS.VIEW_SAMPLE_REQUEST + ":sampleId", assertAuthenticated, Routes.Sample.viewSampleRequest);
+    router.getAsync(C.URLS.VIEW_SAMPLE_REQUESTS, assertAuthenticated, Routes.Sample.viewSampleRequests);
 
     // ModVote
     router.getAsync(C.URLS.VIEW_MOD_VOTE, assertAuthenticated, Routes.ModVote.viewModVote);

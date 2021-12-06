@@ -120,7 +120,8 @@ export const testApi = {
         return {userId, thingId, sampleId};
     },
     createPostDispute: async () => {
-        const userId = await testApi.createUser();
+        const userId = await testApi.createUserWithSettings('a',
+            [[C.USER.COLUMNS.dm_participate, C.USER.DM_PARTICIPATE.direct]]);
         const thingId = await testApi.createPost({userId});
         await db.votes.submitDispute({thingId, userId, field:"censor", shouldBe:true});
         return {userId, thingId};

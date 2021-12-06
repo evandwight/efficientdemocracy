@@ -6,22 +6,25 @@ import { validationAssert } from '../utils';
 
 export async function userSettings(req, res) {
     const { user, csrfToken } = res.locals;
-    reactRender(res, UserSettings({ user, csrfToken }), { title: "User settings", includeScript: "/public/userSettings.js"});
+    reactRender(res, UserSettings({ user, csrfToken }), 
+        { title: "User settings", includeScript: "/public/userSettings.js", showCards: false});
 }
 
 export async function submitUserSettings(req, res) {
     const userId = req.user.id;
     const body = { ...req.body };
     const sendEmails = body.hasOwnProperty(C.USER.COLUMNS.send_emails);
+    const dmSendEmails = body.hasOwnProperty(C.USER.COLUMNS.dm_send_emails);
     const wantsMod = body.hasOwnProperty(C.USER.COLUMNS.wants_mod);
     const wantsProxy = body.hasOwnProperty(C.USER.COLUMNS.wants_proxy);
     const dmParticipate = body[C.USER.COLUMNS.dm_participate];
 
-    validationAssert(C.USER.DM_PARICIPATE.hasOwnProperty(dmParticipate), "Invalid dm_participate", 400);
-    validationAssert(dmParticipate === C.USER.DM_PARICIPATE.no || sendEmails, 
-        "To participate in democratic moderation you must enable send_emails", 400);
+    validationAssert(C.USER.DM_PARTICIPATE.hasOwnProperty(dmParticipate), "Invalid dm_participate", 400);
+    validationAssert(dmParticipate === C.USER.DM_PARTICIPATE.no || dmSendEmails, 
+        "To participate in democratic moderation you must enable dm_send_emails", 400);
 
     await db.users.setSetting(userId, C.USER.COLUMNS.send_emails, sendEmails);
+    await db.users.setSetting(userId, C.USER.COLUMNS.dm_send_emails, dmSendEmails);
     await db.users.setSetting(userId, C.USER.COLUMNS.wants_mod, wantsMod);
     await db.users.setSetting(userId, C.USER.COLUMNS.wants_proxy, wantsProxy);
     await db.users.setSetting(userId, C.USER.COLUMNS.first_run, false);

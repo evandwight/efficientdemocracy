@@ -31,13 +31,13 @@ describe("ModVotesDb", () => {
                 [C.USER.COLUMNS.wants_mod, false]
             ]);
             const user1 = await testApi.createUserWithSettings("user1", [
-                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARICIPATE.direct]
+                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARTICIPATE.direct]
             ]);
             const user2 = await testApi.createUserWithSettings("user2", [
-                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARICIPATE.direct]
+                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARTICIPATE.direct]
             ]);
             const user3 = await testApi.createUserWithSettings("user3", [
-                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARICIPATE.no]
+                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARTICIPATE.no]
             ]);
             await ModVotes.upsertVote({userId: user1, vote:mod1});
             await ModVotes.upsertVote({userId: user2, vote:mod2});
@@ -53,11 +53,11 @@ describe("ModVotesDb", () => {
                 [C.USER.COLUMNS.wants_proxy, true]
             ]);
             const user1 = await testApi.createUserWithSettings("user1", [
-                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARICIPATE.proxy],
+                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARTICIPATE.proxy],
                 [C.USER.COLUMNS.proxy_id, proxy1],
             ]);
             const user2 = await testApi.createUserWithSettings("user2", [
-                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARICIPATE.proxy],
+                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARTICIPATE.proxy],
                 [C.USER.COLUMNS.proxy_id, null],
             ]);
             await ModVotes.upsertVote({userId: proxy1, vote:mod1});
