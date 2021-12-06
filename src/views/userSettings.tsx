@@ -7,6 +7,7 @@ export const UserSettings = ({ user, csrfToken }) => {
         <h1>User settings</h1>
         <div>User name: {user.user_name}</div>
         <div><a href={C.URLS.CHANGE_EMAIL}>Change</a> your email</div>
+        {user.is_mod && <div><a href={C.URLS.MOD_VIEW_MINI_MODS}>mini-mod</a></div>}
         <br />
         <form action={C.URLS.SUBMIT_USER_SETTINGS} method="POST" autoComplete="off">
             <input type="hidden" name="_csrf" value={csrfToken} />
@@ -37,6 +38,7 @@ export const UserSettings = ({ user, csrfToken }) => {
                 <div><a href={C.URLS.VIEW_MOD_VOTE}>Change</a> your vote for moderator</div>
                 <div><a href={C.URLS.VIEW_SAMPLE_REQUESTS}>View</a> samples to answer</div>
             </div>
+            
 
             <div>
                 <input type="submit" value="Submit" />
