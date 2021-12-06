@@ -41,7 +41,6 @@ export async function submitPostAction(req, res) {
 export async function viewSetMiniMods(req, res) {
     let users = await db.users.getUsers();
     users.sort((a,b) => a.user_name - b.user_name);
-    console.log(users);
     reactRender(res, ViewSetMiniMods({users}), {title: "Set mini mods", includeVotesJs: true});
 }
 
