@@ -7,7 +7,16 @@ import db from '../db/databaseApi';
 import { CachedDB } from '../db/cachedDb';
 import * as C from '../constant';
 
+export function validationAssertCanModVote(user) {
+    validationAssert(user.wants_proxy || user.dm_participate === C.USER.DM_PARTICIPATE.direct,
+        "To vote for mod, you must participate in democratic moderation directly", 400);
+}
+
 export async function viewModVote(req, res) {
+    const { user } = res.locals;
+
+    validationAssertCanModVote(user);
+
     const currentModId = await DemocraticModerationService.getMod();
     const currentMod = await db.users.getUser(currentModId);
     const currentModVoteId = await DemocraticModerationService.getModVote(req.user.id);
@@ -22,8 +31,7 @@ export async function submitModVote(req, res) {
     const { user } = res.locals;
 
     validationAssert(validator.isUUID(vote,4), "Invalid vote", 400);
-    validationAssert(user.wants_proxy || user.dm_participate === C.USER.DM_PARTICIPATE.direct,
-        "To vote for mod, you must participate in democratic moderation directly", 400);
+    validationAssertCanModVote(user);
 
     await DemocraticModerationService.setModVote({userId: user.id, vote});
 

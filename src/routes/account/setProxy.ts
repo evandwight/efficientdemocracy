@@ -6,7 +6,15 @@ import { reactRender } from '../../views/utils';
 import { ViewProxy } from '../../views/viewProxy';
 import { validationAssert } from '../utils';
 
+export function validationAssertCanSetProxy(user) {
+    validationAssert(user.dm_participate === C.USER.DM_PARTICIPATE.proxy,
+        "To set a proxy, you must participate in democratic moderation by proxy", 400);
+}
+
 export async function viewProxy(req, res) {
+    const { user } = res.locals;
+    validationAssertCanSetProxy(user);
+
     const proxyId = await DemocraticModerationService.getProxy(req.user.id);
     const currentProxy = !!proxyId ? await db.users.getUser(proxyId) : null;
     const proxies = await DemocraticModerationService.getProxies();
@@ -19,8 +27,8 @@ export async function submitProxy(req, res) {
     const { user } = res.locals;
 
     validationAssert(validator.isUUID(proxyId, 4), "Invalid proxyId", 400);
-    validationAssert(user.dm_participate === C.USER.DM_PARTICIPATE.proxy,
-        "To set a proxy, you must participate in democratic moderation by proxy", 400);
+    validationAssertCanSetProxy(user);
+    
 
     await DemocraticModerationService.setProxy({ userId: user.id, proxyId });
 
