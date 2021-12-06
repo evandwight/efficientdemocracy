@@ -50,7 +50,8 @@ describe("ModVotesDb", () => {
                 [C.USER.COLUMNS.wants_mod, true]
             ]);
             const proxy1 = await testApi.createUserWithSettings("proxy1", [
-                [C.USER.COLUMNS.wants_proxy, true]
+                [C.USER.COLUMNS.wants_proxy, true],
+                [C.USER.COLUMNS.dm_participate, C.USER.DM_PARTICIPATE.direct],
             ]);
             const user1 = await testApi.createUserWithSettings("user1", [
                 [C.USER.COLUMNS.dm_participate, C.USER.DM_PARTICIPATE.proxy],
@@ -62,7 +63,7 @@ describe("ModVotesDb", () => {
             ]);
             await ModVotes.upsertVote({userId: proxy1, vote:mod1});
             const counts = await ModVotes.countVotes();
-            expect(counts).toEqual([{vote:mod1, user_name: "mod1", count: 1}]);
+            expect(counts).toEqual([{vote:mod1, user_name: "mod1", count: 2}]);
         });
     });
 });
