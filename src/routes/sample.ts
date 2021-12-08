@@ -35,6 +35,7 @@ export async function viewSampleRequest(req, res) {
     validationAssert(validator.isUUID(sampleId, 4), "Invalid sample id", 400);
 
     let sample = await DemocraticModerationService.getSampleResult(sampleId);
+    validationAssert(!!sample, "Sample not found", 404);
     sample.post = await db.qPosts.getPost(sample.samplee_id);
     unexpectedAssert(!!sample.post, "No post found with sample")
 
