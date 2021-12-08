@@ -47,13 +47,12 @@ const Element = () =>
         <ul>
             <li>Should this post be quarantined?</li>
             <li>Retrospectively, was this a good decision?</li>
-            <li>Should this be a community rule?</li>
             <li>Should this community be quarantined?</li>
             <li>Is this person an expert in physics?</li>
             <li>As an expert in physics, do you think this study is good?</li>
         </ul>
         <p>
-            The answers won't always be right but when your peers have a consensus it signals that you'll feel the same way. By making decisions democratically we put them on firm foundations. Foundations that lets us use moderation with less fear of tyranny.
+            The answers won't always be right but a group comes to a consensus it's a good signal. By making decisions democratically we put them on firm foundations. Foundations that lets us use moderation with less fear of tyranny.
         </p>
         <p>
             We do not need big tech monopolies to control speech. We can build communities that moderate themselves [22].
