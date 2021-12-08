@@ -1,22 +1,25 @@
 import React from 'react';
 import * as C from '../../constant';
 
-const title = "Designated Proxy"
+const title = "Designated proxy"
 
 const element = () =>
     <div>
         <h2>{title}</h2>
         <p>
-            Currently not implemented.
+            Being actively involved takes time and ends up excluding the majority of people from participating.  This introduces a bias towards those with excess time or extreme interest.
         </p>
         <p>
-            Being actively involved takes time. For those who want their voice to be heard but not actively involved, they can designate a proxy to vote for them. Proxies give the silent majority a voice.
+            We give users the power to designate a proxy to act on their behalf. This lowers the barrier to participation and removes the bias towards extremes. Proxies give the silent majority a voice.
         </p>
         <p>
-            To keep proxies voting aligned to the users who designated them we regularly sample the opinion of the designators and compare it to the voting record of their proxies. When the difference becomes too large, we ask our users to designate new proxies. Ideally, we'd only need to bother a small fraction of designators every quarter.  It scales - the more users, the less work.
+            To keep proxies aligned with their users we regularly sample users' opinion and compare it to the voting record of their proxy. When the difference becomes too large, users must designate new proxies. Statistical sampling allows us to only bother a small fraction of users every quarter.  The more users, the less work.
         </p>
         <p>
-            Proxies have an all-or-nothing problem. However, without them, your only choice is nothing.
+            Proxies will never be perfect representatives but the alternative is no representation at all.
+        </p>
+        <p>
+            To particpate in democratic moderation via proxy: change the <a href={C.URLS.USER_SETTINGS}>setting</a> and <a href={C.URLS.VIEW_PROXY}>pick a proxy</a>.
         </p>
     </div>
 
