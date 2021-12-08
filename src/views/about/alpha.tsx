@@ -6,8 +6,15 @@ const title = "Status"
 const element = () =>
     <div>
         <h2>Status: Alpha</h2>
+        <h4>Unimplemented features</h4>
+        <ul>
+            <li>Submitting posts (not needed till the community is large)</li>
+            <li>Multiple subcommunities</li>
+            <li>Validating proxy representation</li>
+            <li>Explainations for moderator decisions</li>
+        </ul>
         <p>
-            All basic functionality has been implemented and enabled. Bugs and performance need to be worked out.
+            Bugs and performance need to be worked out.
         </p>
         <h4>Security</h4>
         <p>
