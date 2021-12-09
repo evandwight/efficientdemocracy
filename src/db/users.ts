@@ -1,7 +1,8 @@
 import { generateSlug } from "random-word-slugs";
 import * as C from '../constant';
-import { internalAssertOne, retryOnceOnUniqueError, selectOne, selectOneAttr, selectRows } from '../db/utils';
+import { internalAssertOne, retryOnceOnUniqueError, selectAttr, selectOne, selectOneAttr, selectRows } from '../db/utils';
 import { unexpectedAssert } from "../routes/utils";
+import { DmUser } from "../services/democraticModerationService/types";
 import { DatabaseApi } from "./databaseApi";
 import { User, UserId } from './types';
 
@@ -35,7 +36,16 @@ export default class Users {
     // NO FIX
     getUserIds(): Promise<UserId[]> {
         return this.db.pool.query(`SELECT id FROM users`)
-            .then((result) => result.rows.map(row => row.id));
+            .then(selectAttr('id'));
+    }
+
+    getDmUsers(): Promise<DmUser[]> {
+        return this.db.pool.query(
+            `SELECT id , dm_participate, proxy_id
+            FROM users
+            WHERE dm_participate <> 'no'`)
+            .then(selectRows)
+            .then(e => ({userId: e.id, proxyId: e.dm_participate === 'proxy' ? e.proxy_id : null}));
     }
 
     getUsers(): Promise<User[]> {

@@ -22,7 +22,7 @@ describe('sample', () => {
                 await db.users.setSetting(userId, C.USER.COLUMNS.first_run, false);
 
                 const thingId = await testApi.createPost({ userId });
-                const sampleId = await testApi.createSample({ thingId, userIdsInSample: [userId] });
+                const sampleId = await testApi.createSample({ thingId, dmUsersInSample: [{userId, proxyId: null}] });
                 let res = await request.get(C.URLS.VIEW_SAMPLE_REQUEST + sampleId)
                     .send()
                     .expect(200);

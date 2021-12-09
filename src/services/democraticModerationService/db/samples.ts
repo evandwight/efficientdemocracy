@@ -4,7 +4,8 @@ import dbPool from "../../../db/dbPool";
 import { Sample, ThingId, UserId } from '../../../db/types';
 import * as Utils from '../../../db/utils';
 import { countToNumber, existsOne, internalAssertOne, selectAttr, selectOne, selectRows } from "../../../db/utils";
-import { unexpectedAssert } from '../../../routes/utils';
+import { unexpectedAssert, UnexpectedInternalError } from '../../../routes/utils';
+import { DmUser } from '../types';
 import ModActions from "./modActions";
 
 
@@ -12,27 +13,35 @@ export default class Samples {
     static vote({ sampleId, userId, vote, strikeUps, strikeDowns, strikePoster, strikeDisputers }) {
         return dbPool.query(
             `INSERT INTO sample_votes
-                (sample_id, user_id, vote, strike_ups, strike_downs, strike_poster, strike_disputers, has_voted, in_sample) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7, true, false)
+                (sample_id, user_id, vote, strike_ups, strike_downs, strike_poster, strike_disputers) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
             ON CONFLICT (sample_id, user_id)
-            DO UPDATE SET 
-                (vote, strike_ups, strike_downs, strike_poster, strike_disputers, has_voted) 
-                = ($3, $4, $5, $6, $7, true)
-                WHERE sample_votes.has_voted = false`,
+            DO NOTHING`,
             [sampleId, userId, vote, strikeUps, strikeDowns, strikePoster, strikeDisputers]).then(existsOne);
+    }
+
+    static canVote({ sampleId, userId }) {
+        return dbPool.query(
+            `SELECT *
+            FROM in_sample
+            WHERE sample_id = $1 AND 
+                ((user_id = $2 AND proxy_id IS NULL) OR proxy_id = $2)
+            LIMIT 1`, [sampleId, userId]).then(existsOne);
     }
 
     static async getOldestSample(userId: UserId): Promise<Sample> {
         const sample = await dbPool.query(`
             SELECT id, samplee_id, field
-            FROM sample_votes as sv INNER JOIN samples ON sv.sample_id = samples.id
-            WHERE user_id = $1 and has_voted = false and expires > NOW()
+            FROM in_sample as isu
+                LEFT JOIN sample_votes as sv ON isu.user_id = sv.user_id AND isu.sample_id = sv.sample_id  
+                INNER JOIN samples ON isu.sample_id = samples.id
+            WHERE isu.user_id = $1 and sv.user_id IS NULL and samples.expires > NOW()
             ORDER BY expires DESC
             LIMIT 1`, [userId]).then(selectOne);
         if (sample) {
             sample.post = await db.qPosts.getPost(sample.samplee_id).then(r => {
                 if (r === null) {
-                    throw new Error("Cannot find post for sample");
+                    throw new UnexpectedInternalError("Cannot find post for sample");
                 } else {
                     return r;
                 }
@@ -43,24 +52,14 @@ export default class Samples {
 
     static async getSamplesForUser({ userId, isProxy }): Promise<Sample[]> {
         const samples = await dbPool.query(
-            `WITH all_sample_votes as (
-                SELECT sample_id, has_voted
-                FROM sample_votes
-                WHERE 
-                    user_id = $1
-                UNION
-                SELECT sample_id, has_voted
-                FROM sample_votes
-                    INNER JOIN users ON users.proxy_id = sample_votes.user_id
-                WHERE 
-                    $2 = true
-                    AND users.dm_participate = '${C.USER.DM_PARTICIPATE.proxy}'
-                    AND users.proxy_id = $1
-            )
-            SELECT samples.id, samples.samplee_id, samples.field
-            FROM all_sample_votes as sv INNER JOIN samples ON sv.sample_id = samples.id
-            WHERE sv.has_voted = false and samples.expires > NOW()
-            ORDER BY expires DESC`, [userId, isProxy]).then(selectRows);
+            `SELECT samples.id, samples.samplee_id, samples.field
+            FROM in_sample as isu
+                LEFT JOIN sample_votes as sv ON isu.user_id = sv.user_id AND isu.sample_id = sv.sample_id
+                INNER JOIN samples ON isu.sample_id = samples.id
+            WHERE sv.user_id IS NULL
+                AND (isu.user_id = $1 OR ($2 = true AND isu.proxy_id = $1))
+                AND samples.expires > NOW()
+            ORDER BY samples.expires DESC`, [userId, isProxy]).then(selectRows);
         for (const sample of samples) {
             sample.post = await db.qPosts.getPost(sample.samplee_id);
             unexpectedAssert(!!sample.post, "No post found with sample")
@@ -68,20 +67,30 @@ export default class Samples {
         return samples;
     }
 
-    static async createSample({ thingId, userIdsInSample, type, field }) {
+    static async createSamplesEntry({ sampleId, thingId, type, expiry, field, client }) {
+        return client.query(
+            `INSERT INTO samples (id, samplee_id, type, expires, field, is_complete)
+            VALUES ($1, $2, $3, $4, $5, false)`,
+            [sampleId, thingId, type, expiry, field])
+            .then(internalAssertOne);
+    }
+
+    static async createInSample({ userId, sampleId, proxyId, client }) {
+        return client.query(
+            `INSERT INTO in_sample (sample_id, user_id, proxy_id) 
+            VALUES ($1, $2, $3)`,
+            [sampleId, userId, proxyId])
+            .then(internalAssertOne);
+    }
+
+    static async createSample({ thingId, dmUsersInSample, type, field }:
+        { thingId: ThingId, dmUsersInSample: DmUser[], type: number, field: string }) {
         const expiry = Utils.daysFromNow(1);
         return Utils.WithTransaction(db, async (client) => {
             const sampleId = await db.things.create(C.THINGS.SAMPLE, client);
-            await client.query(
-                `INSERT INTO samples (id, samplee_id, type, expires, field, is_complete)
-                VALUES ($1, $2, $3, $4, $5, false)`,
-                [sampleId, thingId, type, expiry, field])
-                .then(internalAssertOne);
-            await Promise.all(userIdsInSample.map(userId =>
-                client.query(
-                    `INSERT INTO sample_votes (sample_id, user_id, has_voted) VALUES ($1, $2, false)`,
-                    [sampleId, userId])
-                    .then(internalAssertOne)));
+            await Samples.createSamplesEntry({ sampleId, thingId, type, expiry, field, client });
+            await Promise.all(dmUsersInSample.map(e => 
+                Samples.createInSample({ userId: e.userId, sampleId, proxyId: e.proxyId, client })));
             return sampleId;
         });
     }
@@ -106,23 +115,16 @@ export default class Samples {
 
     static countVotes(sampleId) {
         return dbPool.query(
-            `WITH in_sample_users as (
-                SELECT sv.user_id, sv.sample_id, users.dm_participate, users.proxy_id
-                FROM sample_votes as sv
-                    INNER JOIN users ON users.id = sv.user_id
-                WHERE sv.sample_id = $1 AND sv.in_sample = true
-            ),
-            all_sample_votes as (
+            `WITH all_sample_votes as (
                 SELECT isu.user_id, sv.vote, sv.strike_ups, sv.strike_downs, sv.strike_poster, sv.strike_disputers
-                FROM in_sample_users as isu
+                FROM in_sample as isu
                     INNER JOIN sample_votes as sv ON sv.user_id = isu.user_id and sv.sample_id = isu.sample_id
-                WHERE isu.dm_participate = 'direct'
+                WHERE isu.proxy_id IS NULL AND isu.sample_id = $1
                 UNION
                 SELECT isu.user_id, sv.vote, sv.strike_ups, sv.strike_downs, sv.strike_poster, sv.strike_disputers
-                FROM in_sample_users as isu
-                    INNER JOIN users as p_users ON p_users.id = isu.proxy_id
+                FROM in_sample as isu
                     INNER JOIN sample_votes as sv ON sv.user_id = isu.proxy_id and sv.sample_id = isu.sample_id
-                WHERE isu.dm_participate = 'proxy' AND p_users.wants_proxy = true
+                WHERE isu.proxy_id IS NOT NULL AND isu.sample_id = $1
             )
             SELECT vote, strike_ups, strike_downs, strike_poster, strike_disputers, COUNT(*) as count 
             FROM all_sample_votes

@@ -1,3 +1,4 @@
+import { UserId } from "../../db/types"
 
 export type StrikesInfo = {
     strikeUps: boolean,
@@ -16,4 +17,9 @@ export type MiniModVoteSummary = {
         vote: number,
         true: StrikeVoteSummary,
         false: StrikeVoteSummary,
+}
+
+export type DmUser = {
+    userId: UserId,
+    proxyId?: UserId,
 }
