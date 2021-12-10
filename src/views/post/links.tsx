@@ -2,27 +2,6 @@ import React from 'react';
 import * as C from '../../constant';
 import { dateToTimeSince } from '../utils';
 
-
-export const Links = ({ post, user }) => {
-
-    <div>
-        by <span className="gray-900">{post.user_name}</span>
-        ,  <span className="whitespace-nowrap">{dateToTimeSince(post.created)}</span>
-        <MaybeLink maybe={!!post.url} href={post.url}>
-            link
-        </MaybeLink>
-        <MaybeLink maybe={!!post.hackernews_id} href={`https://news.ycombinator.com/item?id=${post.hackernews_id}`}>
-            hn comments
-        </MaybeLink>
-        <MaybeLink maybe={!!user?.is_mod} href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>
-            mod actions
-        </MaybeLink>
-        <MaybeLink maybe={!!user?.is_mini_mod} href={C.URLS.QPOSTS_MOD_ACTIONS + post.id}>
-            mini mod actions
-        </MaybeLink>
-    </div>
-}
-
 export const UserName = ({ name }) => <span>by <span className="gray-900">{name}</span></span>
 
 export const TimeSince = ({ created }) => <span>, {dateToTimeSince(created)}</span>
