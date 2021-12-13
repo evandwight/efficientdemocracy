@@ -64,6 +64,7 @@ export const ABOUT_ELECTED_MODERATORS = ABOUT + "elected-moderators";
 export const ABOUT_DESIGNATED_PROXY = ABOUT + "designated-proxy";
 export const ABOUT_MODERATE_VISIBILITY = ABOUT + "moderate-visibility";
 export const ABOUT_FAQ = ABOUT + "faq";
+export const ABOUT_FAQ_FAKE_ACCOUNTS = ABOUT_FAQ + "#fake-accounts";
 export const ABOUT_STATUS = ABOUT + "alpha";
 export const ABOUT_COSTS = ABOUT + "costs";
 export const ABOUT_HOW_WE_ARE_DIFFERENT = ABOUT + "how-we-are-different";

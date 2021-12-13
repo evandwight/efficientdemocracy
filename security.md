@@ -6,7 +6,6 @@ This site is insecure.
 We follow try to follow the recommendations listed in the owasp cheatsheets. They are out of date and incomplete but better than nothing.
 Cheatsheets:
 * https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html
-* https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
 
 ### Authentication
 

@@ -10,12 +10,13 @@ const element = () =>
             We aim to keep costs low in order to avoid outside investment and being forced to optimize for investors instead of users.
         </p>
         <p>
-            The people are the foundation for decisions. Not advertisers. Not investors. Not lizard people. The community decides.
+            The community decides. Not advertisers. Not investors. Not lizard people. The community.
         </p>
         <h4>Current costs per month: $4</h4>
         <ul>
             <li>$1 - domain</li>
             <li>$3 - external ip address</li>
+            <li>$0.25 - random aws alarms :/</li>
         </ul>
     </div>
 

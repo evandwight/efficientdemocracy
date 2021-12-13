@@ -11,7 +11,7 @@ const Element = () =>
             Community curated news: keep up to date with hacker news without going down the rabbit hole.
         </p>
         <p>
-            Hacker news brings you the most engaging stories on the internet, but it doesn't know when to stop. You keep reading hoping the next comment will answer all your questions. But usually it just makes you angry.
+            Hacker news brings you the most engaging stories on the internet, but it doesn't know when to stop. You keep reading hoping the next comment will answer all your questions. Though usually it just makes you angry.
         </p>
         <p>
             Efficient Democracy converts endless scrolling to a weekly newsletter of just important stories. No more addiction. Only the news you need.
@@ -27,7 +27,7 @@ const Element = () =>
             To decide the importance of a post, we estimate the result of a referendum on “is this post important?”
         </p>
         <p>
-            It's that simple!
+            Using consensus to curate. It's that simple!
         </p>
         <h3>But referendums can't handle the tsunami of posts!</h3>
         <p>
@@ -52,23 +52,14 @@ const Element = () =>
             <li>As an expert in physics, do you think this study is good?</li>
         </ul>
         <p>
-            The answers won't always be right but a group comes to a consensus it's a good signal. By making decisions democratically we put them on firm foundations. Foundations that lets us use moderation with less fear of tyranny.
+            The answers won't always be right but the goal is to improve the signal to noise ratio. A consensus is a good signal. By making decisions democratically we put them on firm foundations - community buy-in.
         </p>
         <p>
-            We do not need big tech monopolies to control speech. We can build communities that moderate themselves [22].
+            We do not need big tech monopolies to control speech. We can build communities that moderate themselves [22]. To learn more, read about <a href={C.URLS.ABOUT_HOW_WE_ARE_DIFFERENT}>how we are different</a>!
         </p>
         <p>
-            To learn more, read about <a href={C.URLS.ABOUT_HOW_WE_ARE_DIFFERENT}>how we are different</a>!
+            If you've already signed up, then don't <a href={SIGNUP}>sign up</a>.
         </p>
-        <h3>Limited sign ups</h3>
-        <p>
-            Sign ups are limited to prevent unexpected performance degradation. If you have already signed up, then do not <a href={SIGNUP}>sign up</a>!
-        </p>
-        <code>
-            {`const users = await CachedDB.getUsers();
-const enableRegister = users.length < 1000;
-...`}
-        </code>
         <h3>Notes</h3>
         <ul>
             <li>[22] - We moderate illegal content separately</li>

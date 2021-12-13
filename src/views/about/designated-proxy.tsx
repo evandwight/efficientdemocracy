@@ -19,7 +19,7 @@ const element = () =>
             Proxies will never be perfect representatives but the alternative is no representation at all.
         </p>
         <p>
-            To particpate in democratic moderation via proxy: change the <a href={C.URLS.USER_SETTINGS}>setting</a> and <a href={C.URLS.VIEW_PROXY}>pick a proxy</a>.
+            To participate in democratic moderation via proxy: change the <a href={C.URLS.USER_SETTINGS}>setting</a> and <a href={C.URLS.VIEW_PROXY}>pick a proxy</a>.
         </p>
     </div>
 
