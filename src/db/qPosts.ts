@@ -38,7 +38,6 @@ export default class QPosts {
     }
 
     async upsertHackerNewsPost(v: HnPost): Promise<QPostId> {
-        // TODO what if this query fails, modactions could not be set! Maybe retry?
         let postId = await this.getPostIdByHackerId(v.id);
 
         if (!postId) {
@@ -53,9 +52,9 @@ export default class QPosts {
         } else {
             await this.db.pool.query(
                 `UPDATE qposts 
-                SET hackernews_points = $2
+                SET hackernews_points = $2, title = $3
                 WHERE id = $1`,
-                [postId, v.score]).then(internalAssertOne);
+                [postId, v.score, v.title]).then(internalAssertOne);
         }
         
         return postId;

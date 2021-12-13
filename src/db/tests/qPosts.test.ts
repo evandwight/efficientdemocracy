@@ -40,9 +40,12 @@ describe("QPosts", () => {
             let hackerPost = {id: 1234343, score: 10000, title: "a", by:"b", time: 1633968360};
             const userId = await testApi.createHackerUser();
             const postId = await db.qPosts.upsertHackerNewsPost(hackerPost);
-            const post = await db.qPosts.getPost(postId);
+            let post = await db.qPosts.getPost(postId);
             expect(post.title).toEqual("a");
             expect(post.created).toEqual(new Date(1633968360*1000));
+            await db.qPosts.upsertHackerNewsPost({... hackerPost, title: "asdf"});
+            post = await db.qPosts.getPost(postId);
+            expect(post.title).toEqual("asdf");
         });
     });
 });
