@@ -7,22 +7,25 @@ const element = () =>
     <div>
         <h2>{title}</h2>
         <p>
-            We want to make decisions by estimating a referendum. The following are tools to estimate a referendum described with how accurate, timely and cost in terms of uninterested user time:
+            We want to make decisions by estimating a referendum. We have the following tools:
         </p>
         <ul>
-            <li>Unsolicited votes - 0 cost, timely but inaccurate due to selection bias</li>
-            <li><a href={C.URLS.ABOUT_ELECTED_MODERATORS}>Elected representatives/moderator</a> - 0 cost and timely but inaccurate due to decisions only being influenced by incentives</li>
-            <li>Statistical sample - mostly accurate - sampling error - but constant cost per decision and not timely</li>
-            <li>Referendum - accurate but N cost per decision and not timely</li>
+            <li>Unsolicited votes - 0 cost* and timely but inaccurate due to selection bias</li>
+            <li><a href={C.URLS.ABOUT_ELECTED_MODERATORS}>Elected representatives</a> - 0 cost and timely but inaccurate due to only indirect influence over the decisions</li>
+            <li>Statistical sample - mostly accurate but constant cost and not timely</li>
+            <li>Referendum - accurate but N cost and not timely</li>
         </ul>
         <p>
-            Though each tool is fatally flawed, combining them allows us to overcome that. The efficiency of elected moderators lets them act as a first line of defense. They make the majority of the decisions and prevent a flood of requests on the community's time. We detect bad decisions with unsolicited votes - disputes - and then correct the decision by triggering a statistical sample. Similarly, statistical samples can be corrected by a referendum. The efficient corrected by the accurate.
+            * cost in terms of uninterested user time per decision
         </p>
         <p>
-            Disputes have a selection bias so they cannot be trusted to represent the will of the people. As such, we disincentivize abuse by empowering the community to give strikes to disputers when they feel the issue should not have been disputed.
+            Though each tool is fatally flawed, combining them allows us to overcome that. The efficiency of elected moderators lets them act as a first line of defense. They make the majority of decisions and prevent a flood of requests on the community's time. We detect bad decisions with unsolicited votes - disputes - and then correct the decision by triggering a statistical sample. Similarly, statistical samples can be corrected by a referendum. The efficient corrected by the accurate.
         </p>
         <p>
-            This system hybridizes a representative democracy with a direct democracy to share benefits and eliminate flaws.
+            Disputes have a selection bias so they can't be trusted to represent the will of the people. As such, we disincentivize abuse by empowering the community to give strikes to disputers when they feel the issue should not have been disputed.
+        </p>
+        <p>
+            This system hybridizes a representative democracy with a direct democracy to share benefits and minimize the flaws.
         </p>
         <h4>Let's work through an example:</h4>
         <ul>
