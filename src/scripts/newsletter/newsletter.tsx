@@ -44,9 +44,8 @@ export function Newsletter({posts, postsLink, unsubscribeLink}: propsType) {
         <div>
             <br />
             <hr style={{backgroundColor: BLUE_400}} />
-            <div style={{width: "max-content", margin: "auto"}}>
-                <a href={postsLink}>view in your browser</a> | <a href={unsubscribeLink}>unsubscribe</a>
-            </div>
+            <div><a href={postsLink}>view in your browser</a></div>
+            <div><a href={unsubscribeLink}>unsubscribe</a></div>
         </div>
     </div>;
 }
