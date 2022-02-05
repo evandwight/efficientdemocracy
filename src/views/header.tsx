@@ -8,7 +8,7 @@ export const Header = ({ options, user, csrfToken }) =>
         <table className="bg-blue-400" id="header">
             <tr>
                 <td>
-                    <a href="/"><b>Menos malo</b></a>
+                    <a href="/"><b>Menosmalo</b></a>
                     <span> </span>
                     <a href={C.URLS.ABOUT_STATUS}>alpha</a>
                     <span> | </span>

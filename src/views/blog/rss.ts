@@ -6,7 +6,7 @@ export function rssXmlBoilerPlate(entries: BlogEntry[]) {
     return `
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-    <title>Menos malo blog</title>
+    <title>Menosmalo blog</title>
     <description>Development updates</description>
     <link>https://menosmalo.com/blog</link>
     <copyright>Que?</copyright>

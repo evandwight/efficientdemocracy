@@ -17,7 +17,7 @@ const element = () =>
                 <p><strong>Affiliate</strong> means an entity that controls, is controlled by or is under common control with a party, where &quot;control&quot; means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority.</p>
             </li>
             <li>
-                <p><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to Menos malo.</p>
+                <p><strong>Company</strong> (referred to as either &quot;the Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to Menosmalo.</p>
             </li>
             <li>
                 <p><strong>Device</strong> means any device that can access the Service such as a computer, a cellphone or a digital tablet.</p>
@@ -32,7 +32,7 @@ const element = () =>
                 <p><strong>Third-party Social Media Service</strong> means any services or content (including data, information, products or services) provided by a third-party that may be displayed, included or made available by the Service.</p>
             </li>
             <li>
-                <p><strong>Website</strong> refers to Menos malo, accessible from <a href="https://menosmalo.com" rel="external nofollow noopener" target="_blank">https://menosmalo.com</a></p>
+                <p><strong>Website</strong> refers to Menosmalo, accessible from <a href="https://menosmalo.com" rel="external nofollow noopener" target="_blank">https://menosmalo.com</a></p>
             </li>
             <li>
                 <p><strong>You</strong> means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.</p>

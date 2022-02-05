@@ -1,4 +1,4 @@
-# Menos malo
+# Menosmalo
 
 This site is a work in progress.
 We are a weekly newsletter of deeply important Hacker News posts. An alternative to an addictive infinite list of interesting posts. We only select those you need to read - no news is good news.
