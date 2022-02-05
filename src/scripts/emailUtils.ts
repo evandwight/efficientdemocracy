@@ -5,7 +5,7 @@ export function sendMonitorEmail({subject, text}) {
     if (!to) {
         throw new Error("Invalid to address");
     }
-    const from = "monitor@efficientdemocracy.com"
+    const from = "monitor@menosmalo.com"
 
     return sendEmail({
         to,

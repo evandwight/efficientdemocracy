@@ -7,7 +7,7 @@ const element = () =>
     <div>
         <h2>{title}</h2>
         <p>
-            You can now designate a <a href={C.URLS.ABOUT_DESIGNATED_PROXY}>proxy</a> to participate in democratic moderation on your behalf! I hope this feature encourages people who want more balanced online spaces to sign up and allows efficientdemocracy.com to avoid becoming yet another site catering to an extreme.
+            You can now designate a <a href={C.URLS.ABOUT_DESIGNATED_PROXY}>proxy</a> to participate in democratic moderation on your behalf! I hope this feature encourages people who want more balanced online spaces to sign up and allows menosmalo.com to avoid becoming yet another site catering to an extreme.
         </p>
     </div>
 

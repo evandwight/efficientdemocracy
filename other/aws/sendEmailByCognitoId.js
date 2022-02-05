@@ -51,7 +51,7 @@ async function sendEmail({ to, from, text, html, subject }) {
     assert([...to].filter(c => c === "@").length === 1, "There needs to be one email only");
     assert(await notOnBlackList(to), "Email on blacklist");
 
-    from = from || "info@efficientdemocracy.com";
+    from = from || "info@menosmalo.com";
 
     var body = {};
     if (text) {

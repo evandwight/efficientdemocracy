@@ -46,6 +46,6 @@ export const DB = {
 
 export const POSTS_PER_PAGE = 30;
 
-export const HELP_EMAIL = "info@efficientdemocracy.com";
+export const HELP_EMAIL = "info@menosmalo.com";
 
 export const REGISTER_FORM_ACTION = "registerForm";

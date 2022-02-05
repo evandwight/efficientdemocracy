@@ -6,9 +6,9 @@ export function rssXmlBoilerPlate(entries: BlogEntry[]) {
     return `
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-    <title>Efficient democracy blog</title>
+    <title>Menos malo blog</title>
     <description>Development updates</description>
-    <link>https://efficientdemocracy.com/blog</link>
+    <link>https://menosmalo.com/blog</link>
     <copyright>Que?</copyright>
     <lastBuildDate>${lastModified}</lastBuildDate>
     <pubDate>${new Date(2021, 10, 16).toUTCString()}</pubDate>

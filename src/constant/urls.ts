@@ -86,4 +86,4 @@ export const BLOG_ADDING_PROXIES = "/blog/post/adding-proxies";
 export const DISCORD = "https://discord.gg/7dSc2AA3C4";
 
 export const HN_COMMENT = "https://news.ycombinator.com/item?id=";
-export const BASE_URL = "https://efficientdemocracy.com";
+export const BASE_URL = "https://menosmalo.com";

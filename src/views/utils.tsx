@@ -81,7 +81,7 @@ export const dateToTimeSince = (date: Date) => {
 
 export function HtmlBoilerPlate(innerHtml: string, csrfToken: string, options?: reactRenderOptions): string {
     const {
-        title = "Efficient Democracy",
+        title = "Menos malo",
         includeChartJs = false,
         includeVotesJs = false,
         includeScript = false,

@@ -1,7 +1,7 @@
 limit_req_zone $binary_remote_addr zone=mylimit:10m rate=10r/s;
 
 server {
-    server_name efficientdemocracy.com; # managed by Certbot
+    server_name menosmalo.com;
 
     limit_req zone=mylimit burst=20 nodelay;
 
@@ -16,26 +16,27 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 
+
+
     listen [::]:443 ssl ipv6only=on; # managed by Certbot
     listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/efficientdemocracy.com/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/efficientdemocracy.com/privkey.pem; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/menosmalo.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/menosmalo.com/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
-    # https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html
-    client_max_body_size 1kb;
-    
-
 }
+
 server {
-    if ($host = efficientdemocracy.com) {
+    if ($host = menosmalo.com) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
 
 	listen 80 ;
 	listen [::]:80 ;
-    server_name efficientdemocracy.com;
+    server_name menosmalo.com;
     return 404; # managed by Certbot
+
+
 }
